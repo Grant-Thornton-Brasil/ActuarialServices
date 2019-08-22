@@ -1,0 +1,161 @@
+SEGUROS
+0111 - Incêndio Tradicional
+0112 - Assistência - Bens Em Geral
+0113 - Vidros
+0114 - Compreensivo Residencial
+0115 - Roubo
+0116 - Compreensivo Condomínio
+0117 - Tumultos
+0118 - Compreensivo Empresarial
+0141 - Lucros Cessantes
+0167 - Riscos De Engenharia
+0171 - Riscos Diversos
+0173 - Global De Bancos
+0176 - Riscos Diversos - Planos Conjugados
+0195 - Garantia Est./Ext.Gar-Bens Em Geral
+0196 - Riscos Nomeados E Operacionais
+0234 - Riscos De Petróleo
+0272 - Riscos Nucleares
+0274 - Satélites
+0310 - R.C.Administradores E Diretores-D&O
+0313 - R. C. Riscos Ambientais
+0327 - Compreensivo Riscos Cibernéticos
+0351 - R. C. Geral
+0378 - R. C. Profissional
+0433 - Marítimos
+0435 - Aeronáuticos
+0437 - Responsabilidade Civil Hangar
+0457 - D. P. E. M.
+0520 - Acidentes Pessoais Passageiros-App
+0523 - Rc T. Rod. Interest. E Internac.
+0524 - Garantia Est./ Exten. Garantia–Auto
+0525 - Carta Verde
+0526 - Seguro Popular De Automóvel Usado
+0531 - Automóvel - Casco
+0542 - Assistência E Outras Cobert. - Auto
+0544 - R.C.T.Viagem Intern-Pes Trans Ou Ñ
+0553 - R. C. Facultativa Veículos - Rcfv
+0588 - Dpvat
+0589 - Dpvat Run Off
+0621 - Transporte Nacional
+0622 - Transporte Internacional
+0623 - Rctr-P Interestadual/Internacional
+0627 - Resp. Civil Do Transp. Intermodal
+0628 - Rctr-P Municipal/Intermunicipal
+0632 - R.C.Trans.Carga Viag.Int.-Rctr-Vi-C
+0638 - R.C.Trans. Ferroviário Carga–Rctf-C
+0644 - R.C. Viag.Int. Pessoas - Carta Azul
+0652 - R. C. Trans. Aéreo Carga - Rcta-C
+0654 - R.C. Trans. Rodoviário Carga–Rctr-C
+0655 - R.C. Trans. Desvio De Carga–Rcf-Dc
+0656 - R.C. Trans. Aquaviário Carga–Rca-C
+0658 - R.C.Operador Transp. Multi.-Rcotm-C
+0711 - Riscos Diversos Financeiros
+0739 - Garantia Financeira
+0740 - Garantia De Obrigações Privadas
+0743 - Stop Loss
+0745 - Garantia De Obrigações Públicas
+0746 - Fiança Locatícia
+0747 - Garantia De Concessões Públicas
+0748 - Crédito Interno
+0749 - Crédito A Exportação
+0750 - Garantia Judicial
+0775 - Garantia Segurado - Setor Público
+0776 - Garantia Segurado - Setor Privado
+0819 - Crédito À Exp. Risco Comercial
+0859 - Crédito À Exportação Risco Político
+0860 - Crédito Doméstico Risco Comercial
+0870 - Crédito Doméstico Risco P.Física
+0929 - Funeral
+0936 - Perda Certif. Habilit. De Vôo-Pchv
+0969 - Viagem
+0977 - Prestamista (Exceto Habit E Rural)
+0980 - Educacional
+0981 - Acidentes Pessoais - Individual
+0982 - Acidentes Pessoais
+0983 - Dotal Misto
+0984 - Doenças Graves Ou Doença Terminal
+0986 - Dotal Puro
+0987 - Desemprego/Perda De Renda
+0990 - Eventos Aleatórios
+0991 - Vida
+0992 - Vgbl/Vagp/Vrgp/Vrsa/Pri Individual
+0993 - Vida Em Grupo
+0994 - Vgbl/Vagp/Vrgp/Vrsa/Vri
+1061 - Seg.Habit.Apól. Merc. - Prestamista
+1065 - Seg.Habit.Apól.Merc.-Demais Cobert.
+1066 - Seg.Habit.Sist.Financ. Da Habitação
+1068 - Habitacional - Fora Do Sfh
+1101 - Seguro Agrícola Sem Cob. Do Fesr
+1102 - Seguro Agrícola Com Cob. Do Fesr
+1103 - Seguro Pecuário Sem Cob. Do Fesr
+1104 - Seguro Pecuário Com Cob. Do Fesr
+1105 - Seguro Aquícola Sem Cob. Do Fesr
+1106 - Seguro Aquícola Com Cob. Do Fesr
+1107 - Seguro Florestas Sem Cob. Do Fesr
+1108 - Seguro Florestas Com Cob. Do Fesr
+1109 - Seguro Da Cédula Do Produto Rural
+1128 - Pecuário
+1130 - Seguro Benf. E Prod. Agropecuários
+1162 - Penhor Rural
+1163 - Penhor Rural Instit. Fin. Pub.
+1164 - Seguros Animais
+1198 - Seguro De Vida Do Produtor Rural
+1279 - Seguros No Exterior
+1285 - Saúde - Ressegurador Local
+1299 - Sucursais No Exterior
+1329 - Funeral
+1336 - Perda Certif. Habilit. De Vôo-Pchv
+1369 - Viagem
+1377 - Prestamista (Exceto Habit. E Rural)
+1380 - Educacional
+1381 - Acidentes Pessoais
+1383 - Dotal Misto
+1384 - Doenças Graves Ou Doença Terminal
+1386 - Dotal Puro
+1387 - Desemprego/Perda De Renda
+1390 - Eventos Aleatórios
+1391 - Vida
+1392 - Vgbl/Vagp/Vrgp/Vrsa/Vri
+1417 - Seg. Compreensivo Oper. Portuários
+1428 - R. C. Facult. Para Embarcações-Rcf
+1433 - Marítimos (Cascos)
+1457 - Dpem
+1528 - R. C. Facult. Para Aeronaves - Rcf
+1535 - Aeronáuticos (Cascos)
+1537 - Responsabilidade Civil Hangar
+1574 - Satélites
+1597 - Resp. Explor. Ou Transp. Aéreo-Reta
+1601 - Microsseguros De Pessoas
+1602 - Microsseguros De Danos
+1603 - Microsseguros - Previdência
+1734 - Riscos De Petróleo
+1872 - Riscos Nucleares
+1985 - Saúde
+2201 - Sobrevivência De Assistido
+2202 - Fluxo Biométrico
+2203 - Índice Biométrico
+2293 - Vida Efpc
+RESEGUROS
+01 - Patrimonial
+02 - Riscos Especiais
+03 - Responsabilidades
+04 - Cascos
+05 - Automóvel
+06 - Transportes
+07 - Riscos Financeiros
+08 - Crédito
+09 - Pessoas Coletivo
+10 - Habitacional
+11 - RURAL
+12 - Outros
+13 - Pessoas Individual
+14 - Marítimos
+15 - Aeronáuticos
+16 - Microsseguros
+17 - Petróleo
+18 - Nucleares
+19 - Saúde
+20 - Aceitação no Exterior
+21 - Sucursal no Exterior
+22 - Pessoas EFPC
