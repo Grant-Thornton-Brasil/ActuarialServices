@@ -9,6 +9,8 @@ from win10toast import ToastNotifier
 import os
 from QEMaths.maths import *
 from export import qe_export
+from datetime import datetime
+import calendar
 
 
 class main_window():
@@ -16,6 +18,7 @@ class main_window():
     def __init__(self):
         self.root = Tk()
         # self.root.attributes("-topmost",True)
+        self.root.iconbitmap("icon.ico")
         self.root.title("Grant Thornton Brasil - Serivços Atuariais")
         self.root.resizable(False, False)
         self.design()
@@ -246,11 +249,21 @@ class main_window():
 
 
     def validate(self):
-        # QE
-        if self.qetype_var.get() == 0:
+        # ENTCODIGO
+        if self.entcodigo_entry.get() == None or \
+            self.entcodigo_entry.get() == "" or \
+                len(self.entcodigo_entry.get())==0:
             messagebox.showerror(
                 title="Erro",
-                message="Selecione um Quadro Estatístico"
+                message="Insira um ENTCODIGO."
+            )
+            return
+        # Year
+        if self.year_spinbox.get()==0 or self.year_spinbox.get()==None or \
+            self.year_spinbox.get()=="":
+            messagebox.showerror(
+                title="Erro",
+                message="Insira um Ano Base."
             )
             return
         # Ramos
@@ -262,6 +275,13 @@ class main_window():
                 title="Erro",
                 message="Preencha os ramos\n\n"\
                     "É possível preencher manualmente."
+            )
+            return
+        # QE
+        if self.qetype_var.get() == 0:
+            messagebox.showerror(
+                title="Erro",
+                message="Selecione um Quadro Estatístico"
             )
             return
         # Processos
@@ -287,6 +307,7 @@ class main_window():
     def run(self):
         processos = [self.processo1_var.get(), self.processo2_var.get(),
                      self.processo3_var.get(), self.processo4_var.get()]
+        # Críticas
         if processos[0] == 1:
             qe = self.qetype_var.get()
             entcodigo = self.entcodigo_entry.get()
@@ -316,7 +337,7 @@ class main_window():
                                     entcodigo=entcodigo,
                                     ramcodigos=ramcodigos,
                                     esrcodcess=esrcodcess)
-                    except BaseException:
+                    except FileNotFoundError:
                         pass
             end = time.time()
             toaster = ToastNotifier()
@@ -328,22 +349,77 @@ class main_window():
                         end - start,
                         2)),
                 threaded=True)
+        # Confrontos
         if processos[1] == 1:
+            year = int(self.year_spinbox.get())
             dates_seguros = [datetime(year, month, calendar.monthrange(year, month)[1]).strftime("%Y%m%d") for month in range(1, 13)]
             dates_reseguros = [f"2018" + f"{month}".zfill(2) for month in range(1, 13)]
+            m376 = maths_376(dates_seguros)
+            m377 = maths_377(dates_seguros)
+            m378 = maths_378(dates_seguros)
+            m404 = maths_404(dates_reseguros)
+            m405 = maths_405(dates_reseguros)
+            m406 = maths_406(dates_reseguros)
+            m407 = maths_407(dates_reseguros)
+            m408 = maths_408(dates_reseguros)
+            m409 = maths_408(dates_reseguros)
             qe = self.qetype_var.get()
-            if qe == 376:
-                m376 = maths_376(dates_seguros)
-                for arquivo in self.arquivos_text.get("1.0", END).splitlines()[:-1]:
-                    with open(arquivo) as txt:
+            for arquivo in self.arquivos_text.get("1.0", END).splitlines()[:-1]:
+                try:
+                    with open(arquivo,"r") as txt:
                         linhas = txt.readlines()
                         for linha in linhas:
-                            m376.run(linha)
-            # export to
+                            linha = linha.replace(",", ".").strip()
+                            if qe == 376:
+                                m376.run(linha)
+                            elif qe == 377:
+                                m377.run(linha)
+                            elif qe == 376:
+                                m378.run(linha)
+                            elif qe == 404:
+                                m404.run(linha)
+                            elif qe == 405:
+                                m405.run(linha)
+                            elif qe == 406:
+                                m406.run(linha)
+                            elif qe == 407:
+                                m407.run(linha)
+                            elif qe == 408:
+                                m408.run(linha)
+                            elif qe == 409:
+                                m409.run(linha)
+                except FileNotFoundError:
+                    pass
+                except KeyError:
+                    messagebox.showerror(
+                        title="Erro",
+                        message="As datas dos campos MRFMESANO não condizem com o ano base informado.\n\n"\
+                            "Favor corrigir o ano base ou selecione novamente os arquivos!")
+            folder = os.path.abspath(filedialog.askdirectory())
+            if qe == 376:
+                m376.df.to_excel(folder+"\\376.xlsx")
+            elif qe == 377:
+                m377.df.to_excel(folder+"\\377.xlsx")
+            elif qe == 376:
+                m378.df.to_excel(folder+"\\378.xlsx")
+            elif qe == 404:
+                m404.df.to_excel(folder+"\\404.xlsx")
+            elif qe == 405:
+                m405.df.to_excel(folder+"\\405.xlsx")
+            elif qe == 406:
+                m406.df.to_excel(folder+"\\406.xlsx")
+            elif qe == 407:
+                m407.df.to_excel(folder+"\\407.xlsx")
+            elif qe == 408:
+                m408.df.to_excel(folder+"\\408.xlsx")
+            elif qe == 409:
+                m409.df.to_excel(folder+"\\409.xlsx")
+            
         if processos[2] == 1:
             print("Detalhamento")
         if processos[3] == 1:
             pass
+
 
 if __name__ == "__main__":
     if os.path.exists("base.db"):
