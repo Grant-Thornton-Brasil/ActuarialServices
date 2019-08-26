@@ -2,7 +2,7 @@ import sqlite3
 import time
 from tkinter import *
 from tkinter import filedialog, messagebox
-from db import create_main_tables
+from db import *
 from QEValidations.validation import run_validations
 from Web.ses import SES
 from win10toast import ToastNotifier
@@ -23,6 +23,7 @@ class main_window():
         self.root.resizable(False, False)
         self.design()
         self.positions()
+        self.conn = sqlite3.connect("base.db")
 
 
     def design(self):
@@ -312,11 +313,10 @@ class main_window():
             qe = self.qetype_var.get()
             entcodigo = self.entcodigo_entry.get()
             ramcodigos = self.ramos_text.get("1.0", END).splitlines()[:-1]
-            conn = sqlite3.connect("base.db")
-            create_main_tables(conn)
+            create_main_tables(self.conn)
             esrcodcess = ["38741", "30074", "34819", "36099", "37052",
                           "38253", "31623", "38873", "33294", "39764",
-                          "37729", "31551", "38270", "30201", "34665", "32875"]
+                          "37729", "31551", "38270", "30201", "34665", "32875", entcodigo]
             start = time.time()
             for arquivo in self.arquivos_text.get(
                     "1.0", END).splitlines()[:-1]:
@@ -332,7 +332,7 @@ class main_window():
                                     nome_arquivo=txt.name,
                                     linha=linha,
                                     n=n,
-                                    conn=conn,
+                                    conn=self.conn,
                                     year=int(self.year_spinbox.get()),
                                     entcodigo=entcodigo,
                                     ramcodigos=ramcodigos,
@@ -349,6 +349,7 @@ class main_window():
                         end - start,
                         2)),
                 threaded=True)
+            self.conn.commit()
         # Confrontos
         if processos[1] == 1:
             year = int(self.year_spinbox.get())
@@ -416,9 +417,12 @@ class main_window():
                 m409.df.to_excel(folder+"\\409.xlsx")
             
         if processos[2] == 1:
-            print("Detalhamento")
+            path = os.path.abspath(filedialog.askdirectory())
+            make_report(self.qetype_var.get(),self.conn,path)
         if processos[3] == 1:
-            pass
+            path = os.path.abspath(filedialog.askdirectory())
+            qe_export(self.qetype_var.get(),path,self.arquivos_text.get("1.0",END).splitlines())
+
 
 
 if __name__ == "__main__":

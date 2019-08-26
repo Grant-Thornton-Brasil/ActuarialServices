@@ -1,112 +1,28 @@
+QEs = [376, 377, 378, 404, 405, 406, 407, 408, 409,
+       419, 420, 421, 423]
+crits = [14, 11, 13, 16, 13, 15, 12, 22, 23, 30, 15, 13, 11]
+
+
+def make_report(qe_type,conn, path):
+    for qe, crit in zip(QEs,crits):
+        counter = conn.execute(f'SELECT count(*) FROM "{qe}";')
+        if counter.fetchone()[0] != 0:
+            with open(path+f"\\export_detailed_{qe}.csv", "a+") as csv:
+                query = conn.execute(f'SELECT * FROM "{qe}"')
+                header = "Caminho, Número Linha,"
+                for n in range(1,crit+1):
+                    header += f" Crítica {n},"
+                header = header[:-1]+";"
+                csv.write(header+"\n")
+                for linha in query:
+                    csv.write(str(linha).replace("(","").replace(")","").replace("None","")+"\n")    
+
+
 def create_main_tables(conn):
 
-    # SEGUROS
-
-    conn.execute(
-        'CREATE TABLE IF NOT EXISTS "376" ("File Name" TEXT, Line INTEGER, \
-        T1 INTEGER, T2 INTEGER, T3 INTEGER, T4 INTEGER, T5 INTEGER, \
-        T6 INTEGER, T7 INTEGER, T8 INTEGER, T9 INTEGER, T10 INTEGER, \
-        T11 INTEGER, T12 INTEGER, T13 INTEGER, T14 INTEGER);')
-
-    conn.execute(
-        'CREATE TABLE IF NOT EXISTS "377" ("File Name" TEXT, Line INTEGER, \
-        T1 INTEGER, T2 INTEGER, T3 INTEGER, T4 INTEGER, T5 INTEGER, \
-        T6 INTEGER, T7 INTEGER, T8 INTEGER, T9 INTEGER, T10 INTEGER, \
-        T11 INTEGER);')
-
-    conn.execute(
-        'CREATE TABLE IF NOT EXISTS "378" ("File Name" TEXT, Line INTEGER, \
-        T1 INTEGER, T2 INTEGER, T3 INTEGER, T4 INTEGER, T5 INTEGER, \
-        T6 INTEGER, T7 INTEGER, T8 INTEGER, T9 INTEGER, T10 INTEGER, \
-        T11 INTEGER, T12 INTEGER, T13 INTEGER);')
-
-    # RESEGUROS
-
-    conn.execute(
-        'CREATE TABLE IF NOT EXISTS "404" ("File Name" TEXT, Line INTEGER, \
-        T1 INTEGER, T2 INTEGER, T3 INTEGER, T4 INTEGER, T5 INTEGER, \
-        T6 INTEGER, T7 INTEGER, T8 INTEGER, T9 INTEGER, T10 INTEGER, \
-        T11 INTEGER, T12 INTEGER, T13 INTEGER, T14 INTEGER, T15 INTEGER, \
-        T16 INTEGER);')
-
-    conn.execute(
-        'CREATE TABLE IF NOT EXISTS "405" \
-        ("File Name" TEXT, Line INTEGER, T1 INTEGER, T2 INTEGER, T3 INTEGER, \
-        T4 INTEGER, T5 INTEGER, T6 INTEGER, T7 INTEGER, T8 INTEGER, \
-        T9 INTEGER, T10 INTEGER, T11 INTEGER, T12 INTEGER, T13 INTEGER);')
-
-    conn.execute(
-        'CREATE TABLE IF NOT EXISTS "406" ("File Name" TEXT, Line INTEGER, \
-        T1 INTEGER, T2 INTEGER, T3 INTEGER, T4 INTEGER, T5 INTEGER, \
-        T6 INTEGER, T7 INTEGER, T8 INTEGER, T9 INTEGER, T10 INTEGER, \
-        T11 INTEGER, T12 INTEGER, T13 INTEGER, T14 INTEGER, T15 INTEGER);')
-
-    conn.execute(
-        'CREATE TABLE IF NOT EXISTS "407" ("File Name" TEXT, Line INTEGER, \
-        T1 INTEGER, T2 INTEGER, T3 INTEGER, T4 INTEGER, T5 INTEGER, \
-        T6 INTEGER, T7 INTEGER, T8 INTEGER, T9 INTEGER, T10 INTEGER, \
-        T11 INTEGER, T12 INTEGER);')
-
-    conn.execute(
-        'CREATE TABLE IF NOT EXISTS "408" ("File Name" TEXT, Line INTEGER, \
-        T1 INTEGER, T2 INTEGER, T3 INTEGER, T4 INTEGER, T5 INTEGER, \
-        T6 INTEGER, T7 INTEGER, T8 INTEGER, T9 INTEGER, T10 INTEGER, \
-        T11 INTEGER, T12 INTEGER, T13 INTEGER, T14 INTEGER, T15 INTEGER, \
-        T16 INTEGER, T17 INTEGER, T18 INTEGER, T19 INTEGER, T20 INTEGER, \
-        T21 INTEGER, T22 INTEGER);')
-
-    conn.execute(
-        'CREATE TABLE IF NOT EXISTS "408" ("File Name" TEXT, Line INTEGER, \
-        T1 INTEGER, T2 INTEGER, T3 INTEGER, T4 INTEGER, T5 INTEGER, \
-        T6 INTEGER, T7 INTEGER, T8 INTEGER, T9 INTEGER, T10 INTEGER, \
-        T11 INTEGER, T12 INTEGER, T13 INTEGER, T14 INTEGER, T15 INTEGER, \
-        T16 INTEGER, T17 INTEGER, T18 INTEGER, T19 INTEGER, T20 INTEGER);')
-
-    conn.execute(
-        'CREATE TABLE IF NOT EXISTS "409" ("File Name" TEXT, Line INTEGER, \
-        T1 INTEGER, T2 INTEGER, T3 INTEGER, T4 INTEGER, T5 INTEGER, \
-        T6 INTEGER, T7 INTEGER, T8 INTEGER, T9 INTEGER, T10 INTEGER, \
-        T11 INTEGER, T12 INTEGER, T13 INTEGER, T14 INTEGER, T15 INTEGER, \
-        T16 INTEGER, T17 INTEGER, T18 INTEGER, T19 INTEGER, T20 INTEGER, \
-        T21 INTEGER, T22 INTEGER, T23 INTEGER);')
-
-    # CAPITALIZAÇÃO
-
-    conn.execute(
-        'CREATE TABLE IF NOT EXISTS "419" \
-        ("File Name" TEXT, Line INTEGER, T1 INTEGER, T2 INTEGER, T3 INTEGER, \
-        T4 INTEGER, T5 INTEGER, T6 INTEGER, T7 INTEGER, T8 INTEGER, \
-        T9 INTEGER, T10 INTEGER, T11 INTEGER, T12 INTEGER, T13 INTEGER \
-        T14 INTEGER, T15 INTEGER, T16 INTEGER, T17 INTEGER, T18 INTEGER, \
-        T19 INTEGER, T20 INTEGER, T21 INTEGER, T22 INTEGER, T23 INTEGER, \
-        T24 INTEGER, T25 INTEGER, T26 INTEGER, T27 INTEGER, T28 INTEGER, \
-        T29 INTEGER, T30 INTEGER);')
-
-    conn.execute(
-        'CREATE TABLE IF NOT EXISTS "420" ("File Name" TEXT, Line INTEGER, \
-        T1 INTEGER, T2 INTEGER, T3 INTEGER, T4 INTEGER, T5 INTEGER, \
-        T6 INTEGER, T7 INTEGER, T8 INTEGER, T9 INTEGER, T10 INTEGER, \
-        T11 INTEGER, T12 INTEGER, T13 INTEGER, T14 INTEGER, T15 INTEGER);')
-
-    conn.execute(
-        'CREATE TABLE IF NOT EXISTS "421" ("File Name" TEXT, Line INTEGER, \
-        T1 INTEGER, T2 INTEGER, T3 INTEGER, T4 INTEGER, T5 INTEGER, \
-        T6 INTEGER, T7 INTEGER, T8 INTEGER, T9 INTEGER, T10 INTEGER, \
-        T11 INTEGER, T12 INTEGER, T13 INTEGER);')
-
-    conn.execute(
-        'CREATE TABLE IF NOT EXISTS "422" ("File Name" TEXT, Line INTEGER, \
-        T1 INTEGER, T2 INTEGER, T3 INTEGER, T4 INTEGER, T5 INTEGER, \
-        T6 INTEGER, T7 INTEGER, T8 INTEGER, T9 INTEGER, T10 INTEGER, \
-        T11 INTEGER, T12 INTEGER);')
-
-    conn.execute(
-        'CREATE TABLE IF NOT EXISTS "419" ("File Name" TEXT, Line INTEGER, \
-        T1 INTEGER, T2 INTEGER, T3 INTEGER, T4 INTEGER, T5 INTEGER, \
-        T6 INTEGER, T7 INTEGER, T8 INTEGER, T9 INTEGER, T10 INTEGER, \
-        T11 INTEGER, T12 INTEGER, T13 INTEGER, T14 INTEGER, T15 INTEGER, \
-        T16 INTEGER, T17 INTEGER, T18 INTEGER, T19 INTEGER, T20 INTEGER, \
-        T21 INTEGER, T22 INTEGER, T23 INTEGER);')
-
-
-
+    for qe, crit in zip(QEs,crits):
+        query = f'CREATE TABLE IF NOT EXISTS "{qe}" ("File Name" TEXT, Line INTEGER, '
+        for n in range(1,crit+1):
+            query += f"T{n} INTEGER, "
+        query = query[:-2]+");"
+        conn.execute(query)

@@ -1,11 +1,6 @@
-def qe_export(qe_type):
-    root = Tk()
-    root.attributes("-topmost", True)
-    root.withdraw()
-    arquivos = list(filedialog.askopenfilenames(
-        filetypes=[("Arquivos TXT", "*.txt")]))
-    if qe_type == "376":
-        with open("Export 376.csv", "a+") as csv:
+def qe_export(qe_type, path, file_names):
+    if qe_type == "376" or qe_type == 376:
+        with open(path+"\\376_Export.csv", "a+") as csv:
             headers = [
                 "ESRSEQ",
                 "ENTCODIGO",
@@ -24,30 +19,33 @@ def qe_export(qe_type):
                 "ESRNUMSIN",
                 "ESRVALORMON"]
             csv.write(";".join(headers) + "\n")
-            for arquivo in arquivos:
-                with open(arquivo) as txt:
-                    for linha in txt.readlines():
-                        linha = linha.strip()
-                        structure = [
-                            linha[0:7],
-                            linha[7:12],
-                            linha[12:20],
-                            linha[20:23],
-                            linha[23:27],
-                            linha[27:31],
-                            linha[31:35],
-                            linha[35:43],
-                            linha[43:51],
-                            linha[51:59],
-                            linha[59:67],
-                            linha[67:80],
-                            linha[80:88],
-                            linha[88:93],
-                            linha[93:113],
-                            linha[113:126]]
-                        csv.write(";".join(structure) + "\n")
-    elif qe_type == "377":
-        with open("Export 377.csv", "a+") as csv:
+            for file_name in file_names:
+                try:
+                    with open(file_name) as txt:
+                        for linha in txt.readlines():
+                            linha = linha.strip()
+                            structure = [
+                                linha[0:7],
+                                linha[7:12],
+                                linha[12:20],
+                                linha[20:23],
+                                linha[23:27],
+                                linha[27:31],
+                                linha[31:35],
+                                linha[35:43],
+                                linha[43:51],
+                                linha[51:59],
+                                linha[59:67],
+                                linha[67:80],
+                                linha[80:88],
+                                linha[88:93],
+                                linha[93:113],
+                                linha[113:126]]
+                            csv.write(";".join(structure) + "\n")
+                except FileNotFoundError:
+                    pass
+    if qe_type == "377" or qe_type == 377:
+        with open(path+"\\377_Export.csv", "a+") as csv:
             headers = [
                 "ESLSEQ",
                 "ENTCODIGO",
@@ -63,11 +61,12 @@ def qe_export(qe_type):
                 "ESLCODCESS",
                 "ESLNUMSIN"]
             csv.write(";".join(headers) + "\n")
-            for arquivo in arquivos:
-                with open(arquivo) as txt:
-                    for linha in txt.readlines():
-                        linha = linha.strip()
-                        structure = [
+            for file_name in file_names:
+                try:
+                    with open(file_name) as txt:
+                        for linha in txt.readlines():
+                            linha = linha.strip()
+                            structure = [
                             linha[0:7],
                             linha[7:12],
                             linha[12:20],
@@ -81,9 +80,11 @@ def qe_export(qe_type):
                             linha[63:76],
                             linha[76:81],
                             linha[81:101]]
-                        csv.write(";".join(structure) + "\n")
-    elif qe_type == "378":
-        with open("Export 378.csv", "a+") as csv:
+                            csv.write(";".join(structure) + "\n")
+                except FileNotFoundError:
+                    pass
+    if qe_type == "378" or qe_type == 378:
+        with open(path+"\\378_Export.csv", "a+") as csv:
             headers = [
                 "ESPSEQ",
                 "ENTCODIGO",
@@ -108,11 +109,12 @@ def qe_export(qe_type):
                 "ESPVALORCIRD",
                 "ESPMOEDA"]
             csv.write(";".join(headers) + "\n")
-            for arquivo in arquivos:
-                with open(arquivo) as txt:
-                    for linha in txt.readlines():
-                        linha = linha.strip()
-                        structure = [
+            for file_name in file_names:
+                try:
+                    with open(file_name) as txt:
+                        for linha in txt.readlines():
+                            linha = linha.strip()
+                            structure = [
                             linha[0:7],
                             linha[7:12],
                             linha[12:20],
@@ -135,9 +137,11 @@ def qe_export(qe_type):
                             linha[144:157],
                             linha[157:170],
                             linha[170:173]]
-                        csv.write(";".join(structure) + "\n")
-    elif qe_type == "404":
-        with open("Export 404.csv", "a+") as csv:
+                            csv.write(";".join(structure) + "\n")
+                except FileNotFoundError:
+                    pass
+    if qe_type == "404" or qe_type == 404:
+        with open(path+"\\404_Export.csv", "a+") as csv:
             headers = [
                 "MSASEQ",
                 "ENTCODIGO",
@@ -159,11 +163,12 @@ def qe_export(qe_type):
                 "MSABASEIND",
                 "MSAVALORMON"]
             csv.write(";".join(headers) + "\n")
-            for arquivo in arquivos:
-                with open(arquivo) as txt:
-                    for linha in txt.readlines():
-                        linha = linha.strip()
-                        structure = [
+            for file_name in file_names:
+                try:
+                    with open(file_name) as txt:
+                        for linha in txt.readlines():
+                            linha = linha.strip()
+                            structure = [
                             linha[0:7],
                             linha[7:12],
                             linha[12:18],
@@ -183,9 +188,11 @@ def qe_export(qe_type):
                             linha[116:119],
                             linha[119:120],
                             linha[120:133]]
-                        csv.write(";".join(structure) + "\n")
-    elif qe_type == "405":
-        with open("Export 405.csv", "a+") as csv:
+                            csv.write(";".join(structure) + "\n")
+                except FileNotFoundError:
+                    pass
+    if qe_type == "405" or qe_type == 405:
+        with open(path+"\\405_Export.csv", "a+") as csv:
             headers = [
                 "MSASEQ",
                 "ENTCODIGO",
@@ -206,11 +213,12 @@ def qe_export(qe_type):
                 "MSRDASEIND",
                 "MSRVALORMON"]
             csv.write(";".join(headers) + "\n")
-            for arquivo in arquivos:
-                with open(arquivo) as txt:
-                    for linha in txt.readlines():
-                        linha = linha.strip()
-                        structure = [
+            for file_name in file_names:
+                try:
+                    with open(file_name) as txt:
+                        for linha in txt.readlines():
+                            linha = linha.strip()
+                            structure = [
                             linha[0:7],
                             linha[7:12],
                             linha[12:18],
@@ -229,9 +237,11 @@ def qe_export(qe_type):
                             linha[115:118],
                             linha[118:119],
                             linha[119:132]]
-                        csv.write(";".join(structure) + "\n")
-    elif qe_type == "406":
-        with open("Export 406.csv", "a+") as csv:
+                            csv.write(";".join(structure) + "\n")
+                except FileNotFoundError:
+                    pass
+    if qe_type == "406" or qe_type == 406:
+        with open(path+"\\406_Export.csv", "a+") as csv:
             headers = [
                 "SLASEQ",
                 "ENTCODIGO",
@@ -252,11 +262,12 @@ def qe_export(qe_type):
                 "SLAMOEDA",
                 "SLABASEIND"]
             csv.write(";".join(headers) + "\n")
-            for arquivo in arquivos:
-                with open(arquivo) as txt:
-                    for linha in txt.readlines():
-                        linha = linha.strip()
-                        structure = [
+            for file_name in file_names:
+                try:
+                    with open(file_name) as txt:
+                        for linha in txt.readlines():
+                            linha = linha.strip()
+                            structure = [
                             linha[0:7],
                             linha[7:12],
                             linha[12:18],
@@ -275,9 +286,11 @@ def qe_export(qe_type):
                             linha[124:126],
                             linha[126:129],
                             linha[129:130]]
-                        csv.write(";".join(structure) + "\n")
-    elif qe_type == "407":
-        with open("Export 407.csv", "a+") as csv:
+                            csv.write(";".join(structure) + "\n")
+                except FileNotFoundError:
+                    pass
+    if qe_type == "407" or qe_type == 407:
+        with open(path+"\\407_Export.csv", "a+") as csv:
             headers = [
                 "SLRSEQ",
                 "ENTCODIGO",
@@ -297,11 +310,12 @@ def qe_export(qe_type):
                 "SLRMOEDA",
                 "SLRBASEIND"]
             csv.write(";".join(headers) + "\n")
-            for arquivo in arquivos:
-                with open(arquivo) as txt:
-                    for linha in txt.readlines():
-                        linha = linha.strip()
-                        structure = [
+            for file_name in file_names:
+                try:
+                    with open(file_name) as txt:
+                        for linha in txt.readlines():
+                            linha = linha.strip()
+                            structure = [
                             linha[0:7],
                             linha[7:12],
                             linha[12:18],
@@ -319,9 +333,11 @@ def qe_export(qe_type):
                             linha[123:125],
                             linha[125:128],
                             linha[128:129]]
-                        csv.write(";".join(structure) + "\n")
-    elif qe_type == "408":
-        with open("Export 408.csv", "a+") as csv:
+                            csv.write(";".join(structure) + "\n")
+                except FileNotFoundError:
+                    pass
+    if qe_type == "408" or qe_type == 408:
+        with open(path+"\\408_Export.csv", "a+") as csv:
             headers = [
                 "MPRSEQ",
                 "MRFMESANO",
@@ -347,11 +363,12 @@ def qe_export(qe_type):
                 "MPRTAXACONV",
                 "MPRDATAEMISS "]
             csv.write(";".join(headers) + "\n")
-            for arquivo in arquivos:
-                with open(arquivo) as txt:
-                    for linha in txt.readlines():
-                        linha = linha.strip()
-                        structure = [
+            for file_name in file_names:
+                try:
+                    with open(file_name) as txt:
+                        for linha in txt.readlines():
+                            linha = linha.strip()
+                            structure = [
                             linha[0:7],
                             linha[7:12],
                             linha[12:18],
@@ -377,9 +394,11 @@ def qe_export(qe_type):
                             linha[149:152],
                             linha[152:165],
                             linha[165:173]]
-                        csv.write(";".join(structure) + "\n")
-    elif qe_type == "409":
-        with open("Export 409.csv", "a+") as csv:
+                            csv.write(";".join(structure) + "\n")
+                except FileNotFoundError:
+                    pass
+    if qe_type == "409" or qe_type == 409:
+        with open(path+"\\408_Export.csv", "a+") as csv:
             headers = [
                 "EMFSEQ",
                 "ENTCODIGO",
@@ -403,11 +422,12 @@ def qe_export(qe_type):
                 "EMFVLRDERIVATIVO",
                 "EMFCODGRUPO"]
             csv.write(";".join(headers) + "\n")
-            for arquivo in arquivos:
-                with open(arquivo) as txt:
-                    for linha in txt.readlines():
-                        linha = linha.strip()
-                        structure = [
+            for file_name in file_names:
+                try:
+                    with open(file_name) as txt:
+                        for linha in txt.readlines():
+                            linha = linha.strip()
+                            structure = [
                             linha[0:7],
                             linha[7:12],
                             linha[12:18],
@@ -432,4 +452,6 @@ def qe_export(qe_type):
                             linha[148:151],
                             linha[151:164],
                             linha[164:172]]
-                        csv.write(";".join(structure) + "\n")
+                            csv.write(";".join(structure) + "\n")
+                except FileNotFoundError:
+                    pass
