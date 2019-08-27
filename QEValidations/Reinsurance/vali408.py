@@ -1,6 +1,8 @@
 import ciso8601
 from pycpfcnpj import cpfcnpj
-from ..tools import make_command
+from ..tools import *
+
+moedas = get_moedas()
 
 
 # RESEGUROS
@@ -46,20 +48,21 @@ def validate_408(nome_arquivo, linha, n, conn, dates,
         conn.execute(make_command("T9", nome_arquivo, n, "408"))
     # Verifica se o campo MPATIPOCONT foi preenchido com um tipo de contrato
     # válido
-    if linha[61:62] not in ["1", "2"]:
+    if linha[61] not in ["1", "2"]:
         conn.execute(make_command("T10", nome_arquivo, n, "408"))
     # Verifica se o campo MPAMODCONT foi preenchido com uma modalidade de
     # contrato válida, exceto nos casos em que o tipo de contrato seja
     # ‘Facultativo’, quando o campo deve ser preenchido com ‘99’
-    if (linha[61:62] == "1" and linha[62:64] not in ["01", "02", "03",
+    if (linha[61] == "1" and linha[62:64] not in ["01", "02", "03",
                                                      "04", "05", "06"]) \
-            or (linha[61:62] == "2" and linha[62:64] != "99"):
+            or (linha[61] == "2" and linha[62:64] != "99"):
         conn.execute(make_command("T11", nome_arquivo, n, "408"))
     # Para o tipo de contrato 'Facultativo', verifica se o tipo de movimento é
     # 'Emissão de Prêmio Efetivo' ou 'Endosso de Prêmio Efetivo' ou
     # 'Restituição de Prêmio Efetivo' ou 'Cancelamento de Prêmio Efetivo' ou
     # 'Informação sem Movimentação de Prêmio'
-    pass
+    if linha[61] == "1" and linha[18:21] not in ["24","25","27","26","27"]:
+        conn.execute(make_command("T12", nome_arquivo, n, "408"))
     # Para o tipo de contrato 'Automático' e para as modalidades de contrato
     # 'Proporcional', verifica se o tipo de movimento é 'Emissão de Prêmio
     # Efetivo' ou 'Endosso de Prêmio Efetivo' ou 'Restituição de Prêmio

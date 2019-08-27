@@ -1,6 +1,8 @@
 import ciso8601
 from pycpfcnpj import cpfcnpj
-from ..tools import make_command
+from ..tools import *
+
+moedas = get_moedas()
 
 
 # RESEGUROS

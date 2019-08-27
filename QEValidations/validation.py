@@ -85,7 +85,7 @@ def run_validations(**kwargs):
             linha,
             n,
             conn,
-            dates,
+            dates_reseguros,
             entcodigo,
             gracodigos
         )
@@ -95,7 +95,7 @@ def run_validations(**kwargs):
             linha,
             n,
             conn,
-            dates,
+            dates_reseguros,
             entcodigo,
             gracodigos
         )
@@ -105,7 +105,7 @@ def run_validations(**kwargs):
             linha,
             n,
             conn,
-            dates,
+            dates_reseguros,
             entcodigo,
             gracodigos
         )
@@ -115,7 +115,7 @@ def run_validations(**kwargs):
             linha,
             n,
             conn,
-            dates,
+            dates_reseguros,
             entcodigo,
             gracodigos
         )
@@ -125,7 +125,7 @@ def run_validations(**kwargs):
             linha,
             n,
             conn,
-            dates,
+            dates_reseguros,
             entcodigo,
             gracodigos
         )
@@ -135,7 +135,7 @@ def run_validations(**kwargs):
             linha,
             n,
             conn,
-            dates,
+            dates_reseguros,
             entcodigo,
             gracodigos
         )
