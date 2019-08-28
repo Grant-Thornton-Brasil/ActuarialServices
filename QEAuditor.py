@@ -2,6 +2,7 @@ import sqlite3
 import time
 from tkinter import *
 from tkinter import filedialog, messagebox
+from tkinter.ttk import Treeview
 from db import *
 from QEValidations.validation import run_validations
 from Web.ses import SES
@@ -17,10 +18,10 @@ class main_window():
 
     def __init__(self):
         self.root = Tk()
-        # self.root.attributes("-topmost",True)
-        self.root.iconbitmap("icon.ico")
-        self.root.title("Grant Thornton Brasil - Serivços Atuariais")
+        self.root.iconbitmap(default="icon.ico")
+        self.root.title("Grant Thornton Brasil - Serviços Atuariais")
         self.root.resizable(False, False)
+        self.root.config(padx=3, pady=3)
         self.design()
         self.positions()
         self.conn = sqlite3.connect("base.db")
@@ -50,7 +51,10 @@ class main_window():
         self.ramos_frame = LabelFrame(self.left_frame,
                                       text="Ramos:")
         self.ramos_text = Text(self.ramos_frame,
-                               width=23)
+                               width=23,
+                               height=15)
+        self.ramos_scroll = Scrollbar(self.ramos_frame,
+                                      command=self.ramos_text.yview)
 
         # Big Frame 2 - Direita
         self.right_frame = Frame(self.root)
@@ -125,17 +129,27 @@ class main_window():
         self.arquivos_frame = LabelFrame(self.right_frame,
                                          text="Arquivos Importados")
         self.arquivos_text = Text(self.arquivos_frame,
-                                  height=22,
+                                  height=19,
                                   width=70)
         self.arquivos_button = Button(self.arquivos_frame,
                                       text="Importar TXTs",
-                                      command=lambda: self.add_files())
+                                      command=lambda: self.add_files(),
+                                      height=13,
+                                      width=12)
+        self.arquivos_button_clear = Button(self.arquivos_frame,
+                                            text="Limpar",
+                                            command=lambda: self.arquivos_text.delete(
+                                                "1.0", END),
+                                            height=6,
+                                            width=12)
+        self.arquivos_scroll = Scrollbar(self.arquivos_frame,
+                                         command=self.arquivos_text.yview)
         # Processos
         self.processo1_var = IntVar()
         self.processo2_var = IntVar()
         self.processo3_var = IntVar()
         self.processo4_var = IntVar()
-        self.processos_frame = LabelFrame(self.right_frame,
+        self.processos_frame = LabelFrame(self.left_frame,
                                           text="Processos")
         self.processo1 = Checkbutton(self.processos_frame,
                                      text="Críticas",
@@ -145,45 +159,69 @@ class main_window():
                                      variable=self.processo2_var)
         self.processo3 = Checkbutton(self.processos_frame,
                                      text="Críticas (Detalhamento)",
-                                     variable=self.processo3_var)
+                                     variable=self.processo3_var,
+                                     command=lambda: self.processo1_var.set(1))
         self.processo4 = Checkbutton(self.processos_frame,
                                      text="Exportar para CSV",
                                      variable=self.processo4_var)
 
-        # Status Bar
-        self.status_frame = Frame(self.root)
-        self.status_label = Label(self.status_frame,
-                                  text="Bem-Vindo!".ljust(238,
-                                                          " "),
-                                  bd=1,
-                                  relief=SUNKEN,
-                                  anchor=W)
-        self.status_execute_button = Button(self.status_frame,
-                                            text="Executar",
-                                            command=lambda: self.validate())
-        self.status_cancel_button = Button(self.status_frame,
-                                           text="Cancelar")
+        # Path Bars:
+        self.path_bars_frame = LabelFrame(self.right_frame, text="Caminhos")
+        self.path_detalhamento_label = Label(self.path_bars_frame,
+                                             text="Criticas (Detalhamento)")
+        self.path_detalhamento_entry = Entry(self.path_bars_frame,
+                                             width=73)
+        self.path_detalhamento_button = Button(self.path_bars_frame,
+                                               text="Selecionar Pasta")
+        self.path_export_label = Label(self.path_bars_frame,
+                                       text="Exportação CSVs")
+        self.path_export_entry = Entry(self.path_bars_frame,
+                                       width=73)
+        self.path_export_button = Button(self.path_bars_frame,
+                                         text="Selecionar Pasta")
+
+        # Tree Process
+        self.process_tree_frame = Frame(self.root)
+        self.process_tree = Treeview(self.process_tree_frame,
+                                     height=3,
+                                     columns=("Título do Processo",
+                                              "Progresso (%)",
+                                              "Status"))
+        self.process_start = Button(
+            self.process_tree_frame, height=4, text="EXECUTAR!",
+            command=lambda: self.validate(),
+            font=("TkDefaultFont",9,"bold"))
+        self.process_end = Button(
+            self.process_tree_frame, text="ABORTAR!", fg="red",
+            font=("TkDefaultFont",8,"bold"))
+        self.process_scroll = Scrollbar(self.process_tree_frame,
+                                        command=self.process_tree.yview)
+        self.process_tree.heading("#0", text="Título do Processo")
+        self.process_tree.heading("#1", text="Progresso")
+        self.process_tree.heading("#2", text="Status")
+        self.process_tree.column("#0", width=200)
 
 
     def positions(self):
         # Big Frame 1 - Esquerda
-        self.left_frame.grid(row=0, column=0,
-                             sticky=NW)
+        self.left_frame.grid(row=0, column=0)
         # Entcodigo
         self.entcodigo_frame.pack(fill=X)
         self.entcodigo_entry.pack(fill=X)
         self.entcodigo_button.pack(fill=X)
         # Ano
-        self.year_frame.pack(fill=X, ipady=4)
-        self.year_spinbox.pack(side=RIGHT, anchor=E)
-        self.year_label.pack(side=RIGHT, anchor=E)
+        self.year_frame.pack(fill=X, ipady=3)
+        self.year_label.grid(row=0, column=0)
+        self.year_spinbox.grid(row=0, column=1)
+
         # Ramos
-        self.ramos_frame.pack()
-        self.ramos_text.pack(padx=4, fill=BOTH)
+        self.ramos_frame.pack(fill=X)
+        self.ramos_text.pack(side=LEFT)
+        self.ramos_scroll.pack(side=LEFT, fill=Y)
+        self.ramos_text.config(yscrollcommand=self.ramos_scroll.set)
 
         # Big Frame 2 - Direita
-        self.right_frame.grid(row=0, column=1,
-                              sticky=NE)
+        self.right_frame.grid(row=0, column=1)
         self.qetype_frame.pack(fill=X)
         self.qetype_label1.grid(row=0, column=0, sticky=W)
         self.qetype_label2.grid(row=1, column=0, sticky=W)
@@ -204,20 +242,35 @@ class main_window():
         self.qetype_rb423.grid(row=2, column=5)
         # Arquivos
         self.arquivos_frame.pack(fill=X)
-        self.arquivos_text.pack(side=LEFT, padx=4)
-        self.arquivos_button.pack(side=RIGHT, fill=BOTH)
+        self.arquivos_text.grid(row=0, column=0)
+        self.arquivos_scroll.grid(row=0, column=1, sticky=(N, W, E, S))
+        self.arquivos_button.grid(row=0, column=2, sticky=N, columnspan=2)
+        self.arquivos_button_clear.grid(
+            row=0, column=2, sticky=S, columnspan=2)
+        self.arquivos_text.config(yscrollcommand=self.arquivos_scroll.set)
         # Processos
-        self.processos_frame.pack(fill=BOTH)
-        self.processo1.pack(side=LEFT)
-        self.processo2.pack(side=LEFT)
-        self.processo3.pack(side=LEFT)
-        self.processo4.pack(side=LEFT)
+        self.processos_frame.pack(fill=X, side=BOTTOM, anchor=S)
+        self.processo1.grid(row=0, column=0, sticky=W)
+        self.processo2.grid(row=1, column=0, sticky=W)
+        self.processo3.grid(row=2, column=0, sticky=W)
+        self.processo4.grid(row=3, column=0, sticky=W)
 
-        # Status Bar
-        self.status_frame.grid(row=1, columnspan=2, sticky=SW)
-        self.status_label.grid(row=0, column=0, ipady=4)
-        self.status_execute_button.grid(row=0, column=1)
-        self.status_cancel_button.grid(row=0, column=2)
+        # Path Bars
+        self.path_bars_frame.pack(fill=X)
+        self.path_detalhamento_label.grid(row=0, column=0, sticky=W)
+        self.path_detalhamento_entry.grid(row=0, column=1)
+        self.path_detalhamento_button.grid(row=0, column=2, padx=3)
+        self.path_export_label.grid(row=1, column=0, sticky=W)
+        self.path_export_entry.grid(row=1, column=1)
+        self.path_export_button.grid(row=1, column=2)
+
+        # Tree Process
+        self.process_tree_frame.grid(
+            row=1, column=0, columnspan=2, sticky=(W, E))
+        self.process_tree.pack(side=LEFT, fill=BOTH)
+        self.process_scroll.pack(side=LEFT, fill=BOTH)
+        self.process_start.pack(fill=BOTH)
+        self.process_end.pack(fill=BOTH)
 
     # COMMANDS
     def validate_entcodigo(self):
@@ -424,9 +477,8 @@ class main_window():
             qe_export(self.qetype_var.get(),path,self.arquivos_text.get("1.0",END).splitlines())
 
 
-
 if __name__ == "__main__":
     if os.path.exists("base.db"):
         os.remove("base.db")
-    a=main_window()
+    a = main_window()
     a.root.mainloop()

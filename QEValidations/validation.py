@@ -29,7 +29,7 @@ def run_validations(**kwargs):
         ramcodigos (list):
         esrcodcess (list):
     """
-    qe = kwargs.get("QE")
+    qe = kwargs.get("qe")
     nome_arquivo = kwargs.get("nome_arquivo")
     linha = kwargs.get("linha")
     n = kwargs.get("n")
@@ -45,7 +45,7 @@ def run_validations(**kwargs):
     dates_reseguros = [f"2018" + f"{month}".zfill(2) for month in range(1, 13)]
 
     # SEGUROS
-    if qe == "376" or 376:
+    if qe == "376" or qe == 376:
         validate_376(
             nome_arquivo,
             linha,
@@ -56,7 +56,7 @@ def run_validations(**kwargs):
             ramcodigos,
             esrcodcess
         )
-    elif qe == "377" or 377:
+    elif qe == "377" or qe == 377:
         validate_377(
             nome_arquivo,
             linha,
@@ -67,7 +67,7 @@ def run_validations(**kwargs):
             ramcodigos,
             esrcodcess
         )
-    elif qe == "378" or 378:
+    elif qe == "378" or qe == 378:
         validate_378(
             nome_arquivo,
             linha,
@@ -79,7 +79,7 @@ def run_validations(**kwargs):
             esrcodcess
         )
     # RESSEGUROS
-    elif qe == "404" or 404:
+    elif qe == "404" or qe == 404:
         validate_404(
             nome_arquivo,
             linha,
@@ -89,7 +89,7 @@ def run_validations(**kwargs):
             entcodigo,
             gracodigos
         )
-    elif qe == "405" or 405:
+    elif qe == "405" or qe == 405:
         validate_405(
             nome_arquivo,
             linha,
@@ -99,7 +99,7 @@ def run_validations(**kwargs):
             entcodigo,
             gracodigos
         )
-    elif qe == "406" or 406:
+    elif qe == "406" or qe == 406:
         validate_406(
             nome_arquivo,
             linha,
@@ -109,7 +109,7 @@ def run_validations(**kwargs):
             entcodigo,
             gracodigos
         )
-    elif qe == "407" or 407:
+    elif qe == "407" or qe == 407:
         validate_407(
             nome_arquivo,
             linha,
@@ -119,7 +119,7 @@ def run_validations(**kwargs):
             entcodigo,
             gracodigos
         )
-    elif qe == "408" or 408:
+    elif qe == "408" or qe == 408:
         validate_408(
             nome_arquivo,
             linha,
@@ -129,7 +129,7 @@ def run_validations(**kwargs):
             entcodigo,
             gracodigos
         )
-    elif qe == "409" or 409:
+    elif qe == "409" or qe == 409:
         validate_409(
             nome_arquivo,
             linha,
