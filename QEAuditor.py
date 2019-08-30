@@ -54,7 +54,8 @@ class main_window():
                                       text="Ramos:")
         self.ramos_text = Text(self.ramos_frame,
                                width=23,
-                               height=15)
+                               height=15,
+                               state=DISABLED)
         self.ramos_scroll = Scrollbar(self.ramos_frame,
                                       command=self.ramos_text.yview)
 
@@ -200,9 +201,9 @@ class main_window():
         self.process_tree.heading("#0", text="#")
         self.process_tree.heading("#1", text="Progresso")
         self.process_tree.heading("#2", text="Status")
-        self.process_tree.column("#0", minwidth=40 ,width=40, stretch=False)
-        self.process_tree.column("#1", width=365, stretch=NO)
-        self.process_tree.column("#2", width=365, stretch=NO)
+        self.process_tree.column("#0",width=40)
+        self.process_tree.column("#1", width=365)
+        self.process_tree.column("#2", width=365)
     
 
     def positions(self):
@@ -296,6 +297,10 @@ class main_window():
             )
             return
         self.ramos_text.delete('1.0', END)
+        self.entcodigo_button.config(
+            text="Acessando SES...",
+            state=DISABLED
+        )
         ramos = SES()
         ramos = ramos.get_ramos(
             self.entcodigo_entry.get(),
@@ -306,9 +311,14 @@ class main_window():
                 message="Impossível validar o ENTCODIGO e consultar os ramos.\n\n"
                 "Verifique sua conexão...\n\n"
                 "OBS: É possível imputar manualmente.")
+            self.ramos_text.config(state=NORMAL)    
             return
+        self.ramos_text.config(state=NORMAL)
         for ramo in ramos:
             self.ramos_text.insert(END, ramo + "\n")
+        self.ramos_text.config(state=DISABLED)
+        self.entcodigo_button.config(text="Validar e obter ramos",
+            state=NORMAL)
 
 
     def validate(self):
