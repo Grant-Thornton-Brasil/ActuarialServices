@@ -12,9 +12,11 @@ from QEMaths.maths import *
 from export import qe_export
 from datetime import datetime
 import calendar
+import threading
 
 
 class main_window():
+
 
     def __init__(self):
         self.root = Tk()
@@ -25,7 +27,7 @@ class main_window():
         self.design()
         self.positions()
         self.conn = sqlite3.connect("base.db")
-
+        
 
     def design(self):
         # Big Frame 1 - Esquerda
@@ -37,7 +39,7 @@ class main_window():
         self.entcodigo_button = Button(
             self.entcodigo_frame,
             text="Validar e obter ramos",
-            command=lambda: self.validate_entcodigo())
+            command=lambda: self.get_ramos_thread())
         # Ano
         self.year_frame = LabelFrame(self.left_frame,
                                      text="Período")
@@ -184,8 +186,7 @@ class main_window():
         self.process_tree_frame = Frame(self.root)
         self.process_tree = Treeview(self.process_tree_frame,
                                      height=3,
-                                     columns=("Título do Processo",
-                                              "Progresso (%)",
+                                     columns=("Progresso",
                                               "Status"))
         self.process_start = Button(
             self.process_tree_frame, height=4, text="EXECUTAR!",
@@ -196,11 +197,13 @@ class main_window():
             font=("TkDefaultFont",8,"bold"))
         self.process_scroll = Scrollbar(self.process_tree_frame,
                                         command=self.process_tree.yview)
-        self.process_tree.heading("#0", text="Título do Processo")
+        self.process_tree.heading("#0", text="#")
         self.process_tree.heading("#1", text="Progresso")
         self.process_tree.heading("#2", text="Status")
-        self.process_tree.column("#0", width=200)
-
+        self.process_tree.column("#0", minwidth=40 ,width=40, stretch=False)
+        self.process_tree.column("#1", width=365, stretch=NO)
+        self.process_tree.column("#2", width=365, stretch=NO)
+    
 
     def positions(self):
         # Big Frame 1 - Esquerda
@@ -272,7 +275,13 @@ class main_window():
         self.process_start.pack(fill=BOTH)
         self.process_end.pack(fill=BOTH)
 
+
     # COMMANDS
+    def get_ramos_thread(self):
+        x= threading.Thread(target=self.validate_entcodigo)
+        x.start()
+
+
     def validate_entcodigo(self):
         try:
             int(self.entcodigo_entry.get())
@@ -359,6 +368,7 @@ class main_window():
 
 
     def run(self):
+        start = time.time()
         processos = [self.processo1_var.get(), self.processo2_var.get(),
                      self.processo3_var.get(), self.processo4_var.get()]
         # Críticas
@@ -370,7 +380,6 @@ class main_window():
             esrcodcess = ["38741", "30074", "34819", "36099", "37052",
                           "38253", "31623", "38873", "33294", "39764",
                           "37729", "31551", "38270", "30201", "34665", "32875", entcodigo]
-            start = time.time()
             for arquivo in self.arquivos_text.get(
                     "1.0", END).splitlines()[:-1]:
                 if arquivo != "-" * 70:
@@ -392,16 +401,6 @@ class main_window():
                                     esrcodcess=esrcodcess)
                     except FileNotFoundError:
                         pass
-            end = time.time()
-            toaster = ToastNotifier()
-            toaster.show_toast(
-                title="Críticas",
-                msg="Procecsso executado com sucesso!\n"
-                "Tempo de execução: {} segundos".format(
-                    round(
-                        end - start,
-                        2)),
-                threaded=True)
             self.conn.commit()
         # Confrontos
         if processos[1] == 1:
@@ -468,13 +467,20 @@ class main_window():
                 m408.df.to_excel(folder+"\\408.xlsx")
             elif qe == 409:
                 m409.df.to_excel(folder+"\\409.xlsx")
-            
         if processos[2] == 1:
             path = os.path.abspath(filedialog.askdirectory())
             make_report(self.qetype_var.get(),self.conn,path)
         if processos[3] == 1:
             path = os.path.abspath(filedialog.askdirectory())
             qe_export(self.qetype_var.get(),path,self.arquivos_text.get("1.0",END).splitlines())
+        end = time.time()
+        notifier = ToastNotifier()
+        notifier.show_toast(
+            "Processo Finalizado com Sucesso!",
+            f"O processo levou {round(end-start,2)} segundos",
+            icon_path="icon.ico",
+            threaded=True
+        )
 
 
 if __name__ == "__main__":

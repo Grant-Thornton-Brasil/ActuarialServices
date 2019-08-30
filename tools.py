@@ -18,7 +18,7 @@ def get_lines_from_txts():
 
 def get_moedas():
     moedas = []
-    with open(os.path.abspath(os.path.join(os.path.abspath(__file__),"..","TXTs","moedas.txt")), "r") as txt:
+    with open(os.path.abspath(os.path.join(os.path.abspath(__file__), "..", "TXTs", "moedas.txt")), "r") as txt:
         for linha in txt.readlines():
             moedas.append(linha.strip())
     return moedas
@@ -26,8 +26,7 @@ def get_moedas():
 
 def get_ramos():
     ramos = []
-    with open(os.path.abspath(os.path.join(os.path.abspath(__file__),"..","TXTs","ramos.txt")), "r", encoding="utf8") as txt:
+    with open(os.path.abspath(os.path.join(os.path.abspath(__file__), "..", "TXTs", "ramos.txt")), "r", encoding="utf8") as txt:
         for linha in txt.readlines():
             ramos.append(linha.strip())
     return ramos
-

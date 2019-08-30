@@ -19,7 +19,4 @@ def get_ramos():
     with open(os.path.abspath(os.path.join("TXTs","ramos.txt"))) as txt:
         for linha in txt.readlines():
             ramos.append(linha.strip())
-    return ramos    
-
-
-    
+    return ramos
