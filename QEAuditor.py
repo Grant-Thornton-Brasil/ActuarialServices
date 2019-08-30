@@ -13,6 +13,7 @@ from export import qe_export
 from datetime import datetime
 import calendar
 import threading
+from glob import glob
 
 
 class main_window():
@@ -26,9 +27,9 @@ class main_window():
         self.root.config(padx=3, pady=3)
         self.design()
         self.positions()
-        self.conn = sqlite3.connect("base.db")
-        
+        self.active_list = []
 
+        
     def design(self):
         # Big Frame 1 - Esquerda
         self.left_frame = Frame(self.root)
@@ -175,31 +176,33 @@ class main_window():
         self.path_detalhamento_entry = Entry(self.path_bars_frame,
                                              width=73)
         self.path_detalhamento_button = Button(self.path_bars_frame,
-                                               text="Selecionar Pasta")
+                                               text="Selecionar Pasta",
+                                               command= lambda: self.get_folders(1))
         self.path_export_label = Label(self.path_bars_frame,
                                        text="Exportação CSVs")
         self.path_export_entry = Entry(self.path_bars_frame,
                                        width=73)
         self.path_export_button = Button(self.path_bars_frame,
-                                         text="Selecionar Pasta")
+                                         text="Selecionar Pasta",
+                                               command= lambda: self.get_folders(2))
 
         # Tree Process
         self.process_tree_frame = Frame(self.root)
         self.process_tree = Treeview(self.process_tree_frame,
                                      height=3,
-                                     columns=("Progresso",
-                                              "Status"))
+                                     columns=[i for i in range(1,3)])                       
         self.process_start = Button(
             self.process_tree_frame, height=4, text="EXECUTAR!",
             command=lambda: self.validate(),
             font=("TkDefaultFont",9,"bold"))
         self.process_end = Button(
             self.process_tree_frame, text="ABORTAR!", fg="red",
-            font=("TkDefaultFont",8,"bold"))
+            font=("TkDefaultFont",8,"bold"),
+            command=lambda: self.kill_process())
         self.process_scroll = Scrollbar(self.process_tree_frame,
                                         command=self.process_tree.yview)
         self.process_tree.heading("#0", text="#")
-        self.process_tree.heading("#1", text="Progresso")
+        self.process_tree.heading("#1", text="Processos")
         self.process_tree.heading("#2", text="Status")
         self.process_tree.column("#0",width=40)
         self.process_tree.column("#1", width=365)
@@ -278,6 +281,15 @@ class main_window():
 
 
     # COMMANDS
+    def get_folders(self,process_type):
+        if process_type == 1:
+            self.path_detalhamento_entry.delete(0,END)
+            self.path_detalhamento_entry.insert(0,string=filedialog.askdirectory())
+        elif process_type == 2:
+            self.path_export_entry.delete(0,END)
+            self.path_export_entry.insert(0,string=filedialog.askdirectory())
+
+
     def get_ramos_thread(self):
         x= threading.Thread(target=self.validate_entcodigo)
         x.start()
@@ -366,7 +378,21 @@ class main_window():
                 title="Erro",
                 message="Selecione aom menos um processo.")
             return
-        self.run()
+        process = "QE "+str(self.qetype_var.get())+" - "
+        if self.processo1_var.get() == 0:
+            process += "Críticas, "
+        if self.processo2_var.get() == 0:
+            process += "Confrontos ($), "
+        if self.processo3_var.get() == 0:
+            process += "Críticas (Detalhamento), "
+        if self.processo4_var.get() == 0:
+            process += "Exportar para CSV."
+        
+
+        self.active_list.append(threading.Thread(target=self.run,args=[len(self.active_list)]))
+        self.active_list[-1].start()
+        self.process_tree.insert("",END,text=str(len(self.active_list)),
+            values=(process,"Executando..."))
 
 
     def add_files(self):
@@ -384,7 +410,9 @@ class main_window():
         self.arquivos_text.delete("1.0", END)
         self.arquivos_text.config(state=DISABLED)
 
-    def run(self):
+
+    def run(self,process_number):
+        conn = sqlite3.connect(f"DBs\\{process_number}.db")
         start = time.time()
         processos = [self.processo1_var.get(), self.processo2_var.get(),
                      self.processo3_var.get(), self.processo4_var.get()]
@@ -393,7 +421,7 @@ class main_window():
             qe = self.qetype_var.get()
             entcodigo = self.entcodigo_entry.get()
             ramcodigos = self.ramos_text.get("1.0", END).splitlines()[:-1]
-            create_main_tables(self.conn)
+            create_main_tables(conn)
             esrcodcess = ["38741", "30074", "34819", "36099", "37052",
                           "38253", "31623", "38873", "33294", "39764",
                           "37729", "31551", "38270", "30201", "34665", "32875", entcodigo]
@@ -411,14 +439,14 @@ class main_window():
                                     nome_arquivo=txt.name,
                                     linha=linha,
                                     n=n,
-                                    conn=self.conn,
+                                    conn=conn,
                                     year=int(self.year_spinbox.get()),
                                     entcodigo=entcodigo,
                                     ramcodigos=ramcodigos,
                                     esrcodcess=esrcodcess)
                     except FileNotFoundError:
                         pass
-            self.conn.commit()
+            conn.commit()
         # Confrontos
         if processos[1] == 1:
             year = int(self.year_spinbox.get())
@@ -486,7 +514,7 @@ class main_window():
                 m409.df.to_excel(folder+"\\409.xlsx")
         if processos[2] == 1:
             path = os.path.abspath(filedialog.askdirectory())
-            make_report(self.qetype_var.get(),self.conn,path)
+            make_report(self.qetype_var.get(),conn,path)
         if processos[3] == 1:
             path = os.path.abspath(filedialog.askdirectory())
             qe_export(self.qetype_var.get(),path,self.arquivos_text.get("1.0",END).splitlines())
@@ -500,8 +528,12 @@ class main_window():
         )
 
 
+    def kill_process(self):
+        print(int(self.process_tree.focus()[1:]))
+
+
 if __name__ == "__main__":
-    if os.path.exists("base.db"):
-        os.remove("base.db")
+    for db in glob("DBs\\*.db"):
+        os.remove(db)
     a = main_window()
     a.root.mainloop()
