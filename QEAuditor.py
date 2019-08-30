@@ -133,7 +133,8 @@ class main_window():
                                          text="Arquivos Importados")
         self.arquivos_text = Text(self.arquivos_frame,
                                   height=19,
-                                  width=70)
+                                  width=70,
+                                  state=DISABLED)
         self.arquivos_button = Button(self.arquivos_frame,
                                       text="Importar TXTs",
                                       command=lambda: self.add_files(),
@@ -141,8 +142,7 @@ class main_window():
                                       width=12)
         self.arquivos_button_clear = Button(self.arquivos_frame,
                                             text="Limpar",
-                                            command=lambda: self.arquivos_text.delete(
-                                                "1.0", END),
+                                            command=lambda: self.clear_files(),
                                             height=6,
                                             width=12)
         self.arquivos_scroll = Scrollbar(self.arquivos_frame,
@@ -371,11 +371,18 @@ class main_window():
 
     def add_files(self):
         arquivos = filedialog.askopenfilenames()
+        self.arquivos_text.config(state=NORMAL)
         for n, arquivo in enumerate(arquivos, 1):
             self.arquivos_text.insert(END, str(n) + "\n")
             self.arquivos_text.insert(END, arquivo + "\n")
             self.arquivos_text.insert(END, "-" * 70 + "\n")
+        self.arquivos_text.config(state=DISABLED)
 
+
+    def clear_files(self):
+        self.arquivos_text.config(state=NORMAL)
+        self.arquivos_text.delete("1.0", END)
+        self.arquivos_text.config(state=DISABLED)
 
     def run(self):
         start = time.time()
