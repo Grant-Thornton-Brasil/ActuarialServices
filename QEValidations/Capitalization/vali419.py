@@ -143,7 +143,10 @@ def validate_419(nome_arquivo, linha, n, conn, dates,
         conn.execute(make_command("T26", nome_arquivo, n, "419"))   
     # Valida a correspondência entre os campos ATVCODIGO e
     # TPFOPERADORDERIVATIVO
-    pass
+    if (linha[22:28] in ["D0001", "D1001" ,"D1002", 
+        "D2001","D2002","D3001"] and linha[111] not in ["+","-"]) or
+        linha[111] != "0":
+        conn.execute(make_command("T27", nome_arquivo, n, "419"))
     # Verifica se quando EMFTXMERCADO e EMFTXCONTRATADO é maior que zero o
     # valor de FTRCODIGO é TD1 ou TS1
     pass
