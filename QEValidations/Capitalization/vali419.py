@@ -106,23 +106,29 @@ def validate_419(nome_arquivo, linha, n, conn, dates,
     if (linha[22:27] in ["A0001", "A10001", "A10002"] and linha[27] != "+"):
         conn.execute(make_command("T22", nome_arquivo, n, "419"))
     # Valida a correspondência entre os campos ATVCODIGO e FTRCODIGO
-    if (linha[22:28] == "A0001" and linha[28:32] in ["AA1", "AA2", "AA3", "AA4", "AA9",
-                                                     "MC1", "FF1", "IMO", "FII", "PSR",
-                                                     "DPV"]) or \
+    if (linha[22:28] == "A0001" and linha[28:32] in
+        ["AA1", "AA2", "AA3", "AA4", "AA9",
+         "MC1", "FF1", "IMO", "FII", "PSR",
+         "DPV"]) or \
        (linha[22:28] == "A1001" and linha[28:32] not in ["JJ1", "JM1", "JM2",
-                                                         "JM3", "JM4", "JM9", "JT1", "JT9",
-                                                         "JI1", "JI2", "JI8", "JI9", "ME1",
-                                                         "ME2", "ME3", "ME4", "ME9", "TS1",
-                                                         "TS2", "TD1", "TD2", "997", "998",
+                                                         "JM3", "JM4", "JM9",
+                                                         "JT1", "JT9", "JI1",
+                                                         "JI2", "JI8", "JI9",
+                                                         "ME1", "ME2", "ME3",
+                                                         "ME4", "ME9", "TS1",
+                                                         "TS2", "TD1", "TD2",
+                                                         "997", "998",
                                                          "999"]) or \
        (linha[22:28] == "A1002" and linha[28:32] != "AA1") or \
        (linha[22:28] == "A1003" and linha[28:32] not in ["FF1", "FII",
                                                          "DPV", "PSR"]) or \
        (linha[22:28] == "A1004" and linha[28:32] in ["TS1", "TS2",
-                                                     "TD1", "TD2", "DPV"]) or \
+                                                     "TD1", "TD2",
+                                                     "DPV"]) or \
        (linha[22:28] == "A1005" and linha[28:32] in ["AA1", "AA2", "AA3",
                                                      "AA4", "AA9", "MC1",
-                                                     "FF1", "IMO", "FII", "PSR", "DPV"]) or \
+                                                     "FF1", "IMO", "FII",
+                                                     "PSR", "DPV"]) or \
        (linha[22:28] == "A9999" and linha[28:32] in ["FF1", "FII",
                                                      "PSR", "DPV"]) or \
        (linha[22:28] in ["D0001", "D0002", "D1001", "D1002", "D1003",
@@ -138,20 +144,28 @@ def validate_419(nome_arquivo, linha, n, conn, dates,
     # tabela BENSVINCULADOS do FIPSUSEP, exceto para preenchimento com zeros
     pass
     # Valida a correspondência entre os campos ATVCODIGO e EMFVLRDERIVATIVO
-    if linha[22:28] in ["D0001", "D1001", "D1002",
-                        "D2001", "D2002", "D3001"] and not (float(linha[112:128])>= 0):
-        conn.execute(make_command("T26", nome_arquivo, n, "419"))   
+    if (linha[22:28] in ["D0001", "D1001", "D1002", "D2001", "D2002",
+                         "D3001"] and not (float(linha[112:128]) >= 0)):
+        conn.execute(make_command("T26", nome_arquivo, n, "419"))
     # Valida a correspondência entre os campos ATVCODIGO e
     # TPFOPERADORDERIVATIVO
-    if (linha[22:28] in ["D0001", "D1001" ,"D1002", 
-        "D2001","D2002","D3001"] and linha[111] not in ["+","-"]) or
-        linha[111] != "0":
+    if (linha[22:28] in ["D0001", "D1001", "D1002", "D2001", "D2002",
+                         "D3001"] and linha[111] not in ["+", "-"]) or linha[111] != "0":
         conn.execute(make_command("T27", nome_arquivo, n, "419"))
     # Verifica se quando EMFTXMERCADO e EMFTXCONTRATADO é maior que zero o
     # valor de FTRCODIGO é TD1 ou TS1
-    pass
+    if (float(linha[105:112]) > 0 and float(linha[99:106]) > 0) and \
+            linha[28:31] not in ["TD1", "TS1"]:
+        conn.execute(make_command("T28", nome_arquivo, n, "419"))
     # Verifica se quando EMFTXMERCADO é maior que zero o valor de
     # EMFTXCONTRATADO também é maior que zero e vice-versa
-    pass
+    if (float(linha[105:112]) > 0 and not float(linha[99:106]) > 0) or \
+            (float(linha[99:106]) > 0 and not float(linha[105:112]) > 0):
+        conn.execute(make_command("T29", nome_arquivo, n, "419"))
     # Valida a correspondência entre os campos ATVCODIGO e EMFCODISIN
-    pass
+    if linha[22:28] in ["A1001", "A1002", "A1003", "A1004", "A1005",
+                        "D0001", "D0002", "D0003", "D1001", "D1002",
+                        "D1003", "D1004", "D2001", "D2002", "D2003",
+                        "D2004", "D3001", "D9999"] and \
+       linha[74:87] == "000000000000":
+        conn.execute(make_command("T29", nome_arquivo, n, "419"))

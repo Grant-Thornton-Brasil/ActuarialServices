@@ -31,31 +31,11 @@ def validate_420(nome_arquivo, linha, n, conn, dates,
         conn.execute(make_command("T6", nome_arquivo, n, "420"))
     # Verifica se o campo DOCCODIGO corresponde a um tipo de direito ou
     # obrigação valido (conforme tabela “CONTRATOSEGUROCODIGO”)
-    if linha[22:26] not in ["D0001",
-                            "D0002",
-                            "D0003",
-                            "D0004",
-                            "D0005",
-                            "D0006",
-                            "D0007",
-                            "D9999",
-                            "CC001",
-                            "CC003",
-                            "C0001",
-                            "C0002",
-                            "C0004",
-                            "C0005",
-                            "C0006",
-                            "C9999",
-                            "CR001",
-                            "DR002",
-                            "CCP01",
-                            "CCP02",
-                            "DCP01",
-                            "DCP02",
-                            "DCP03",
-                            "DCP04",
-                            "DCP05"]:
+    if linha[22:26] not in ["D0001", "D0002", "D0003", "D0004", "D0005",
+                            "D0006", "D0007", "D9999", "CC001", "CC003",
+                            "C0001", "C0002", "C0004", "C0005", "C0006",
+                            "C9999", "CR001", "DR002", "CCP01", "CCP02",
+                            "DCP01", "DCP02", "DCP03", "DCP04", "DCP05"]:
         conn.execute(make_command("T7", nome_arquivo, n, "420"))
     # Verifica se o campo TPFOPERADOR corresponde a um tipo de fluxo válido
     # (conforme tabela “TIPOFLUXO”)
@@ -89,7 +69,18 @@ def validate_420(nome_arquivo, linha, n, conn, dates,
     # EMGCODGRUPO do quadro 423.
     pass
     # Valida a correspondência entre os campos DOCCODIGO e TPFOPERADOR
-    pass
+    if (linha[22:27] in ["D0001", "D0002", "D0003", "D0004",
+                         "D0005", "D0006", "D0007", "D9999"] and
+        linha[27] != "-") or \
+        (linha[22:27] in ["C0001", "C0002", "C0004", "C0005",
+                          "C0006", "C9999", "CR001"] and
+         linha[27] != "+") or \
+        (linha[22:27] == "DR002" and linha[27] != "-") or \
+        (linha[22:27] in ["CCP01", "CCP02"] and
+         linha[27] != "+") or \
+        (linha[22:27] in ["DCP01", "DCP02", "DCP03", "DCP04",
+                          "DCP05"] and linha[27] != "-"):
+        conn.execute(make_command("T14", nome_arquivo, n, "420"))
     # Verifica se o campo EMCSEMREGISTRO é igual a 0 ou 1
     if linha[58] not in ["0", "1"]:
         conn.execute(make_command("T7", nome_arquivo, n, "420"))
