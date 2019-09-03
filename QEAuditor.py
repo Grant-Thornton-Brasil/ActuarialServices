@@ -24,9 +24,14 @@ class main_window():
         self.root.title("Grant Thornton Brasil - Serviços Atuariais")
         self.root.resizable(False, False)
         self.root.config(padx=3, pady=3)
+        ws = self.root.winfo_screenwidth() # width of the screen
+        hs = self.root.winfo_screenheight() # height of the screen
+        self.root.geometry(f"894x625+{int(round(ws/7,0))}+{int(round(hs/17,0))}")
         self.design()
         self.positions()
         self.active_list = []
+        self.validations = []
+
 
     def design(self):
         # Big Frame 1 - Esquerda
@@ -229,6 +234,7 @@ class main_window():
         self.process_tree.column("#1", width=365)
         self.process_tree.column("#2", width=365)
 
+
     def positions(self):
         # Big Frame 1 - Esquerda
         self.left_frame.grid(row=0, column=0, sticky=N)
@@ -303,8 +309,8 @@ class main_window():
         self.process_start.pack(fill=BOTH)
         self.process_end.pack(fill=BOTH)
 
-    # COMMANDS
 
+    # COMMANDS
     def get_folders(self, process_type):
         if process_type == 0:
             self.path_confrontos_entry.config(
@@ -336,9 +342,11 @@ class main_window():
                 state=DISABLED
             )
 
+
     def get_ramos_thread(self):
         x = threading.Thread(target=self.validate_entcodigo)
         x.start()
+
 
     def validate_entcodigo(self):
         try:
@@ -377,6 +385,7 @@ class main_window():
         self.ramos_text.config(state=DISABLED)
         self.entcodigo_button.config(text="Validar e obter ramos",
                                      state=NORMAL)
+
 
     def validate(self):
         # ENTCODIGO
@@ -439,6 +448,7 @@ class main_window():
         self.process_tree.insert("", END, text=str(len(self.active_list)),
                                  values=(process, "Executando..."))
 
+
     def add_files(self):
         arquivos = filedialog.askopenfilenames()
         self.arquivos_text.config(state=NORMAL)
@@ -448,10 +458,12 @@ class main_window():
             self.arquivos_text.insert(END, "-" * 70 + "\n")
         self.arquivos_text.config(state=DISABLED)
 
+
     def clear_files(self):
         self.arquivos_text.config(state=NORMAL)
         self.arquivos_text.delete("1.0", END)
         self.arquivos_text.config(state=DISABLED)
+
 
     def run(self, process_number):
         conn = sqlite3.connect(f"DBs\\{process_number}.db")
@@ -551,7 +563,6 @@ class main_window():
                         "com o ano base informado.\n\n"
                         "Favor corrigir o ano base ou selecione"
                         "novamente os arquivos!")
-            folder = os.path.abspath(filedialog.askdirectory())
             if qe == 376:
                 m376.df.to_excel(folder + "\\376.xlsx")
             elif qe == 377:
@@ -589,6 +600,7 @@ class main_window():
             icon_path="icon.ico",
             threaded=True
         )
+
 
     def kill_process(self):
         print(int(self.process_tree.focus()[1:]))
