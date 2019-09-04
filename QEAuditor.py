@@ -14,6 +14,10 @@ from datetime import datetime
 import calendar
 import threading
 from glob import glob
+from getpass import getuser
+from openpyxl import load_workbook
+from openpyxl.utils.dataframe import dataframe_to_rows
+from openpyxl.utils.datetime import to_excel
 
 
 class main_window():
@@ -24,13 +28,12 @@ class main_window():
         self.root.title("Grant Thornton Brasil - Serviços Atuariais")
         self.root.resizable(False, False)
         self.root.config(padx=3, pady=3)
-        ws = self.root.winfo_screenwidth() # width of the screen
-        hs = self.root.winfo_screenheight() # height of the screen
-        self.root.geometry(f"894x625+{int(round(ws/7,0))}+{int(round(hs/17,0))}")
+        ws = self.root.winfo_screenwidth()  # width of the screen
+        hs = self.root.winfo_screenheight()  # height of the screen
+        self.root.geometry(
+            f"894x570+{int(round(ws/7,0))}+{int(round(hs/17,0))}")
         self.design()
         self.positions()
-        self.active_list = []
-        self.validations = []
 
 
     def design(self):
@@ -213,26 +216,12 @@ class main_window():
                                          command=lambda: self.get_folders(2))
 
         # Tree Process
+        self.process_label = Label(self.root, text="Status:")
         self.process_tree_frame = Frame(self.root)
-        self.process_tree = Treeview(self.process_tree_frame,
-                                     height=3,
-                                     columns=[i for i in range(1, 3)])
         self.process_start = Button(
-            self.process_tree_frame, height=4, text="EXECUTAR!",
+            self.process_tree_frame, height=2, text="EXECUTAR!",
             command=lambda: self.validate(),
             font=("TkDefaultFont", 9, "bold"))
-        self.process_end = Button(
-            self.process_tree_frame, text="ABORTAR!", fg="red",
-            font=("TkDefaultFont", 8, "bold"),
-            command=lambda: self.kill_process())
-        self.process_scroll = Scrollbar(self.process_tree_frame,
-                                        command=self.process_tree.yview)
-        self.process_tree.heading("#0", text="#")
-        self.process_tree.heading("#1", text="Processos")
-        self.process_tree.heading("#2", text="Status")
-        self.process_tree.column("#0", width=40)
-        self.process_tree.column("#1", width=365)
-        self.process_tree.column("#2", width=365)
 
 
     def positions(self):
@@ -304,10 +293,7 @@ class main_window():
         # Tree Process
         self.process_tree_frame.grid(
             row=1, column=0, columnspan=2, sticky=(W, E))
-        self.process_tree.pack(side=LEFT, fill=BOTH)
-        self.process_scroll.pack(side=LEFT, fill=BOTH)
         self.process_start.pack(fill=BOTH)
-        self.process_end.pack(fill=BOTH)
 
 
     # COMMANDS
@@ -378,6 +364,8 @@ class main_window():
                 "Verifique sua conexão...\n\n"
                 "OBS: É possível imputar manualmente.")
             self.ramos_text.config(state=NORMAL)
+            self.entcodigo_button.config(text="Validar e obter ramos",
+                                         state=NORMAL)
             return
         self.ramos_text.config(state=NORMAL)
         for ramo in ramos:
@@ -432,21 +420,12 @@ class main_window():
                 title="Erro",
                 message="Selecione aom menos um processo.")
             return
-        process = "QE " + str(self.qetype_var.get()) + " - "
-        if self.processo1_var.get() == 0:
-            process += "Críticas, "
-        if self.processo2_var.get() == 0:
-            process += "Confrontos ($), "
-        if self.processo3_var.get() == 0:
-            process += "Críticas (Detalhamento), "
-        if self.processo4_var.get() == 0:
-            process += "Exportar para CSV."
-
-        self.active_list.append(threading.Thread(
-            target=self.run, args=[len(self.active_list)]))
-        self.active_list[-1].start()
-        self.process_tree.insert("", END, text=str(len(self.active_list)),
-                                 values=(process, "Executando..."))
+        args = (
+            getuser().split(".")[0].title() +
+            " - " +
+            datetime.now().strftime("%d%b%y-%Hh%Mm%Ss%f"))
+        thread = threading.Thread(target=self.run, args=[args])
+        thread.start()
 
 
     def add_files(self):
@@ -466,6 +445,10 @@ class main_window():
 
 
     def run(self, process_number):
+        self.process_start.config(
+            state=DISABLED,
+            text="PROCESSANDO..."
+        )
         conn = sqlite3.connect(f"DBs\\{process_number}.db")
         start = time.time()
         processos = [self.processo1_var.get(), self.processo2_var.get(),
@@ -563,27 +546,541 @@ class main_window():
                         "com o ano base informado.\n\n"
                         "Favor corrigir o ano base ou selecione"
                         "novamente os arquivos!")
-            if qe == 376:
-                m376.df.to_excel(folder + "\\376.xlsx")
-            elif qe == 377:
-                m377.df.to_excel(folder + "\\377.xlsx")
-            elif qe == 376:
-                m378.df.to_excel(folder + "\\378.xlsx")
-            elif qe == 404:
-                m404.df.to_excel(folder + "\\404.xlsx")
-            elif qe == 405:
-                m405.df.to_excel(folder + "\\405.xlsx")
-            elif qe == 406:
-                m406.df.to_excel(folder + "\\406.xlsx")
-            elif qe == 407:
-                m407.df.to_excel(folder + "\\407.xlsx")
-            elif qe == 408:
-                m408.df.to_excel(folder + "\\408.xlsx")
-            elif qe == 409:
-                m409.df.to_excel(folder + "\\409.xlsx")
+            if qe == 376 or qe == 377 or qe == 378:
+                wb_insurance = load_workbook(os.path.abspath(
+                    os.path.join("Excel Models", "Modelo Seguros 2019.xlsx")
+                ))
+                ws376 = wb_insurance["Validação 376"]
+                rows = 14
+                for index, df_row in zip(
+                        m376.df.index, m376.df["Cruzamento 1 - 376"]):
+                    ws376["G" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws376["H" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m376.df.index, m376.df["Cruzamento 2 - 376"]):
+                    ws376["M" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws376["N" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m376.df.index, m376.df["Cruzamento 3 - 376"]):
+                    ws376["S" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws376["T" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m376.df.index, m376.df["Cruzamento 4 - 376"]):
+                    ws376["Y" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws376["Z" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m376.df.index, m376.df["Cruzamento 5 - 376"]):
+                    ws376["AE" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws376["AF" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m376.df.index, m376.df["Cruzamento 6 - 376"]):
+                    ws376["AK" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws376["AL" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m376.df.index, m376.df["Cruzamento 7 - 376"]):
+                    ws376["AQ" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws376["AR" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m376.df.index, m376.df["Cruzamento 8 - 376"]):
+                    ws376["AW" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws376["AY" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m376.df.index, m376.df["Cruzamento 9 - 376"]):
+                    ws376["BC" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws376["BD" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m376.df.index, m376.df["Cruzamento 10 - 376"]):
+                    ws376["BI" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws376["BJ" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m376.df.index, m376.df["Cruzamento 11 - 376"]):
+                    ws376["BO" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws376["BP" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m376.df.index, m376.df["Cruzamento 12 - 376"]):
+                    ws376["BU" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws376["BV" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m376.df.index, m376.df["Cruzamento 13 - 376"]):
+                    ws376["CA" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws376["CB" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m376.df.index, m376.df["Cruzamento 14 - 376"]):
+                    ws376["CG" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws376["CH" + str(rows)].value = df_row
+                    rows += 1
+
+                ws377 = wb_insurance["Validação 377"]
+                rows = 14
+                for index, df_row in zip(
+                        m377.df.index, m377.df["Cruzamento 1 - 377"]):
+                    ws377["G" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws377["H" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m377.df.index, m377.df["Cruzamento 2 - 377"]):
+                    ws377["M" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws377["N" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m377.df.index, m377.df["Cruzamento 3 - 377"]):
+                    ws377["S" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws377["T" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m377.df.index, m377.df["Cruzamento 4 - 377"]):
+                    ws377["Y" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws377["Z" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m377.df.index, m377.df["Cruzamento 5 - 377"]):
+                    ws377["AE" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws377["AF" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m377.df.index, m377.df["Cruzamento 6 - 377"]):
+                    ws377["AK" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws377["AL" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m377.df.index, m377.df["Cruzamento 7 - 377"]):
+                    ws377["AQ" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws377["AR" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m377.df.index, m377.df["Cruzamento 8 - 377"]):
+                    ws377["AW" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws377["AY" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m377.df.index, m377.df["Cruzamento 9 - 377"]):
+                    ws377["BC" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws377["BD" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m377.df.index, m377.df["Cruzamento 10 - 377"]):
+                    ws377["BI" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws377["BJ" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+
+                ws378 = wb_insurance["Validação 378"]
+                rows = 14
+                for index, df_row in zip(
+                        m378.df.index, m378.df["Cruzamento 1 - 378"]):
+                    ws378["G" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws378["H" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m378.df.index, m378.df["Cruzamento 2 - 378"]):
+                    ws378["M" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws378["N" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m378.df.index, m378.df["Cruzamento 3 - 378"]):
+                    ws378["S" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws378["T" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m378.df.index, m378.df["Cruzamento 4 - 378"]):
+                    ws378["Y" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws378["Z" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m378.df.index, m378.df["Cruzamento 5 - 378"]):
+                    ws378["AE" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws378["AF" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m378.df.index, m378.df["Cruzamento 6 - 378"]):
+                    ws378["AK" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws378["AL" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m378.df.index, m378.df["Cruzamento 7 - 378"]):
+                    ws378["AQ" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws378["AR" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m378.df.index, m378.df["Cruzamento 8 - 378"]):
+                    ws378["AW" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws378["AY" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m378.df.index, m378.df["Cruzamento 9 - 378"]):
+                    ws378["BC" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws378["BD" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m378.df.index, m378.df["Cruzamento 10 - 378"]):
+                    ws378["BI" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws378["BJ" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m378.df.index, m378.df["Cruzamento 11 - 378"]):
+                    ws378["BO" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws378["BP" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m378.df.index, m378.df["Cruzamento 12 - 378"]):
+                    ws378["BU" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws378["BV" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m378.df.index, m378.df["Cruzamento 13 - 378"]):
+                    ws378["CA" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws378["CB" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m378.df.index, m378.df["Cruzamento 14 - 378"]):
+                    ws378["CG" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws378["CH" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m378.df.index, m378.df["Cruzamento 15 - 378"]):
+                    ws378["CM" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws378["CN" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m378.df.index, m378.df["Cruzamento 16 - 378"]):
+                    ws378["CS" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws378["CT" + str(rows)].value = df_row
+                    rows += 1
+
+                wb_insurance.save(os.path.abspath(os.path.join(
+                    self.path_confrontos_entry.get(),
+                    "Insurances.xlsx"
+                )))
+            elif qe in [404, 405, 406, 407, 408, 409]:
+                wb_insurance = load_workbook(os.path.abspath(
+                    os.path.join("Excel Models", "Modelo Resseguros 2019.xlsx")
+                ))
+                ws404 = wb_insurance["Validação 404"]
+                rows = 14
+                for index, df_row in zip(
+                        m404.df.index, m404.df["Cruzamento 1 - 404"]):
+                    ws404["G" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws404["H" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m404.df.index, m404.df["Cruzamento 2 - 404"]):
+                    ws404["M" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws404["N" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m404.df.index, m404.df["Cruzamento 3 - 404"]):
+                    ws404["S" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws404["T" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m404.df.index, m404.df["Cruzamento 4 - 404"]):
+                    ws404["Y" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws404["Z" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m404.df.index, m404.df["Cruzamento 5 - 404"]):
+                    ws404["AE" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws404["AF" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m404.df.index, m404.df["Cruzamento 6 - 404"]):
+                    ws404["AK" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws404["AL" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m404.df.index, m404.df["Cruzamento 7 - 404"]):
+                    ws404["AQ" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws404["AR" + str(rows)].value = df_row
+                    rows += 1
+                ws405 = wb_insurance["Validação 405"]
+                rows = 14
+                for index, df_row in zip(
+                        m405.df.index, m405.df["Cruzamento 1 - 405"]):
+                    ws405["G" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws405["H" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m405.df.index, m405.df["Cruzamento 2 - 405"]):
+                    ws405["M" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws405["N" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m405.df.index, m405.df["Cruzamento 3 - 405"]):
+                    ws405["S" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws405["T" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m405.df.index, m405.df["Cruzamento 4 - 405"]):
+                    ws405["Y" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws405["Z" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m405.df.index, m405.df["Cruzamento 5 - 405"]):
+                    ws405["AE" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws405["AF" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                ws406 = wb_insurance["Validação 406"]
+                rows = 14
+                for index, df_row in zip(
+                        m406.df.index, m406.df["Cruzamento 1 - 406"]):
+                    ws406["G" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws406["H" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m406.df.index, m406.df["Cruzamento 2 - 406"]):
+                    ws406["M" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws406["N" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m406.df.index, m406.df["Cruzamento 3 - 406"]):
+                    ws406["S" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws406["T" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m406.df.index, m406.df["Cruzamento 4 - 406"]):
+                    ws406["Y" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws406["Z" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m406.df.index, m406.df["Cruzamento 5 - 406"]):
+                    ws406["AE" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws406["AF" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m406.df.index, m406.df["Cruzamento 6 - 406"]):
+                    ws406["AK" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws406["AL" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                ws407 = wb_insurance["Validação 407"]
+                rows = 14
+                for index, df_row in zip(
+                        m407.df.index, m407.df["Cruzamento 1 - 407"]):
+                    ws407["G" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws407["H" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m407.df.index, m407.df["Cruzamento 2 - 407"]):
+                    ws407["M" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws407["N" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m407.df.index, m407.df["Cruzamento 3 - 407"]):
+                    ws407["S" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws407["T" + str(rows)].value = df_row
+                    rows += 1
+                ws408 = wb_insurance["Validação 408"]
+                rows = 14
+                for index, df_row in zip(
+                        m408.df.index, m408.df["Cruzamento 1 - 408"]):
+                    ws408["G" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws408["H" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m408.df.index, m408.df["Cruzamento 2 - 408"]):
+                    ws408["M" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws408["N" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m408.df.index, m408.df["Cruzamento 3 - 408"]):
+                    ws408["S" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws408["T" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m408.df.index, m408.df["Cruzamento 4 - 408"]):
+                    ws408["Y" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws408["Z" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m408.df.index, m408.df["Cruzamento 5 - 408"]):
+                    ws408["AE" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws408["AF" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m408.df.index, m408.df["Cruzamento 6 - 408"]):
+                    ws408["AK" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws408["AL" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m408.df.index, m408.df["Cruzamento 7 - 408"]):
+                    ws408["AQ" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws408["AR" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m408.df.index, m408.df["Cruzamento 8 - 408"]):
+                    ws408["AW" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws408["AX" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m408.df.index, m408.df["Cruzamento 9 - 408"]):
+                    ws408["BC" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws408["BD" + str(rows)].value = df_row
+                    rows += 1
+                rows = 14
+                for index, df_row in zip(
+                        m408.df.index, m408.df["Cruzamento 10 - 408"]):
+                    ws408["BI" +
+                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws408["BJ" + str(rows)].value = df_row
+                    rows += 1
+                wb_insurance.save(os.path.abspath(os.path.join(
+                    self.path_confrontos_entry.get(),
+                    "Reinsurances.xlsx"
+                )))
+            elif qe in [419, 420, 421, 422, 423]:
+                pass
+
+        # Detalhamento
         if processos[2] == 1:
             path = os.path.abspath(filedialog.askdirectory())
             make_report(self.qetype_var.get(), conn, path)
+        # export
         if processos[3] == 1:
             path = os.path.abspath(filedialog.askdirectory())
             qe_export(
@@ -593,6 +1090,10 @@ class main_window():
                     "1.0",
                     END).splitlines())
         end = time.time()
+        self.process_start.config(
+            state=NORMAL,
+            text="EXECUTAR!"
+        )
         notifier = ToastNotifier()
         notifier.show_toast(
             "Processo Finalizado com Sucesso!",
@@ -600,10 +1101,6 @@ class main_window():
             icon_path="icon.ico",
             threaded=True
         )
-
-
-    def kill_process(self):
-        print(int(self.process_tree.focus()[1:]))
 
 
 if __name__ == "__main__":
