@@ -426,6 +426,17 @@ class main_window():
             datetime.now().strftime("%d%b%y-%Hh%Mm%Ss%f"))
         thread = threading.Thread(target=self.run, args=[args])
         thread.start()
+        self.qetype_var.set(0)
+        self.entcodigo_entry.delete(0,END)
+        self.ramos_text.delete(0,END)
+        self.processo1_var.set(0)
+        self.processo2_var.set(0)
+        self.processo3_var.set(0)
+        self.processo4_var.set(0)
+        self.clear_files()
+        self.path_confrontos_entry.delete(0,END)
+        self.path_detalhamento_entry.delete(0,END)
+        self.path_export_entry.delete(0,END)
 
 
     def add_files(self):
