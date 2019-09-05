@@ -20,8 +20,7 @@ from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl.utils.datetime import to_excel
 
 
-class main_window():
-
+class main_window:
     def __init__(self):
         self.root = Tk()
         self.root.iconbitmap(default="icon.ico")
@@ -35,194 +34,191 @@ class main_window():
         self.design()
         self.positions()
 
-
     def design(self):
         # Big Frame 1 - Esquerda
         self.left_frame = Frame(self.root)
         # Entcodigo
-        self.entcodigo_frame = LabelFrame(self.left_frame,
-                                          text="Código SUSEP - ENTCODIGO:")
+        self.entcodigo_frame = LabelFrame(
+            self.left_frame, text="Código SUSEP - ENTCODIGO:"
+        )
         self.entcodigo_entry = Entry(self.entcodigo_frame)
         self.entcodigo_button = Button(
             self.entcodigo_frame,
             text="Validar e obter ramos",
-            command=lambda: self.get_ramos_thread())
+            command=lambda: self.get_ramos_thread(),
+        )
         # Ano
-        self.year_frame = LabelFrame(self.left_frame,
-                                     text="Período")
-        self.year_label = Label(self.year_frame,
-                                text="Ano Base:")
-        self.year_spinbox = Spinbox(self.year_frame,
-                                    from_=2010,
-                                    to=2100)
+        self.year_frame = LabelFrame(self.left_frame, text="Período")
+        self.year_label = Label(self.year_frame, text="Ano Base:")
+        self.year_spinbox = Spinbox(self.year_frame, from_=2010, to=2100)
         self.year_spinbox.delete(0, "end")
         # Ramos
-        self.ramos_frame = LabelFrame(self.left_frame,
-                                      text="Ramos:")
-        self.ramos_text = Text(self.ramos_frame,
-                               width=23,
-                               height=16,
-                               state=DISABLED)
-        self.ramos_scroll = Scrollbar(self.ramos_frame,
-                                      command=self.ramos_text.yview)
+        self.ramos_frame = LabelFrame(self.left_frame, text="Ramos:")
+        self.ramos_text = Text(
+            self.ramos_frame,
+            width=23,
+            height=16,
+            state=DISABLED)
+        self.ramos_scroll = Scrollbar(
+            self.ramos_frame, command=self.ramos_text.yview)
 
         # Big Frame 2 - Direita
         self.right_frame = Frame(self.root)
         # QE Types
-        self.qetype_frame = LabelFrame(self.right_frame,
-                                       text="QE")
-        self.qetype_label1 = Label(self.qetype_frame,
-                                   text="Seguros:")
-        self.qetype_label2 = Label(self.qetype_frame,
-                                   text="Resseguros:")
-        self.qetype_label3 = Label(self.qetype_frame,
-                                   text="Capitalização:")
+        self.qetype_frame = LabelFrame(self.right_frame, text="QE")
+        self.qetype_label1 = Label(self.qetype_frame, text="Seguros:")
+        self.qetype_label2 = Label(self.qetype_frame, text="Resseguros:")
+        self.qetype_label3 = Label(self.qetype_frame, text="Capitalização:")
         # QE Types RBs
         self.qetype_var = IntVar()
-        self.qetype_rb376 = Radiobutton(self.qetype_frame,
-                                        variable=self.qetype_var,
-                                        text="376",
-                                        value=376)
-        self.qetype_rb377 = Radiobutton(self.qetype_frame,
-                                        variable=self.qetype_var,
-                                        text="377",
-                                        value=377)
-        self.qetype_rb378 = Radiobutton(self.qetype_frame,
-                                        variable=self.qetype_var,
-                                        text="378",
-                                        value=378)
-        self.qetype_rb404 = Radiobutton(self.qetype_frame,
-                                        variable=self.qetype_var,
-                                        text="404",
-                                        value=404)
-        self.qetype_rb405 = Radiobutton(self.qetype_frame,
-                                        variable=self.qetype_var,
-                                        text="405",
-                                        value=405)
-        self.qetype_rb406 = Radiobutton(self.qetype_frame,
-                                        variable=self.qetype_var,
-                                        text="406",
-                                        value=406)
-        self.qetype_rb407 = Radiobutton(self.qetype_frame,
-                                        variable=self.qetype_var,
-                                        text="407",
-                                        value=407)
-        self.qetype_rb408 = Radiobutton(self.qetype_frame,
-                                        variable=self.qetype_var,
-                                        text="408",
-                                        value=408)
-        self.qetype_rb409 = Radiobutton(self.qetype_frame,
-                                        variable=self.qetype_var,
-                                        text="409",
-                                        value=409)
-        self.qetype_rb419 = Radiobutton(self.qetype_frame,
-                                        variable=self.qetype_var,
-                                        text="419",
-                                        value=419)
-        self.qetype_rb420 = Radiobutton(self.qetype_frame,
-                                        variable=self.qetype_var,
-                                        text="420",
-                                        value=420)
-        self.qetype_rb421 = Radiobutton(self.qetype_frame,
-                                        variable=self.qetype_var,
-                                        text="421",
-                                        value=421)
-        self.qetype_rb422 = Radiobutton(self.qetype_frame,
-                                        variable=self.qetype_var,
-                                        text="422",
-                                        value=422)
-        self.qetype_rb423 = Radiobutton(self.qetype_frame,
-                                        variable=self.qetype_var,
-                                        text="423",
-                                        value=423)
+        self.qetype_rb376 = Radiobutton(
+            self.qetype_frame, variable=self.qetype_var, text="376", value=376
+        )
+        self.qetype_rb377 = Radiobutton(
+            self.qetype_frame, variable=self.qetype_var, text="377", value=377
+        )
+        self.qetype_rb378 = Radiobutton(
+            self.qetype_frame, variable=self.qetype_var, text="378", value=378
+        )
+        self.qetype_rb404 = Radiobutton(
+            self.qetype_frame, variable=self.qetype_var, text="404", value=404
+        )
+        self.qetype_rb405 = Radiobutton(
+            self.qetype_frame, variable=self.qetype_var, text="405", value=405
+        )
+        self.qetype_rb406 = Radiobutton(
+            self.qetype_frame, variable=self.qetype_var, text="406", value=406
+        )
+        self.qetype_rb407 = Radiobutton(
+            self.qetype_frame, variable=self.qetype_var, text="407", value=407
+        )
+        self.qetype_rb408 = Radiobutton(
+            self.qetype_frame, variable=self.qetype_var, text="408", value=408
+        )
+        self.qetype_rb409 = Radiobutton(
+            self.qetype_frame, variable=self.qetype_var, text="409", value=409
+        )
+        self.qetype_rb419 = Radiobutton(
+            self.qetype_frame, variable=self.qetype_var, text="419", value=419
+        )
+        self.qetype_rb420 = Radiobutton(
+            self.qetype_frame, variable=self.qetype_var, text="420", value=420
+        )
+        self.qetype_rb421 = Radiobutton(
+            self.qetype_frame, variable=self.qetype_var, text="421", value=421
+        )
+        self.qetype_rb422 = Radiobutton(
+            self.qetype_frame, variable=self.qetype_var, text="422", value=422
+        )
+        self.qetype_rb423 = Radiobutton(
+            self.qetype_frame, variable=self.qetype_var, text="423", value=423
+        )
         # Lista Arquivos
-        self.arquivos_frame = LabelFrame(self.right_frame,
-                                         text="Arquivos Importados")
-        self.arquivos_text = Text(self.arquivos_frame,
-                                  height=19,
-                                  width=70,
-                                  state=DISABLED)
-        self.arquivos_button = Button(self.arquivos_frame,
-                                      text="Importar TXTs",
-                                      command=lambda: self.add_files(),
-                                      height=13,
-                                      width=12)
-        self.arquivos_button_clear = Button(self.arquivos_frame,
-                                            text="Limpar",
-                                            command=lambda:
-                                            self.clear_files(),
-                                            height=6,
-                                            width=12)
-        self.arquivos_scroll = Scrollbar(self.arquivos_frame,
-                                         command=self.arquivos_text.yview)
+        self.arquivos_frame = LabelFrame(
+            self.right_frame, text="Arquivos Importados")
+        self.arquivos_text = Text(
+            self.arquivos_frame, height=19, width=70, state=DISABLED
+        )
+        self.arquivos_button = Button(
+            self.arquivos_frame,
+            text="Importar TXTs",
+            command=lambda: self.add_files(),
+            height=13,
+            width=12,
+        )
+        self.arquivos_button_clear = Button(
+            self.arquivos_frame,
+            text="Limpar",
+            command=lambda: self.clear_files(),
+            height=6,
+            width=12,
+        )
+        self.arquivos_scroll = Scrollbar(
+            self.arquivos_frame, command=self.arquivos_text.yview
+        )
         # Processos
         self.processo1_var = IntVar()
         self.processo2_var = IntVar()
         self.processo3_var = IntVar()
         self.processo4_var = IntVar()
-        self.processos_frame = LabelFrame(self.left_frame,
-                                          text="Processos")
-        self.processo1 = Checkbutton(self.processos_frame,
-                                     text="Críticas",
-                                     variable=self.processo1_var)
-        self.processo2 = Checkbutton(self.processos_frame,
-                                     text="Confronto ($)",
-                                     variable=self.processo2_var)
-        self.processo3 = Checkbutton(self.processos_frame,
-                                     text="Críticas (Detalhamento)",
-                                     variable=self.processo3_var,
-                                     command=lambda:
-                                     self.processo1_var.set(1))
-        self.processo4 = Checkbutton(self.processos_frame,
-                                     text="Exportar para CSV",
-                                     variable=self.processo4_var)
+        self.processos_frame = LabelFrame(self.left_frame, text="Processos")
+        self.processo1 = Checkbutton(
+            self.processos_frame, text="Críticas", variable=self.processo1_var
+        )
+        self.processo2 = Checkbutton(
+            self.processos_frame,
+            text="Confronto ($)",
+            variable=self.processo2_var)
+        self.processo3 = Checkbutton(
+            self.processos_frame,
+            text="Críticas (Detalhamento)",
+            variable=self.processo3_var,
+            command=lambda: self.processo1_var.set(1),
+        )
+        self.processo4 = Checkbutton(
+            self.processos_frame,
+            text="Exportar para CSV",
+            variable=self.processo4_var)
 
         # Path Bars:
         self.path_bars_frame = LabelFrame(self.right_frame, text="Caminhos")
         # Confrontros ($)
-        self.path_confrontos_label = Label(self.path_bars_frame,
-                                           text="Confrontos ($)")
-        self.path_confrontos_entry = Entry(self.path_bars_frame,
-                                           width=73,
-                                           state=DISABLED,
-                                           disabledbackground="white",
-                                           disabledforeground="black")
+        self.path_confrontos_label = Label(
+            self.path_bars_frame, text="Confrontos ($)")
+        self.path_confrontos_entry = Entry(
+            self.path_bars_frame,
+            width=73,
+            state=DISABLED,
+            disabledbackground="white",
+            disabledforeground="black",
+        )
         self.path_confrontos_button = Button(
             self.path_bars_frame,
             text="Selecionar Pasta",
-            command=lambda: self.get_folders(0))
+            command=lambda: self.get_folders(0),
+        )
         # Criticas (Detalhamento)
-        self.path_detalhamento_label = Label(self.path_bars_frame,
-                                             text="Criticas (Detalhamento)")
-        self.path_detalhamento_entry = Entry(self.path_bars_frame,
-                                             width=73,
-                                             state=DISABLED,
-                                             disabledbackground="white",
-                                             disabledforeground="black")
+        self.path_detalhamento_label = Label(
+            self.path_bars_frame, text="Criticas (Detalhamento)"
+        )
+        self.path_detalhamento_entry = Entry(
+            self.path_bars_frame,
+            width=73,
+            state=DISABLED,
+            disabledbackground="white",
+            disabledforeground="black",
+        )
         self.path_detalhamento_button = Button(
             self.path_bars_frame,
             text="Selecionar Pasta",
-            command=lambda: self.get_folders(1))
+            command=lambda: self.get_folders(1),
+        )
         # Exportação (CSVs)
-        self.path_export_label = Label(self.path_bars_frame,
-                                       text="Exportação CSVs")
-        self.path_export_entry = Entry(self.path_bars_frame,
-                                       width=73,
-                                       state=DISABLED,
-                                       disabledbackground="white",
-                                       disabledforeground="black")
-        self.path_export_button = Button(self.path_bars_frame,
-                                         text="Selecionar Pasta",
-                                         command=lambda: self.get_folders(2))
+        self.path_export_label = Label(
+            self.path_bars_frame, text="Exportação CSVs")
+        self.path_export_entry = Entry(
+            self.path_bars_frame,
+            width=73,
+            state=DISABLED,
+            disabledbackground="white",
+            disabledforeground="black",
+        )
+        self.path_export_button = Button(
+            self.path_bars_frame,
+            text="Selecionar Pasta",
+            command=lambda: self.get_folders(2),
+        )
 
         # Tree Process
         self.process_label = Label(self.root, text="Status:")
         self.process_tree_frame = Frame(self.root)
         self.process_start = Button(
-            self.process_tree_frame, height=2, text="EXECUTAR!",
+            self.process_tree_frame,
+            height=2,
+            text="EXECUTAR!",
             command=lambda: self.validate(),
-            font=("TkDefaultFont", 9, "bold"))
-
+            font=("TkDefaultFont", 9, "bold"),
+        )
 
     def positions(self):
         # Big Frame 1 - Esquerda
@@ -295,44 +291,30 @@ class main_window():
             row=1, column=0, columnspan=2, sticky=(W, E))
         self.process_start.pack(fill=BOTH)
 
-
     # COMMANDS
+
     def get_folders(self, process_type):
         if process_type == 0:
-            self.path_confrontos_entry.config(
-                state=NORMAL
-            )
+            self.path_confrontos_entry.config(state=NORMAL)
             self.path_confrontos_entry.delete(0, END)
             self.path_confrontos_entry.insert(
                 0, string=filedialog.askdirectory())
-            self.path_confrontos_entry.config(
-                state=DISABLED
-            )
+            self.path_confrontos_entry.config(state=DISABLED)
         if process_type == 1:
-            self.path_detalhamento_entry.config(
-                state=NORMAL
-            )
+            self.path_detalhamento_entry.config(state=NORMAL)
             self.path_detalhamento_entry.delete(0, END)
             self.path_detalhamento_entry.insert(
                 0, string=filedialog.askdirectory())
-            self.path_detalhamento_entry.config(
-                state=DISABLED
-            )
+            self.path_detalhamento_entry.config(state=DISABLED)
         elif process_type == 2:
-            self.path_export_entry.config(
-                state=NORMAL
-            )
+            self.path_export_entry.config(state=NORMAL)
             self.path_export_entry.delete(0, END)
             self.path_export_entry.insert(0, string=filedialog.askdirectory())
-            self.path_export_entry.config(
-                state=DISABLED
-            )
-
+            self.path_export_entry.config(state=DISABLED)
 
     def get_ramos_thread(self):
         x = threading.Thread(target=self.validate_entcodigo)
         x.start()
-
 
     def validate_entcodigo(self):
         try:
@@ -344,14 +326,11 @@ class main_window():
             messagebox.showerror(
                 title="Erro",
                 message="Verifique o ENTCODIGO e o ANO!\n\n"
-                "ENTCODIGO -> (Inteiro e cinco digitos)"
+                "ENTCODIGO -> (Inteiro e cinco digitos)",
             )
             return
-        self.ramos_text.delete('1.0', END)
-        self.entcodigo_button.config(
-            text="Acessando SES...",
-            state=DISABLED
-        )
+        self.ramos_text.delete("1.0", END)
+        self.entcodigo_button.config(text="Acessando SES...", state=DISABLED)
         ramos = SES()
         ramos = ramos.get_ramos(
             self.entcodigo_entry.get(),
@@ -362,36 +341,35 @@ class main_window():
                 message="Impossível validar o ENTCODIGO"
                 " e consultar os ramos.\n\n"
                 "Verifique sua conexão...\n\n"
-                "OBS: É possível imputar manualmente.")
+                "OBS: É possível imputar manualmente.",
+            )
             self.ramos_text.config(state=NORMAL)
-            self.entcodigo_button.config(text="Validar e obter ramos",
-                                         state=NORMAL)
+            self.entcodigo_button.config(
+                text="Validar e obter ramos", state=NORMAL)
             return
         self.ramos_text.config(state=NORMAL)
         for ramo in ramos:
             self.ramos_text.insert(END, ramo + "\n")
         self.ramos_text.config(state=DISABLED)
-        self.entcodigo_button.config(text="Validar e obter ramos",
-                                     state=NORMAL)
-
+        self.entcodigo_button.config(
+            text="Validar e obter ramos", state=NORMAL)
 
     def validate(self):
         # ENTCODIGO
-        if self.entcodigo_entry.get() is None or \
-            self.entcodigo_entry.get() == "" or \
-                len(self.entcodigo_entry.get()) == 0:
-            messagebox.showerror(
-                title="Erro",
-                message="Insira um ENTCODIGO."
-            )
+        if (
+            self.entcodigo_entry.get() is None
+            or self.entcodigo_entry.get() == ""
+            or len(self.entcodigo_entry.get()) == 0
+        ):
+            messagebox.showerror(title="Erro", message="Insira um ENTCODIGO.")
             return
         # Year
-        if self.year_spinbox.get() == 0 or self.year_spinbox.get() \
-                is None or self.year_spinbox.get() == "":
-            messagebox.showerror(
-                title="Erro",
-                message="Insira um Ano Base."
-            )
+        if (
+            self.year_spinbox.get() == 0
+            or self.year_spinbox.get() is None
+            or self.year_spinbox.get() == ""
+        ):
+            messagebox.showerror(title="Erro", message="Insira um Ano Base.")
             return
         # Ramos
         try:
@@ -399,45 +377,33 @@ class main_window():
                 raise
         except BaseException:
             messagebox.showerror(
-                title="Erro",
-                message="Preencha os ramos\n\n"
-                "É possível preencher manualmente."
-            )
+                title="Erro", message="Preencha os ramos\n\n"
+                "É possível preencher manualmente.", )
             return
         # QE
         if self.qetype_var.get() == 0:
             messagebox.showerror(
-                title="Erro",
-                message="Selecione um Quadro Estatístico"
+                title="Erro", message="Selecione um Quadro Estatístico"
             )
             return
         # Processos
-        if self.processo1_var.get() == 0 and \
-            self.processo2_var.get() == 0 and \
-                self.processo3_var.get() == 0 and \
-        self.processo4_var.get() == 0:
+        if (
+            self.processo1_var.get() == 0
+            and self.processo2_var.get() == 0
+            and self.processo3_var.get() == 0
+            and self.processo4_var.get() == 0
+        ):
             messagebox.showerror(
-                title="Erro",
-                message="Selecione aom menos um processo.")
+                title="Erro", message="Selecione aom menos um processo."
+            )
             return
         args = (
-            getuser().split(".")[0].title() +
-            " - " +
-            datetime.now().strftime("%d%b%y-%Hh%Mm%Ss%f"))
+            getuser().split(".")[0].title()
+            + " - "
+            + datetime.now().strftime("%d%b%y-%Hh%Mm%Ss%f")
+        )
         thread = threading.Thread(target=self.run, args=[args])
         thread.start()
-        self.qetype_var.set(0)
-        self.entcodigo_entry.delete(0,END)
-        self.ramos_text.delete(0,END)
-        self.processo1_var.set(0)
-        self.processo2_var.set(0)
-        self.processo3_var.set(0)
-        self.processo4_var.set(0)
-        self.clear_files()
-        self.path_confrontos_entry.delete(0,END)
-        self.path_detalhamento_entry.delete(0,END)
-        self.path_export_entry.delete(0,END)
-
 
     def add_files(self):
         arquivos = filedialog.askopenfilenames()
@@ -448,32 +414,46 @@ class main_window():
             self.arquivos_text.insert(END, "-" * 70 + "\n")
         self.arquivos_text.config(state=DISABLED)
 
-
     def clear_files(self):
         self.arquivos_text.config(state=NORMAL)
         self.arquivos_text.delete("1.0", END)
         self.arquivos_text.config(state=DISABLED)
 
-
     def run(self, process_number):
-        self.process_start.config(
-            state=DISABLED,
-            text="PROCESSANDO..."
-        )
+        self.process_start.config(state=DISABLED, text="PROCESSANDO...")
         conn = sqlite3.connect(f"DBs\\{process_number}.db")
         start = time.time()
-        processos = [self.processo1_var.get(), self.processo2_var.get(),
-                     self.processo3_var.get(), self.processo4_var.get()]
+        processos = [
+            self.processo1_var.get(),
+            self.processo2_var.get(),
+            self.processo3_var.get(),
+            self.processo4_var.get(),
+        ]
         # Críticas
         if processos[0] == 1:
             qe = self.qetype_var.get()
             entcodigo = self.entcodigo_entry.get()
             ramcodigos = self.ramos_text.get("1.0", END).splitlines()[:-1]
             create_main_tables(conn)
-            esrcodcess = ["38741", "30074", "34819", "36099",
-                          "37052", "38253", "31623", "38873", "33294",
-                          "39764", "37729", "31551", "38270", "30201",
-                          "34665", "32875", entcodigo]
+            esrcodcess = [
+                "38741",
+                "30074",
+                "34819",
+                "36099",
+                "37052",
+                "38253",
+                "31623",
+                "38873",
+                "33294",
+                "39764",
+                "37729",
+                "31551",
+                "38270",
+                "30201",
+                "34665",
+                "32875",
+                entcodigo,
+            ]
             for arquivo in self.arquivos_text.get(
                     "1.0", END).splitlines()[:-1]:
                 if arquivo != "-" * 70:
@@ -492,7 +472,8 @@ class main_window():
                                     year=int(self.year_spinbox.get()),
                                     entcodigo=entcodigo,
                                     ramcodigos=ramcodigos,
-                                    esrcodcess=esrcodcess)
+                                    esrcodcess=esrcodcess,
+                                )
                     except FileNotFoundError:
                         pass
             conn.commit()
@@ -500,14 +481,11 @@ class main_window():
         if processos[1] == 1:
             year = int(self.year_spinbox.get())
             dates_seguros = [
-                datetime(
-                    year,
-                    month,
-                    calendar.monthrange(
-                        year,
-                        month)[1]).strftime("%Y%m%d") for month in range(
-                    1,
-                    13)]
+                datetime(year, month, calendar.monthrange(year, month)[1]).strftime(
+                    "%Y%m%d"
+                )
+                for month in range(1, 13)
+            ]
             dates_reseguros = [
                 f"2018" +
                 f"{month}".zfill(2) for month in range(
@@ -556,108 +534,125 @@ class main_window():
                         message="As datas dos campos MRFMESANO não condizem "
                         "com o ano base informado.\n\n"
                         "Favor corrigir o ano base ou selecione"
-                        "novamente os arquivos!")
+                        "novamente os arquivos!",
+                    )
             if qe == 376 or qe == 377 or qe == 378:
-                wb_insurance = load_workbook(os.path.abspath(
-                    os.path.join("Excel Models", "Modelo Seguros 2019.xlsx")
-                ))
+                wb_insurance = load_workbook(
+                    os.path.abspath(
+                        os.path.join(
+                            "Excel Models",
+                            "Modelo Seguros 2019.xlsx")))
                 ws376 = wb_insurance["Validação 376"]
                 rows = 14
                 for index, df_row in zip(
                         m376.df.index, m376.df["Cruzamento 1 - 376"]):
-                    ws376["G" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws376["G" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws376["H" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m376.df.index, m376.df["Cruzamento 2 - 376"]):
-                    ws376["M" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws376["M" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws376["N" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m376.df.index, m376.df["Cruzamento 3 - 376"]):
-                    ws376["S" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws376["S" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws376["T" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m376.df.index, m376.df["Cruzamento 4 - 376"]):
-                    ws376["Y" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws376["Y" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws376["Z" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m376.df.index, m376.df["Cruzamento 5 - 376"]):
-                    ws376["AE" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws376["AE" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws376["AF" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m376.df.index, m376.df["Cruzamento 6 - 376"]):
-                    ws376["AK" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws376["AK" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws376["AL" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m376.df.index, m376.df["Cruzamento 7 - 376"]):
-                    ws376["AQ" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws376["AQ" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws376["AR" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m376.df.index, m376.df["Cruzamento 8 - 376"]):
-                    ws376["AW" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws376["AW" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws376["AY" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m376.df.index, m376.df["Cruzamento 9 - 376"]):
-                    ws376["BC" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws376["BC" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws376["BD" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m376.df.index, m376.df["Cruzamento 10 - 376"]):
-                    ws376["BI" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws376["BI" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws376["BJ" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m376.df.index, m376.df["Cruzamento 11 - 376"]):
-                    ws376["BO" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws376["BO" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws376["BP" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m376.df.index, m376.df["Cruzamento 12 - 376"]):
-                    ws376["BU" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws376["BU" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws376["BV" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m376.df.index, m376.df["Cruzamento 13 - 376"]):
-                    ws376["CA" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws376["CA" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws376["CB" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m376.df.index, m376.df["Cruzamento 14 - 376"]):
-                    ws376["CG" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws376["CG" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws376["CH" + str(rows)].value = df_row
                     rows += 1
 
@@ -665,71 +660,81 @@ class main_window():
                 rows = 14
                 for index, df_row in zip(
                         m377.df.index, m377.df["Cruzamento 1 - 377"]):
-                    ws377["G" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws377["G" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws377["H" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m377.df.index, m377.df["Cruzamento 2 - 377"]):
-                    ws377["M" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws377["M" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws377["N" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m377.df.index, m377.df["Cruzamento 3 - 377"]):
-                    ws377["S" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws377["S" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws377["T" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m377.df.index, m377.df["Cruzamento 4 - 377"]):
-                    ws377["Y" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws377["Y" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws377["Z" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m377.df.index, m377.df["Cruzamento 5 - 377"]):
-                    ws377["AE" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws377["AE" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws377["AF" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m377.df.index, m377.df["Cruzamento 6 - 377"]):
-                    ws377["AK" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws377["AK" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws377["AL" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m377.df.index, m377.df["Cruzamento 7 - 377"]):
-                    ws377["AQ" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws377["AQ" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws377["AR" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m377.df.index, m377.df["Cruzamento 8 - 377"]):
-                    ws377["AW" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws377["AW" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws377["AY" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m377.df.index, m377.df["Cruzamento 9 - 377"]):
-                    ws377["BC" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws377["BC" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws377["BD" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m377.df.index, m377.df["Cruzamento 10 - 377"]):
-                    ws377["BI" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws377["BI" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws377["BJ" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
@@ -738,208 +743,241 @@ class main_window():
                 rows = 14
                 for index, df_row in zip(
                         m378.df.index, m378.df["Cruzamento 1 - 378"]):
-                    ws378["G" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws378["G" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws378["H" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m378.df.index, m378.df["Cruzamento 2 - 378"]):
-                    ws378["M" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws378["M" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws378["N" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m378.df.index, m378.df["Cruzamento 3 - 378"]):
-                    ws378["S" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws378["S" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws378["T" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m378.df.index, m378.df["Cruzamento 4 - 378"]):
-                    ws378["Y" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws378["Y" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws378["Z" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m378.df.index, m378.df["Cruzamento 5 - 378"]):
-                    ws378["AE" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws378["AE" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws378["AF" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m378.df.index, m378.df["Cruzamento 6 - 378"]):
-                    ws378["AK" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws378["AK" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws378["AL" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m378.df.index, m378.df["Cruzamento 7 - 378"]):
-                    ws378["AQ" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws378["AQ" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws378["AR" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m378.df.index, m378.df["Cruzamento 8 - 378"]):
-                    ws378["AW" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws378["AW" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws378["AY" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m378.df.index, m378.df["Cruzamento 9 - 378"]):
-                    ws378["BC" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws378["BC" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws378["BD" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m378.df.index, m378.df["Cruzamento 10 - 378"]):
-                    ws378["BI" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws378["BI" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws378["BJ" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m378.df.index, m378.df["Cruzamento 11 - 378"]):
-                    ws378["BO" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws378["BO" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws378["BP" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m378.df.index, m378.df["Cruzamento 12 - 378"]):
-                    ws378["BU" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws378["BU" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws378["BV" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m378.df.index, m378.df["Cruzamento 13 - 378"]):
-                    ws378["CA" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws378["CA" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws378["CB" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m378.df.index, m378.df["Cruzamento 14 - 378"]):
-                    ws378["CG" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws378["CG" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws378["CH" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m378.df.index, m378.df["Cruzamento 15 - 378"]):
-                    ws378["CM" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws378["CM" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws378["CN" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m378.df.index, m378.df["Cruzamento 16 - 378"]):
-                    ws378["CS" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws378["CS" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws378["CT" + str(rows)].value = df_row
                     rows += 1
 
-                wb_insurance.save(os.path.abspath(os.path.join(
-                    self.path_confrontos_entry.get(),
-                    "Insurances.xlsx"
-                )))
+                wb_insurance.save(
+                    os.path.abspath(
+                        os.path.join(
+                            self.path_confrontos_entry.get(), "Insurances.xlsx"
+                        )
+                    )
+                )
             elif qe in [404, 405, 406, 407, 408, 409]:
-                wb_insurance = load_workbook(os.path.abspath(
-                    os.path.join("Excel Models", "Modelo Resseguros 2019.xlsx")
-                ))
+                wb_insurance = load_workbook(
+                    os.path.abspath(
+                        os.path.join(
+                            "Excel Models",
+                            "Modelo Resseguros 2019.xlsx")))
                 ws404 = wb_insurance["Validação 404"]
                 rows = 14
                 for index, df_row in zip(
                         m404.df.index, m404.df["Cruzamento 1 - 404"]):
-                    ws404["G" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws404["G" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws404["H" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m404.df.index, m404.df["Cruzamento 2 - 404"]):
-                    ws404["M" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws404["M" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws404["N" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m404.df.index, m404.df["Cruzamento 3 - 404"]):
-                    ws404["S" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws404["S" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws404["T" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m404.df.index, m404.df["Cruzamento 4 - 404"]):
-                    ws404["Y" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws404["Y" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws404["Z" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m404.df.index, m404.df["Cruzamento 5 - 404"]):
-                    ws404["AE" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws404["AE" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws404["AF" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m404.df.index, m404.df["Cruzamento 6 - 404"]):
-                    ws404["AK" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws404["AK" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws404["AL" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m404.df.index, m404.df["Cruzamento 7 - 404"]):
-                    ws404["AQ" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws404["AQ" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws404["AR" + str(rows)].value = df_row
                     rows += 1
                 ws405 = wb_insurance["Validação 405"]
                 rows = 14
                 for index, df_row in zip(
                         m405.df.index, m405.df["Cruzamento 1 - 405"]):
-                    ws405["G" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws405["G" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws405["H" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m405.df.index, m405.df["Cruzamento 2 - 405"]):
-                    ws405["M" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws405["M" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws405["N" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m405.df.index, m405.df["Cruzamento 3 - 405"]):
-                    ws405["S" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws405["S" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws405["T" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m405.df.index, m405.df["Cruzamento 4 - 405"]):
-                    ws405["Y" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws405["Y" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws405["Z" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m405.df.index, m405.df["Cruzamento 5 - 405"]):
-                    ws405["AE" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws405["AE" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws405["AF" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
@@ -947,43 +985,49 @@ class main_window():
                 rows = 14
                 for index, df_row in zip(
                         m406.df.index, m406.df["Cruzamento 1 - 406"]):
-                    ws406["G" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws406["G" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws406["H" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m406.df.index, m406.df["Cruzamento 2 - 406"]):
-                    ws406["M" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws406["M" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws406["N" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m406.df.index, m406.df["Cruzamento 3 - 406"]):
-                    ws406["S" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws406["S" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws406["T" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m406.df.index, m406.df["Cruzamento 4 - 406"]):
-                    ws406["Y" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws406["Y" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws406["Z" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m406.df.index, m406.df["Cruzamento 5 - 406"]):
-                    ws406["AE" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws406["AE" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws406["AF" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m406.df.index, m406.df["Cruzamento 6 - 406"]):
-                    ws406["AK" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws406["AK" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws406["AL" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
@@ -991,99 +1035,113 @@ class main_window():
                 rows = 14
                 for index, df_row in zip(
                         m407.df.index, m407.df["Cruzamento 1 - 407"]):
-                    ws407["G" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws407["G" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws407["H" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m407.df.index, m407.df["Cruzamento 2 - 407"]):
-                    ws407["M" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws407["M" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws407["N" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m407.df.index, m407.df["Cruzamento 3 - 407"]):
-                    ws407["S" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws407["S" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws407["T" + str(rows)].value = df_row
                     rows += 1
                 ws408 = wb_insurance["Validação 408"]
                 rows = 14
                 for index, df_row in zip(
                         m408.df.index, m408.df["Cruzamento 1 - 408"]):
-                    ws408["G" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws408["G" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws408["H" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m408.df.index, m408.df["Cruzamento 2 - 408"]):
-                    ws408["M" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws408["M" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws408["N" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m408.df.index, m408.df["Cruzamento 3 - 408"]):
-                    ws408["S" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws408["S" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws408["T" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m408.df.index, m408.df["Cruzamento 4 - 408"]):
-                    ws408["Y" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws408["Y" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws408["Z" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m408.df.index, m408.df["Cruzamento 5 - 408"]):
-                    ws408["AE" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws408["AE" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws408["AF" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m408.df.index, m408.df["Cruzamento 6 - 408"]):
-                    ws408["AK" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws408["AK" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws408["AL" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m408.df.index, m408.df["Cruzamento 7 - 408"]):
-                    ws408["AQ" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws408["AQ" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws408["AR" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m408.df.index, m408.df["Cruzamento 8 - 408"]):
-                    ws408["AW" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws408["AW" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws408["AX" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m408.df.index, m408.df["Cruzamento 9 - 408"]):
-                    ws408["BC" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws408["BC" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws408["BD" + str(rows)].value = df_row
                     rows += 1
                 rows = 14
                 for index, df_row in zip(
                         m408.df.index, m408.df["Cruzamento 10 - 408"]):
-                    ws408["BI" +
-                          str(rows)].value = to_excel(datetime.strptime(index, "%Y%m%d"))
+                    ws408["BI" + str(rows)].value = to_excel(
+                        datetime.strptime(index, "%Y%m%d")
+                    )
                     ws408["BJ" + str(rows)].value = df_row
                     rows += 1
-                wb_insurance.save(os.path.abspath(os.path.join(
-                    self.path_confrontos_entry.get(),
-                    "Reinsurances.xlsx"
-                )))
+                wb_insurance.save(
+                    os.path.abspath(
+                        os.path.join(
+                            self.path_confrontos_entry.get(),
+                            "Reinsurances.xlsx")))
             elif qe in [419, 420, 421, 422, 423]:
                 pass
 
@@ -1097,20 +1155,16 @@ class main_window():
             qe_export(
                 self.qetype_var.get(),
                 path,
-                self.arquivos_text.get(
-                    "1.0",
-                    END).splitlines())
+                self.arquivos_text.get("1.0", END).splitlines(),
+            )
         end = time.time()
-        self.process_start.config(
-            state=NORMAL,
-            text="EXECUTAR!"
-        )
+        self.process_start.config(state=NORMAL, text="EXECUTAR!")
         notifier = ToastNotifier()
         notifier.show_toast(
             "Processo Finalizado com Sucesso!",
             f"O processo levou {round(end-start,2)} segundos",
             icon_path="icon.ico",
-            threaded=True
+            threaded=True,
         )
 
 
