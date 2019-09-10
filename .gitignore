@@ -121,3 +121,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# DBs
+*.db
+.gitignore
+.vscode/launch.json
+
