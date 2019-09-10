@@ -1,30 +1,40 @@
-from selenium.webdriver.support.ui import WebDriverWait, Select
-from selenium.webdriver.support import expected_conditions as EC
+import os
+import requests
+from bs4 import BeautifulSoup
+from selenium import webdriver
 from selenium.webdriver import ChromeOptions
 from selenium.webdriver.common.by import By
-from selenium import webdriver
-import os
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import Select, WebDriverWait
 
 
 class SES():
 
-    def __init__(self):
-        options = ChromeOptions()
-        options.add_argument("--window-size=1920,1080")
-        options.add_argument("--disable-gpu")
-        options.add_argument("--headless")
-        path = os.path.abspath(
-            os.path.join(
-                os.path.abspath(__file__),
-                "..",
-                "chromedriver.exe"))
-        self.driver = webdriver.Chrome(executable_path=path, options=options)
-
-    def get_ramos(self, entcodigo, year):
+    def __init__(self, initialize=True):
+        if initialize == True:
+            options = ChromeOptions()
+            options.add_argument("--window-size=1920,1080")
+            options.add_argument("--disable-gpu")
+            options.add_argument("--headless")
+            path = os.path.abspath(
+                os.path.join(
+                    os.path.abspath(__file__),
+                    "..",
+                    "chromedriver.exe"))
+            self.driver = webdriver.Chrome(executable_path=path, options=options)
+        else:
+            pass
+        
+    def get_ramos(self, entcodigo, year, qe_type):
         try:
             # Get
-            self.driver.get(
-                r"https://www2.susep.gov.br/menuestatistica/SES/premiosesinistros.aspx?id=54")
+            qe_type = int(qe_type)
+            if qe_type in [376,377,378]:
+                self.driver.get(
+                    r"https://www2.susep.gov.br/menuestatistica/SES/premiosesinistros.aspx?id=54")
+            else:
+                self.driver.get(
+                    r"https://www2.susep.gov.br/menuestatistica/SES/valoresresmovgrupos.aspx?tipo=premios&id=56")
             # Find Data Elements
             datestart = self.driver.find_element_by_xpath(
                 r'//*[@id="ctl00_ContentPlaceHolder1_edInicioPer"]')
@@ -65,10 +75,23 @@ class SES():
             except BaseException:
                 pass
             ramos = []
-            for ramo in table.text.split("\n")[1:-1]:
-                ramos.append(ramo[:4])
+            if qe_type in [376,377,378]:
+                for ramo in table.text.split("\n")[1:-1]:
+                    ramos.append(ramo[:4])
+            elif qe_type in [404,405,406,407,408,409]:
+                for ramo in table.text.split("\n")[1:-1]:
+                    ramos.append(ramo[:2])                
             self.driver.quit()
             return ramos
 
         except BaseException:
             return False
+        
+    def get_esrcodcess(self):
+        html = requests.get("https://www2.susep.gov.br/menuestatistica/SES/valoresresmovgrupos.aspx?tipo=sinistros&id=57").text
+        sopa= BeautifulSoup(html, "html.parser")
+        esrcodcess = []
+        table = sopa.find("select", {"name":"ctl00$ContentPlaceHolder1$edEmpresas"})
+        for element in table.find_all("option")[1:]:
+            esrcodcess.append(element.text[:5].strip())
+        return esrcodcess

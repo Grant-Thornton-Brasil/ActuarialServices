@@ -22,3 +22,9 @@ def get_ramos():
         for linha in txt.readlines():
             ramos.append(linha.strip())
     return ramos
+
+def resolve42x(line):
+    if len(line) == 70:
+        return 422
+    elif len(line) == 38:
+        return 423

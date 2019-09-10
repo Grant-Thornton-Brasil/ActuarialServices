@@ -25,7 +25,7 @@ def run_validations(**kwargs):
         n (int): Número da Linha do Arquivo
         conn (Connection): Conexão SLQLITE3
         year (int): Datas
-        entcodigo (list):
+        entcodigo (str):
         ramcodigos (list):
         esrcodcess (list):
     """
