@@ -5,7 +5,7 @@ from ..tools import make_command
 
 # CAPITALIZAÇÃO
 def validate_419(nome_arquivo, linha, n, conn, dates,
-                 entcodigo, ramcodigos, esrcodcess):
+                 entcodigo):
     # Verifica se não há linhas em branco
     # Verifica o tamanho padrão da linha (133 caracteres)
     if linha == "" or linha is None:

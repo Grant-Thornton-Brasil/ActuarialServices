@@ -5,7 +5,7 @@ from ..tools import make_command
 
 # CAPITALIZAÇÃO
 def validate_422(nome_arquivo, linha, n, conn, dates,
-                 entcodigo, ramcodigos, esrcodcess):
+                 entcodigo):
     # Verifica se não há linhas em branco
     if linha == "" or linha is None:
         conn.execute(make_command("T1", nome_arquivo, n, "422"))

@@ -14,6 +14,7 @@ from .Reinsurance.vali408 import validate_408
 from .Reinsurance.vali409 import validate_409
 import calendar
 from datetime import datetime
+from .tools import resolve42x
 
 
 def run_validations(**kwargs):
@@ -28,6 +29,7 @@ def run_validations(**kwargs):
         entcodigo (str):
         ramcodigos (list):
         esrcodcess (list):
+        gracodigos (list):
     """
     qe = kwargs.get("qe")
     nome_arquivo = kwargs.get("nome_arquivo")
@@ -40,12 +42,17 @@ def run_validations(**kwargs):
     esrcodcess = kwargs.get("esrcodcess")
     gracodigos = kwargs.get("gracodigos")
 
-    dates_seguros = [datetime(year, month, calendar.monthrange(year, month)[
-    1]).strftime("%Y%m%d") for month in range(1, 13)]
+    dates_seguros = [
+        datetime(year,
+                 month,
+                 calendar.monthrange(year,
+                                     month)[1]).strftime("%Y%m%d")
+        for month in range(1, 13)]
+
     dates_reseguros = [f"2018" + f"{month}".zfill(2) for month in range(1, 13)]
 
     # SEGUROS
-    if qe == "376" or qe == 376:
+    if qe == 376:
         validate_376(
             nome_arquivo,
             linha,
@@ -54,9 +61,8 @@ def run_validations(**kwargs):
             dates_seguros,
             entcodigo,
             ramcodigos,
-            esrcodcess
-        )
-    elif qe == "377" or qe == 377:
+            esrcodcess)
+    elif qe == 377:
         validate_377(
             nome_arquivo,
             linha,
@@ -65,9 +71,8 @@ def run_validations(**kwargs):
             dates_seguros,
             entcodigo,
             ramcodigos,
-            esrcodcess
-        )
-    elif qe == "378" or qe == 378:
+            esrcodcess)
+    elif qe == 378:
         validate_378(
             nome_arquivo,
             linha,
@@ -76,10 +81,9 @@ def run_validations(**kwargs):
             dates_seguros,
             entcodigo,
             ramcodigos,
-            esrcodcess
-        )
+            esrcodcess)
     # RESSEGUROS
-    elif qe == "404" or qe == 404:
+    elif qe == 404:
         validate_404(
             nome_arquivo,
             linha,
@@ -87,9 +91,8 @@ def run_validations(**kwargs):
             conn,
             dates_reseguros,
             entcodigo,
-            gracodigos
-        )
-    elif qe == "405" or qe == 405:
+            gracodigos)
+    elif qe == 405:
         validate_405(
             nome_arquivo,
             linha,
@@ -97,9 +100,8 @@ def run_validations(**kwargs):
             conn,
             dates_reseguros,
             entcodigo,
-            gracodigos
-        )
-    elif qe == "406" or qe == 406:
+            gracodigos)
+    elif qe == 406:
         validate_406(
             nome_arquivo,
             linha,
@@ -107,9 +109,8 @@ def run_validations(**kwargs):
             conn,
             dates_reseguros,
             entcodigo,
-            gracodigos
-        )
-    elif qe == "407" or qe == 407:
+            gracodigos)
+    elif qe == 407:
         validate_407(
             nome_arquivo,
             linha,
@@ -117,9 +118,8 @@ def run_validations(**kwargs):
             conn,
             dates_reseguros,
             entcodigo,
-            gracodigos
-        )
-    elif qe == "408" or qe == 408:
+            gracodigos)
+    elif qe == 408:
         validate_408(
             nome_arquivo,
             linha,
@@ -127,9 +127,8 @@ def run_validations(**kwargs):
             conn,
             dates_reseguros,
             entcodigo,
-            gracodigos
-        )
-    elif qe == "409" or qe == 409:
+            gracodigos)
+    elif qe == 409:
         validate_409(
             nome_arquivo,
             linha,
@@ -137,6 +136,46 @@ def run_validations(**kwargs):
             conn,
             dates_reseguros,
             entcodigo,
-            gracodigos
-        )
+            gracodigos)
     # CAPITALIZAÇÃO
+    elif qe == 419:
+        validate_419(
+            nome_arquivo,
+            linha,
+            n,
+            conn,
+            dates_seguros,
+            entcodigo)
+    elif qe == 420:
+        validate_420(
+            nome_arquivo,
+            linha,
+            n,
+            conn,
+            dates_seguros,
+            entcodigo)
+    elif qe == 421:
+        validate_421(
+            nome_arquivo,
+            linha,
+            n,
+            conn,
+            dates_seguros,
+            entcodigo)
+    elif qe == 429:
+        if resolve42x(linha) == 422:
+            validate_422(
+                nome_arquivo,
+                linha,
+                n,
+                conn,
+                dates_seguros,
+                entcodigo)
+        elif resolve42x(linha) == 422:
+            validate_423(
+                nome_arquivo,
+                linha,
+                n,
+                conn,
+                dates_seguros,
+                entcodigo)

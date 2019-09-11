@@ -10,6 +10,9 @@ from win10toast import ToastNotifier
 import time
 import sqlite3
 from db import *
+from excel_tools import Handler
+from QEMaths.maths import maths
+
 
 
 class main_window:
@@ -305,6 +308,7 @@ class main_window:
 
     def execute(self):
         self.output_execute_bt.config(state=DISABLED)
+        self.root.wm_state('iconic')
         notifier=ToastNotifier()
         start = time.time()
         # Vars
@@ -317,9 +321,12 @@ class main_window:
         total = 0
         # Prepare DB Tables
         create_main_tables(conn)
+        # Prepare Excel File
+        excel = Handler(qe)
         # Ok, Lets finally process these fuckers
         if self.processo1_var.get():
-            for arquivo in self.files_list:
+            # CRITICAS
+            for arquivo in self.files_list:                   
                 with open(arquivo) as txt:
                     linhas = txt.readlines()
                     total += len(linhas)
@@ -327,16 +334,26 @@ class main_window:
                         run_validations(
                             qe=qe,
                             nome_arquivo = txt.name,
-                            linha=linha.strip(),
+                            linha=linha.replace(",",".").strip(),
                             n=n,
                             conn=conn,
                             year = year,
                             entcodigo = entcodigo,
                             ramcodigos = self.ramos_list,
-                            esrcodcess = esrcodcess)
+                            esrcodcess = esrcodcess,
+                            gracodigos = self.ramos_list)
             conn.commit()
+            # Export Excel
+            excel.critics_to_excel(conn,total)
         if self.processo2_var.get():
-            pass
+            # CRUZAMENTOS
+            calculator = maths(year,qe)
+            for file in self.files_list:
+                with open(file) as txt:
+                    for line in txt.readlines():
+                        calculator.score_line(line.replace(",",".").strip())
+            df = calculator.get_dataframe()
+            excel.df_to_excel(df,qe)
         if self.processo3_var.get():
             pass
         if self.processo4_var.get():
@@ -347,6 +364,9 @@ class main_window:
             icon_path="GUI_res\\icon.ico",
             threaded=True)
         self.output_execute_bt.config(state=NORMAL)
+        self.root.wm_state("normal")
+        # Save Excel
+        excel.save_xl(self.output_entry.get())
         
 
 if __name__ == "__main__":
