@@ -12,6 +12,8 @@ import sqlite3
 from db import *
 from excel_tools import Handler
 from QEMaths.maths import maths
+import subprocess
+
 
 
 
@@ -267,8 +269,7 @@ class main_window:
     def get_ramos(self):
         self.ent_vali_button.config(
             state=DISABLED,
-            text="Consultando \n Sistema\n SES..."
-        )
+            text="Consultando \n Sistema\n SES...")
         if self.ent_entry.get() == "" or \
             self.qetype_var.get() == 0 or self.year_spin.get() == 0 or \
                 self.year_spin.get() == "":
@@ -310,14 +311,18 @@ class main_window:
         self.output_execute_bt.config(state=DISABLED)
         self.root.wm_state('iconic')
         notifier=ToastNotifier()
-        start = time.time()
         # Vars
+        start = time.time()
         qe = self.qetype_var.get()
         year = int(self.year_spin.get())
         entcodigo = self.ent_entry.get()
         conn = sqlite3.connect("DBs\\{}.db".format(len(glob("DBs\\*.db"))+1))
         esrcodcess = SES(initialize=False).get_esrcodcess()
         esrcodcess.append(entcodigo)
+        path = os.path.abspath(self.output_entry.get())
+        # Crate new folder
+        os.mkdir(path+"\\Output")
+        path = os.path.abspath(os.path.join(path,"Output"))
         total = 0
         # Prepare DB Tables
         create_main_tables(conn)
@@ -355,9 +360,9 @@ class main_window:
             df = calculator.get_dataframe()
             excel.df_to_excel(df,qe)
         if self.processo3_var.get():
-            pass
+            make_report(qe,conn,path)
         if self.processo4_var.get():
-            pass
+            excel.qe_to_csv(qe,path,self.files_list)
         notifier.show_toast(
             title="Processo Finalizado!",
             msg="Executado em {}".format(round(time.time()-start,2)),
@@ -366,7 +371,9 @@ class main_window:
         self.output_execute_bt.config(state=NORMAL)
         self.root.wm_state("normal")
         # Save Excel
-        excel.save_xl(self.output_entry.get())
+        if self.processo1_var.get() == 1 or \
+            self.processo2_var.get() == 1:
+            excel.save_xl(path)
         
 
 if __name__ == "__main__":
