@@ -4,5 +4,4 @@ openpyxl
 pandas
 pycpfcnpj
 requests
-selenium
 win10toast

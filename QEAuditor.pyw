@@ -3,7 +3,7 @@ from tkinter import *
 from tkinter import filedialog, messagebox
 from tkinter.ttk import Separator
 import os
-from Web.ses import SES
+from web_ses import *
 from threading import Thread
 from QEValidations.validation import run_validations
 from win10toast import ToastNotifier
@@ -13,8 +13,6 @@ from db import *
 from excel_tools import Handler
 from QEMaths.maths import maths
 import subprocess
-
-
 
 
 class main_window:
@@ -146,7 +144,7 @@ class main_window:
                                       command=lambda: self.search())
         self.output_execute_bt = Button(self.output_frame, text="EXECUTAR!",
                                         font=("TkDefaultFont", 10, "bold"),
-                                        command=lambda: self.execute())
+                                        command=lambda:self.make_thread(self.validate).start() )
 
     def positions(self):
         # QE Types
@@ -242,6 +240,7 @@ class main_window:
                 title="Erro",
                 message="Importe ao menos UM arquivo!")
             return
+        self.execute()
 
     def search(self):
         path = filedialog.askdirectory()
@@ -281,8 +280,7 @@ class main_window:
             state=NORMAL,
             text="Validar\n&\nObter Ramos")
             return
-        ramos = SES()
-        self.ramos_list = ramos.get_ramos(self.ent_entry.get(),
+        self.ramos_list = get_ramos(self.ent_entry.get(),
                                 int(self.year_spin.get()),
                                 self.qetype_var.get())
         if not self.ramos_list:
@@ -317,7 +315,7 @@ class main_window:
         year = int(self.year_spin.get())
         entcodigo = self.ent_entry.get()
         conn = sqlite3.connect("DBs\\{}.db".format(len(glob("DBs\\*.db"))+1))
-        esrcodcess = SES(initialize=False).get_esrcodcess()
+        esrcodcess = get_esrcodcess()
         esrcodcess.append(entcodigo)
         path = os.path.abspath(self.output_entry.get())
         # Crate new folder
