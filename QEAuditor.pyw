@@ -31,6 +31,7 @@ class main_window:
         self.positions()
         self.files_list = []
         self.ramos_list = []
+        self.ramos_validated = False
 
     def design(self):
         # QE Types
@@ -88,6 +89,8 @@ class main_window:
         self.year_spin = Spinbox(self.entcodyear_frame, from_=2010, to=2100)
         self.ent_vali_button = Button(
             self.entcodyear_frame, text="Validar\n&\nObter Ramos",
+            height=3,
+            width=10,
             command=lambda: self.make_thread(self.get_ramos).start())
         # PROCESSOS
         self.processo1_var = IntVar()
@@ -219,26 +222,32 @@ class main_window:
         return Thread(target=command)
 
     def validate(self):
-        if self.qetype_var.get() == 0:
-            messagebox.showerror(
-                title="Erro",
-                message="Selecione um QE!")
+        if self.qetype_var.get() == 0 or \
+            self.ent_entry.get() == "" or \
+                not (2010 <= self.year_spin.get()<=2100) or \
+                    not self.ramos_validated:
+            messagebox.showerror("Erro!","Favor validar o ENTCODIGO " \
+                "para obter os ramos!")
             return
-        if self.ent_entry.get() == "" or len(self.ramos_list)==0:
-            messagebox.showerror(
-                title="Erro",
-                message="Verifique:\n\n- ENTCODIGO,\n- Ano Base,\n- Ramos.")
+        if self.processo3_var.get() == 1 and \
+            self.processo1_var.get() == 1:
+            messagebox.showerror("Erro!",
+                "Para extrair o relatório de críticas detalhado é necessário"\
+                    ' selecionar o caixa "críticas" também!')
             return
-        if (self.processo1_var.get() + self.processo2_var.get() +
-                self.processo3_var.get() + self.processo4_var.get()) == 0:
-            messagebox.showerror(
-                title="Erro",
-                message="Selecione ao menos UM processo!")
+        if len(self.files_list ) == 0:
+            messagebox.showerror("Erro!","Adicione ao menos um arquivo TXT!")
             return
-        if len(self.files_list) == 0:
-            messagebox.showerror(
-                title="Erro",
-                message="Importe ao menos UM arquivo!")
+        if len(self.output_entry.get()) ==0:
+            messagebox.showerror("Erro!", "É necessário "\
+                "escolher um caminho para exportação!")
+            return
+        if os.path.exists(os.path.abspath(os.path.join(
+            self.output_entry.get(),
+            "\\Output"))):
+            messagebox.showerror("Erro!",
+                "Já existe uma pasta OUTPUT nesse diretório.\n"
+                "Apague ou renomeia para outro nome.")
             return
         self.execute()
 
@@ -266,44 +275,42 @@ class main_window:
         self.arquivos_text.config(state=DISABLED)
 
     def get_ramos(self):
-        self.ent_vali_button.config(
-            state=DISABLED,
-            text="Consultando \n Sistema\n SES...")
-        if self.ent_entry.get() == "" or \
-            self.qetype_var.get() == 0 or self.year_spin.get() == 0 or \
-                self.year_spin.get() == "":
-            messagebox.showerror(
-                title="Erro",
-                message="Verifique os campos:\n"
-                "- QEs,\n- ENTCODIGO,\n- ANO BASE")
-            self.ent_vali_button.config(
-            state=NORMAL,
-            text="Validar\n&\nObter Ramos")
+        # Validação
+        if self.qetype_var.get() == 0:
+            messagebox.showerror("Error!",
+                "Selecione um QE!")
             return
+        if self.ent_entry.get()=="" or len(self.ent_entry.get())==0:
+            messagebox.showerror("Erro!", "Digite um ENTCODIGO válido!")
+            return
+        try:
+            if not 2010<=int(self.year_spin.get())<2100:
+                messagebox.showerror("Erro!", "Digite um ano base válido!")
+                return
+        except:
+            messagebox.showerror("Erro!", "Digite um ano base válido!")
+            return
+        # Format Button
+        self.ent_vali_button.config(state=DISABLED,text="Consultando\n SES...")
+        # SES
         self.ramos_list = get_ramos(self.ent_entry.get(),
-                                int(self.year_spin.get()),
-                                self.qetype_var.get())
+                  self.year_spin.get(),
+                  self.qetype_var.get())
         if not self.ramos_list:
-            messagebox.showerror(
-                title="Erro",
-                message="Algo deu errado :(\n\n"\
-                        "Verifique sua conexão e o ENTCODIGO.\n\n"\
-                        "É possivel digitar os ramos manualmente também\n"\
-                        "(Lembre-se de separar-los entre linhas!)")
-            self.ent_vali_button.config(
-                state=NORMAL,
-                text="Validar\n&\nObter Ramos")
+            messagebox.showerror("Erro!", "Impossível acessar o SES SUSEP." \
+                                 "\n\nVerifique sua conexão!")
+            self.ent_vali_button.config(state=NORMAL, 
+                                        text="Validar\n&\nObter Ramos")
             return
-        self.ramos_text.delete(0,END)
-        self.ramos_text.config(
-            state=NORMAL)
+        self.ramos_text.config(state=NORMAL)
+        self.ramos_text.delete("1.0",END)
         for ramo in self.ramos_list:
             self.ramos_text.insert(END,ramo+"\n")
-        self.ramos_text.config(
-            state=DISABLED)
-        self.ent_vali_button.config(
-                state=NORMAL,
-                text="Validar\n&\nObter Ramos")
+        self.ramos_text.config(state=DISABLED)
+        # Reset Button
+        self.ent_vali_button.config(state=NORMAL, 
+                                        text="Validar\n&\nObter Ramos")
+        self.ramos_validated = True
 
     def execute(self):
         self.output_execute_bt.config(state=DISABLED)
@@ -372,7 +379,19 @@ class main_window:
         if self.processo1_var.get() == 1 or \
             self.processo2_var.get() == 1:
             excel.save_xl(path)
-        
+        # Clear form
+        self.qetype_var.set(0)
+        self.ent_entry.delete(0,END)
+        self.ramos_text.config(state=NORMAL)
+        self.ramos_text.delete("1.0",END)
+        self.ramos_text.config(state=DISABLED)
+        self.ramos_list = []
+        self.clear_arquivos()
+        self.output_entry.config(state=NORMAL)
+        self.output_entry.delete(0,END)
+        self.output_entry.config(state=DISABLED)
+        self.clear_arquivos()
+
 
 if __name__ == "__main__":
     for db in glob("DBs\\*.db"):

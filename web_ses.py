@@ -55,6 +55,8 @@ def get_ramos(entcodigo, ano, qe_type):
             elements = sopa.find_all("td", {"align": "left"})
             for element in elements[3:]:
                 ramos.append(element.text[:2])
+        if len(ramos)==0:
+            return False
         return ramos
     except:
         return False
