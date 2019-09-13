@@ -111,87 +111,87 @@ class Handler:
 
     def df_to_excel(self,df,qe):
         ws = self.wb.active
-        if qe == 378:
+        if qe == 376:
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 1 - 378"]):
+            for index, value in zip(df.index, df["Cruzamento 1 - 376"]):
                 ws[f"G{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
                 ws[f"H{row}"].value = value
                 ws[f"H{row}"].number_format ="#,##0" 
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 2 - 378"]):
+            for index, value in zip(df.index, df["Cruzamento 2 - 376"]):
                 ws[f"M{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
                 ws[f"N{row}"].value = value
                 ws[f"N{row}"].number_format ="#,##0" 
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 3 - 378"]):
+            for index, value in zip(df.index, df["Cruzamento 3 - 376"]):
                 ws[f"S{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
                 ws[f"T{row}"].value = value
                 ws[f"T{row}"].number_format ="#,##0" 
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 4 - 378"]):
+            for index, value in zip(df.index, df["Cruzamento 4 - 376"]):
                 ws[f"Y{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
                 ws[f"Z{row}"].value = value
                 ws[f"Z{row}"].number_format ="#,##0" 
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 5 - 378"]):
+            for index, value in zip(df.index, df["Cruzamento 5 - 376"]):
                 ws[f"AE{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
                 ws[f"AF{row}"].value = value
                 ws[f"AF{row}"].number_format ="#,##0" 
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 6 - 378"]):
+            for index, value in zip(df.index, df["Cruzamento 6 - 376"]):
                 ws[f"AK{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
                 ws[f"AK{row}"].value = value
                 ws[f"AL{row}"].number_format ="#,##0" 
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 7 - 378"]):
+            for index, value in zip(df.index, df["Cruzamento 7 - 376"]):
                 ws[f"AQ{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
                 ws[f"AQ{row}"].value = value
                 ws[f"AR{row}"].number_format ="#,##0" 
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 8 - 378"]):
+            for index, value in zip(df.index, df["Cruzamento 8 - 376"]):
                 ws[f"AW{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
                 ws[f"AX{row}"].value = value
                 ws[f"AX{row}"].number_format ="#,##0" 
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 9 - 378"]):
+            for index, value in zip(df.index, df["Cruzamento 9 - 376"]):
                 ws[f"BC{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
                 ws[f"BD{row}"].value = value
                 ws[f"BD{row}"].number_format ="#,##0" 
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 10 - 378"]):
+            for index, value in zip(df.index, df["Cruzamento 10 - 376"]):
                 ws[f"BI{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
                 ws[f"BI{row}"].value = value
                 ws[f"BJ{row}"].number_format ="#,##0" 
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 11 - 378"]):
+            for index, value in zip(df.index, df["Cruzamento 11 - 376"]):
                 ws[f"BO{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
                 ws[f"BP{row}"].value = value
                 ws[f"BP{row}"].number_format ="#,##0" 
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 12 - 378"]):
+            for index, value in zip(df.index, df["Cruzamento 12 - 376"]):
                 ws[f"BU{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
                 ws[f"BV{row}"].value = value
                 ws[f"BV{row}"].number_format ="#,##0" 
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 13 - 378"]):
+            for index, value in zip(df.index, df["Cruzamento 13 - 376"]):
                 ws[f"CA{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
                 ws[f"CB{row}"].value = value
                 ws[f"CB{row}"].number_format ="#,##0" 
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 14 - 378"]):
+            for index, value in zip(df.index, df["Cruzamento 14 - 376"]):
                 ws[f"CG{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
                 ws[f"CH{row}"].value = value
                 ws[f"CH{row}"].number_format ="#,##0" 

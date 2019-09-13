@@ -12,7 +12,6 @@ import sqlite3
 from db import *
 from excel_tools import Handler
 from QEMaths.maths import maths
-import subprocess
 
 
 class main_window:
@@ -222,15 +221,20 @@ class main_window:
         return Thread(target=command)
 
     def validate(self):
+        if self.processo1_var.get()+self.processo2_var.get() + \
+            self.processo3_var.get()+self.processo4_var.get()==0:
+                messagebox.showerror("Erro!",
+                "Favor selecionar ao menos um processo!")
+                return
         if self.qetype_var.get() == 0 or \
             self.ent_entry.get() == "" or \
-                not (2010 <= self.year_spin.get()<=2100) or \
+                not (2010 <= int(self.year_spin.get())<=2100) or \
                     not self.ramos_validated:
             messagebox.showerror("Erro!","Favor validar o ENTCODIGO " \
                 "para obter os ramos!")
             return
         if self.processo3_var.get() == 1 and \
-            self.processo1_var.get() == 1:
+            self.processo1_var.get() == 0:
             messagebox.showerror("Erro!",
                 "Para extrair o relatório de críticas detalhado é necessário"\
                     ' selecionar o caixa "críticas" também!')
@@ -242,14 +246,21 @@ class main_window:
             messagebox.showerror("Erro!", "É necessário "\
                 "escolher um caminho para exportação!")
             return
-        if os.path.exists(os.path.abspath(os.path.join(
-            self.output_entry.get(),
-            "\\Output"))):
+        if os.path.exists(
+            os.path.abspath(self.output_entry.get()+"\\Output")):
             messagebox.showerror("Erro!",
                 "Já existe uma pasta OUTPUT nesse diretório.\n"
                 "Apague ou renomeia para outro nome.")
             return
-        self.execute()
+        try:
+            self.execute()
+        except KeyError:
+            messagebox.showerror("Erro!",
+            "A Ano Base não condiz com as datas do(s) arquivo(s)!\n"
+            "Favor verificar...")
+            self.clear_form()
+            self.output_execute_bt.config(state=NORMAL)
+            os.remove(self.output_entry.get()+"\\Output")
 
     def search(self):
         path = filedialog.askdirectory()
@@ -321,7 +332,6 @@ class main_window:
         qe = self.qetype_var.get()
         year = int(self.year_spin.get())
         entcodigo = self.ent_entry.get()
-        conn = sqlite3.connect("DBs\\{}.db".format(len(glob("DBs\\*.db"))+1))
         esrcodcess = get_esrcodcess()
         esrcodcess.append(entcodigo)
         path = os.path.abspath(self.output_entry.get())
@@ -329,12 +339,15 @@ class main_window:
         os.mkdir(path+"\\Output")
         path = os.path.abspath(os.path.join(path,"Output"))
         total = 0
+        # Connection
+        db_path = path+"\\"+str(len(glob(path+"\\*.db"))+1)+".db"
+        conn = sqlite3.connect(db_path)
         # Prepare DB Tables
         create_main_tables(conn)
         # Prepare Excel File
         excel = Handler(qe)
         # Ok, Lets finally process these fuckers
-        if self.processo1_var.get():
+        if self.processo1_var.get() ==1:
             # CRITICAS
             for arquivo in self.files_list:                   
                 with open(arquivo) as txt:
@@ -355,7 +368,7 @@ class main_window:
             conn.commit()
             # Export Excel
             excel.critics_to_excel(conn,total)
-        if self.processo2_var.get():
+        if self.processo2_var.get()== 1:
             # CRUZAMENTOS
             calculator = maths(year,qe)
             for file in self.files_list:
@@ -364,9 +377,9 @@ class main_window:
                         calculator.score_line(line.replace(",",".").strip())
             df = calculator.get_dataframe()
             excel.df_to_excel(df,qe)
-        if self.processo3_var.get():
+        if self.processo3_var.get()==1:
             make_report(qe,conn,path)
-        if self.processo4_var.get():
+        if self.processo4_var.get()==1:
             excel.qe_to_csv(qe,path,self.files_list)
         notifier.show_toast(
             title="Processo Finalizado!",
@@ -379,7 +392,12 @@ class main_window:
         if self.processo1_var.get() == 1 or \
             self.processo2_var.get() == 1:
             excel.save_xl(path)
-        # Clear form
+        # Clear form & Delete DB
+        self.clear_form()
+        conn.close()
+        os.remove(db_path)
+
+    def clear_form(self):
         self.qetype_var.set(0)
         self.ent_entry.delete(0,END)
         self.ramos_text.config(state=NORMAL)
@@ -391,10 +409,11 @@ class main_window:
         self.output_entry.delete(0,END)
         self.output_entry.config(state=DISABLED)
         self.clear_arquivos()
-
+        self.processo1_var.set(0)
+        self.processo2_var.set(0)
+        self.processo3_var.set(0)
+        self.processo4_var.set(0)
 
 if __name__ == "__main__":
-    for db in glob("DBs\\*.db"):
-        os.remove(db)
     a = main_window()
     a.root.mainloop()
