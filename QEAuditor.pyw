@@ -12,6 +12,7 @@ import sqlite3
 from db import *
 from excel_tools import Handler
 from QEMaths.maths import maths
+import shutil
 
 
 class main_window:
@@ -258,10 +259,14 @@ class main_window:
             messagebox.showerror("Erro!",
             "A Ano Base não condiz com as datas do(s) arquivo(s)!\n"
             "Favor verificar...")
+            self.conn.close()
+            shutil.rmtree(
+                os.path.abspath(
+                    os.path.join(
+                        self.output_entry.get(),"Output")))
             self.clear_form()
             self.output_execute_bt.config(state=NORMAL)
-            os.remove(self.output_entry.get()+"\\Output")
-
+            
     def search(self):
         path = filedialog.askdirectory()
         self.output_entry.config(state=NORMAL)
@@ -341,9 +346,9 @@ class main_window:
         total = 0
         # Connection
         db_path = path+"\\"+str(len(glob(path+"\\*.db"))+1)+".db"
-        conn = sqlite3.connect(db_path)
+        self.conn = sqlite3.connect(db_path)
         # Prepare DB Tables
-        create_main_tables(conn)
+        create_main_tables(self.conn)
         # Prepare Excel File
         excel = Handler(qe)
         # Ok, Lets finally process these fuckers
@@ -359,15 +364,15 @@ class main_window:
                             nome_arquivo = txt.name,
                             linha=linha.replace(",",".").strip(),
                             n=n,
-                            conn=conn,
+                            conn=self.conn,
                             year = year,
                             entcodigo = entcodigo,
                             ramcodigos = self.ramos_list,
                             esrcodcess = esrcodcess,
                             gracodigos = self.ramos_list)
-            conn.commit()
+            self.conn.commit()
             # Export Excel
-            excel.critics_to_excel(conn,total)
+            excel.critics_to_excel(self.conn,total)
         if self.processo2_var.get()== 1:
             # CRUZAMENTOS
             calculator = maths(year,qe)
@@ -378,7 +383,7 @@ class main_window:
             df = calculator.get_dataframe()
             excel.df_to_excel(df,qe)
         if self.processo3_var.get()==1:
-            make_report(qe,conn,path)
+            make_report(qe,self.conn,path)
         if self.processo4_var.get()==1:
             excel.qe_to_csv(qe,path,self.files_list)
         notifier.show_toast(
@@ -394,7 +399,7 @@ class main_window:
             excel.save_xl(path)
         # Clear form & Delete DB
         self.clear_form()
-        conn.close()
+        self.conn.close()
         os.remove(db_path)
 
     def clear_form(self):
