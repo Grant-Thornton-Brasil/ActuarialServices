@@ -3,7 +3,7 @@
 ![](https://github.com/marcelo-franceschini/ActuarialServicesGrantThornton/blob/master/Docs/notification.png)
 ## What is this?
 
-This is a tool that audit TXTs files sent to [SUSEP](http://www.susep.gov.br "SUSEP"), following their [manual](https://www2.susep.gov.br/download/fip2_2/Fip22_ManualPreenchimentosetembro-2019.zip "manual").
+This is a tool that audits TXTs files sent to [SUSEP](http://www.susep.gov.br "SUSEP"), following their [manual](https://www2.susep.gov.br/download/fip2_2/Fip22_ManualPreenchimentosetembro-2019.zip "manual").
 Unfortunately, this is very specific to the Brazilian insurance market, so the SUSEP's manual is entire in Portuguese :sleeping:
 
 ### How to use it
