@@ -22,4 +22,4 @@ requests
 win10toast
 ```
 2. Clone the project
-3. Execute \_\_sdasda__.pyw
+3. Execute \_\_main__.pyw
