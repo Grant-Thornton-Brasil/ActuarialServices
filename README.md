@@ -17,6 +17,7 @@ ciso8601
 openpyxl
 pandas
 pycpfcnpj
+pyodbc
 requests
 win10toast
 ```
