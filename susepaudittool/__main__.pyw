@@ -19,7 +19,8 @@ class main_window:
     # GUI ITSELF
     def __init__(self):
         self.root = Tk()
-        self.root.iconbitmap(default="GUI_res\\icon.ico")
+        self.dir = os.path.join(os.path.abspath(os.path.dirname(__file__)),"..")
+        self.root.iconbitmap(default=self.dir+"\\GUI_res\\icon.ico")
         self.root.title("Grant Thornton Brasil - Serviços Atuariais")
         self.root.resizable(False, False)
         self.root.config(padx=3, pady=3)
@@ -125,7 +126,7 @@ class main_window:
         self.ramos_scroll = Scrollbar(
             self.ramos_frame, command=self.ramos_text.yview)
         # FIP
-        self.search_image = PhotoImage(file="GUI_res\\search.png")
+        self.search_image = PhotoImage(file=self.dir+"\\GUI_res\\search.png")
         self.fip_frame = LabelFrame(self.root, text="FIP - Arquivo Access (.mdb ou .accdb)")
         self.fip_label = Label(self.fip_frame, text="Caminho: ")
         self.fip_entry = Entry(self.fip_frame, state=DISABLED, width= 102,
@@ -416,7 +417,7 @@ class main_window:
         notifier.show_toast(
             title="Processo Finalizado!",
             msg="Executado em {}".format(round(time.time()-start,2)),
-            icon_path="GUI_res\\icon.ico",
+            icon_path=self.dir+"\\GUI_res\\icon.ico",
             threaded=True)
         self.output_execute_bt.config(state=NORMAL)
         self.root.wm_state("normal")
