@@ -26,7 +26,7 @@ class main_window:
         ws = self.root.winfo_screenwidth()  # width of the screen
         hs = self.root.winfo_screenheight()  # height of the screen
         self.root.geometry(
-            f"717x450+{int(round(ws/7,0))}+{int(round(hs/17,0))}")
+            f"717x498+{int(round(ws/7,0))}+{int(round(hs/17,0))}")
         self.design()
         self.positions()
         self.files_list = []
@@ -124,6 +124,16 @@ class main_window:
             pady=2)
         self.ramos_scroll = Scrollbar(
             self.ramos_frame, command=self.ramos_text.yview)
+        # FIP
+        self.search_image = PhotoImage(file="GUI_res\\search.png")
+        self.fip_frame = LabelFrame(self.root, text="FIP - Arquivo Access (.mdb ou .accdb)")
+        self.fip_label = Label(self.fip_frame, text="Caminho: ")
+        self.fip_entry = Entry(self.fip_frame, state=DISABLED, width= 102,
+                                  disabledbackground="white",
+                                  disabledforeground="black")
+        self.fip_serch_bt = Button(self.fip_frame, text="X",
+                                      image=self.search_image,
+                                      command=lambda: self.search("FIP"))
         # ARQUIVOS
         self.arquivos_frame = LabelFrame(self.root, text="Arquivos:")
         self.arquivos_text = Text(self.arquivos_frame, width=75, height=15,
@@ -141,10 +151,10 @@ class main_window:
         self.output_entry = Entry(self.output_frame, width=88, state=DISABLED,
                                   disabledbackground="white",
                                   disabledforeground="black")
-        self.search_image = PhotoImage(file="GUI_res\\search.png")
+        
         self.output_serch_bt = Button(self.output_frame, text="X",
                                       image=self.search_image,
-                                      command=lambda: self.search())
+                                      command=lambda: self.search("OUT"))
         self.output_execute_bt = Button(self.output_frame, text="EXECUTAR!",
                                         font=("TkDefaultFont", 10, "bold"),
                                         command=lambda:self.make_thread(self.validate).start() )
@@ -189,9 +199,16 @@ class main_window:
         self.ramos_text.pack(fill=BOTH, side=LEFT)
         self.ramos_scroll.pack(fill=BOTH, side=LEFT)
         self.ramos_text.config(yscrollcommand=self.ramos_scroll.set)
+        # FIP DB
+        self.fip_frame.grid(
+            row=2, column=0, columnspan=3,
+            sticky=(W, N, S, E))
+        self.fip_label.pack(side=LEFT)
+        self.fip_entry.pack(side=LEFT,fill=BOTH)
+        self.fip_serch_bt.pack(side=LEFT)
         # ARQUIVOS
         self.arquivos_frame.grid(
-            row=2, column=0, columnspan=3,
+            row=3, column=0, columnspan=3,
             sticky=(W, N, S, E))
         self.arquivos_text.grid(row=0, column=0, rowspan=2)
         self.arquivos_scroll.grid(
@@ -202,7 +219,7 @@ class main_window:
         self.arquivos_clear_bt.grid(row=1, column=2, sticky=(W, N, S, E))
         # OUTPUT
         self.output_frame.grid(
-            row=3,
+            row=4,
             column=0,
             sticky=(W, N, S, E),
             columnspan=3)
@@ -266,18 +283,27 @@ class main_window:
                         self.output_entry.get(),"Output")))
             self.clear_form()
             self.output_execute_bt.config(state=NORMAL)
+        if self.processo2_var.get() == 1 and self.fip_entry.get() == "":
+            messagebox.showerror("Erro!",
+            "Selecione um arquivo de banco de dados do FIP!")
             
-    def search(self):
-        path = filedialog.askdirectory()
-        self.output_entry.config(state=NORMAL)
-        self.output_entry.delete(0, END)
-        self.output_entry.insert(0, path)
-        self.abs_path = os.path.abspath(path)
-        self.output_entry.config(state=DISABLED)
+    def search(self,func):
+        if func == "OUT":
+            path = filedialog.askdirectory()
+            self.output_entry.config(state=NORMAL)
+            self.output_entry.delete(0, END)
+            self.output_entry.insert(0, path)
+            self.output_entry.config(state=DISABLED)
+        elif func == "FIP":
+            path = filedialog.askopenfilename(filetypes=[("Arquivo de Access","*.mdb;*.accdb")])
+            self.fip_entry.config(state=NORMAL)
+            self.fip_entry.delete(0, END)
+            self.fip_entry.insert(0, path)
+            self.fip_entry.config(state=DISABLED)
 
     def add_txt_file(self):
         self.arquivos_text.config(state=NORMAL)
-        for arquivo in filedialog.askopenfilenames():
+        for arquivo in filedialog.askopenfilenames(filetypes=[("Arquivos de Texto","*.txt")]):
             self.files_list.append(os.path.abspath(arquivo))
             self.arquivos_text.insert(END, str(len(self.files_list)) + "\n")
             self.arquivos_text.insert(END, arquivo + "\n")
@@ -381,7 +407,8 @@ class main_window:
                     for line in txt.readlines():
                         calculator.score_line(line.replace(",",".").strip())
             df = calculator.get_dataframe()
-            excel.df_to_excel(df,qe)
+            excel.df_to_excel(df,qe,os.path.abspath(self.fip_entry.get()),year,entcodigo)
+            excel.conn.close()
         if self.processo3_var.get()==1:
             make_report(qe,self.conn,path)
         if self.processo4_var.get()==1:
@@ -418,7 +445,11 @@ class main_window:
         self.processo2_var.set(0)
         self.processo3_var.set(0)
         self.processo4_var.set(0)
+        self.fip_entry.config(state=NORMAL)
+        self.fip_entry.delete(0,END)
+        self.fip_entry.config(state=DISABLED)
 
+        
 if __name__ == "__main__":
     a = main_window()
     a.root.mainloop()

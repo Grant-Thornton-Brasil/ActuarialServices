@@ -2,6 +2,7 @@ import os
 from openpyxl import load_workbook
 from openpyxl.utils.datetime import to_excel
 from datetime import datetime
+import pyodbc
 
 
 class Handler:
@@ -42,6 +43,24 @@ class Handler:
         elif self.qe == 423:
             path = capitalization + "\\423.xlsx"
         self.wb = load_workbook(os.path.abspath(path))
+
+    def get_from_fip(self, db_path, year, cmpid, entcodigo):
+        values = []
+        self.conn = pyodbc.connect(
+            r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ='+db_path)
+        query = self.conn.execute(
+            f"""SELECT sum(vdrValor)
+                FROM ValoresMovRamos
+                WHERE ((mrfMesAno >= #01/01/{year}#)
+                AND (mrfMesAno <= #31/12/{year}#)
+                AND (CMPID = {cmpid})
+                AND (entCodigo = '{entcodigo}'))
+                GROUP BY mrfMesAno
+                ORDER BY mrfMesAno
+                """).fetchall()
+        for i in query:
+            values.append(i[0])
+        return values
 
     def critics_to_excel(self, conn, total):
         self.report = []
@@ -109,490 +128,727 @@ class Handler:
             else:
                 self.report.append((total,item))
 
-    def df_to_excel(self,df,qe):
+    def df_to_excel(self,df_cruz, qe, db_path, year, entcodigo):
         ws = self.wb.active
         if qe == 376:
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 1 - 376"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 1 - 376"], self.get_from_fip(db_path, year, 12184, entcodigo)):
                 ws[f"G{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"H{row}"].value = value
-                ws[f"H{row}"].number_format ="#,##0" 
+                ws[f"G{row}"].offset(column=1).value= value
+                ws[f"G{row}"].offset(column=2).value= value_fip
+                ws[f"G{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"G{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"G{row}"].offset(column=3).number_format ="#,##0"
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 2 - 376"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 2 - 376"], self.get_from_fip(db_path, year, 12185, entcodigo)):
                 ws[f"M{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"N{row}"].value = value
-                ws[f"N{row}"].number_format ="#,##0" 
+                ws[f"M{row}"].offset(column=1).value= value
+                ws[f"M{row}"].offset(column=2).value= value_fip
+                ws[f"M{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"M{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"M{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 3 - 376"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 3 - 376"], self.get_from_fip(db_path, year, 12186, entcodigo)):
                 ws[f"S{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"T{row}"].value = value
-                ws[f"T{row}"].number_format ="#,##0" 
+                ws[f"S{row}"].offset(column=1).value= value
+                ws[f"S{row}"].offset(column=2).value= value_fip
+                ws[f"S{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"S{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"S{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 4 - 376"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 4 - 376"], self.get_from_fip(db_path, year, 12188, entcodigo)):
                 ws[f"Y{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"Z{row}"].value = value
-                ws[f"Z{row}"].number_format ="#,##0" 
+                ws[f"Y{row}"].offset(column=1).value= value
+                ws[f"Y{row}"].offset(column=2).value= value_fip
+                ws[f"Y{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"Y{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"Y{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 5 - 376"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 5 - 376"], self.get_from_fip(db_path, year, 12189, entcodigo)):
                 ws[f"AE{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"AF{row}"].value = value
-                ws[f"AF{row}"].number_format ="#,##0" 
+                ws[f"AE{row}"].offset(column=1).value= value
+                ws[f"AE{row}"].offset(column=2).value= value_fip
+                ws[f"AE{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"AE{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"AE{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 6 - 376"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 6 - 376"], self.get_from_fip(db_path, year, 12190, entcodigo)):
                 ws[f"AK{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"AK{row}"].value = value
-                ws[f"AL{row}"].number_format ="#,##0" 
+                ws[f"AK{row}"].offset(column=1).value= value
+                ws[f"AK{row}"].offset(column=2).value= value_fip
+                ws[f"AK{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"AK{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"AK{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 7 - 376"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 7 - 376"], self.get_from_fip(db_path, year, 12218, entcodigo)):
                 ws[f"AQ{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"AQ{row}"].value = value
-                ws[f"AR{row}"].number_format ="#,##0" 
+                ws[f"AQ{row}"].offset(column=1).value= value
+                ws[f"AQ{row}"].offset(column=2).value= value_fip
+                ws[f"AQ{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"AQ{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"AQ{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 8 - 376"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 8 - 376"], self.get_from_fip(db_path, year, 12219, entcodigo)):
                 ws[f"AW{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"AX{row}"].value = value
-                ws[f"AX{row}"].number_format ="#,##0" 
+                ws[f"AW{row}"].offset(column=1).value= value
+                ws[f"AW{row}"].offset(column=2).value= value_fip
+                ws[f"AW{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"AW{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"AW{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 9 - 376"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 9 - 376"], self.get_from_fip(db_path, year, 12208, entcodigo)):
                 ws[f"BC{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"BD{row}"].value = value
-                ws[f"BD{row}"].number_format ="#,##0" 
+                ws[f"BC{row}"].offset(column=1).value= value
+                ws[f"BC{row}"].offset(column=2).value= value_fip
+                ws[f"BC{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"BC{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"BC{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 10 - 376"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 10 - 376"], self.get_from_fip(db_path, year, 12209, entcodigo)):
                 ws[f"BI{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"BI{row}"].value = value
-                ws[f"BJ{row}"].number_format ="#,##0" 
+                ws[f"BI{row}"].offset(column=1).value= value
+                ws[f"BI{row}"].offset(column=2).value= value_fip
+                ws[f"BI{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"BI{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"BI{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 11 - 376"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 11 - 376"], self.get_from_fip(db_path, year, 12224, entcodigo)):
                 ws[f"BO{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"BP{row}"].value = value
-                ws[f"BP{row}"].number_format ="#,##0" 
+                ws[f"BO{row}"].offset(column=1).value= value
+                ws[f"BO{row}"].offset(column=2).value= value_fip
+                ws[f"BO{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"BO{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"BO{row}"].offset(column=3).number_format ="#,##0" 
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 12 - 376"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 12 - 376"], self.get_from_fip(db_path, year, 12225, entcodigo)):
                 ws[f"BU{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"BV{row}"].value = value
-                ws[f"BV{row}"].number_format ="#,##0" 
+                ws[f"BU{row}"].offset(column=1).value= value
+                ws[f"BU{row}"].offset(column=2).value= value_fip
+                ws[f"BU{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"BU{row}"].offset(column=2).number_format ="#,##0" 
+                ws[f"BU{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 13 - 376"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 13 - 376"], self.get_from_fip(db_path, year, 12234, entcodigo)):
                 ws[f"CA{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"CB{row}"].value = value
-                ws[f"CB{row}"].number_format ="#,##0" 
+                ws[f"CA{row}"].offset(column=1).value= value
+                ws[f"CA{row}"].offset(column=2).value= value_fip
+                ws[f"CA{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"CA{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"CA{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 14 - 376"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 14 - 376"], self.get_from_fip(db_path, year, 12235, entcodigo)):
                 ws[f"CG{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"CH{row}"].value = value
-                ws[f"CH{row}"].number_format ="#,##0" 
+                ws[f"CG{row}"].offset(column=1).value= value
+                ws[f"CG{row}"].offset(column=2).value= value_fip
+                ws[f"CG{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"CG{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"CG{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
         elif qe == 377:
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 1 - 377"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 1 - 377"], self.get_from_fip(db_path, year, 12278, entcodigo)):
                 ws[f"G{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"H{row}"].value = value
-                ws[f"H{row}"].number_format ="#,##0" 
+                ws[f"G{row}"].offset(column=1).value= value
+                ws[f"G{row}"].offset(column=2).value= value_fip
+                ws[f"G{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"G{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"G{row}"].offset(column=3).number_format ="#,##0"
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 2 - 377"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 2 - 377"], self.get_from_fip(db_path, year, 12279, entcodigo)):
                 ws[f"M{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"N{row}"].value = value
-                ws[f"N{row}"].number_format ="#,##0" 
+                ws[f"M{row}"].offset(column=1).value= value
+                ws[f"M{row}"].offset(column=2).value= value_fip
+                ws[f"M{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"M{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"M{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 3 - 377"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 3 - 377"], self.get_from_fip(db_path, year, 12280, entcodigo)):
                 ws[f"S{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"T{row}"].value = value
-                ws[f"T{row}"].number_format ="#,##0" 
+                ws[f"S{row}"].offset(column=1).value= value
+                ws[f"S{row}"].offset(column=2).value= value_fip
+                ws[f"S{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"S{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"S{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 4 - 377"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 4 - 377"], self.get_from_fip(db_path, year, 12300, entcodigo)):
                 ws[f"Y{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"Z{row}"].value = value
-                ws[f"Z{row}"].number_format ="#,##0" 
+                ws[f"Y{row}"].offset(column=1).value= value
+                ws[f"Y{row}"].offset(column=2).value= value_fip
+                ws[f"Y{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"Y{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"Y{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 5 - 377"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 5 - 377"], self.get_from_fip(db_path, year, 12282, entcodigo)):
                 ws[f"AE{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"AF{row}"].value = value
-                ws[f"AF{row}"].number_format ="#,##0" 
+                ws[f"AE{row}"].offset(column=1).value= value
+                ws[f"AE{row}"].offset(column=2).value= value_fip
+                ws[f"AE{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"AE{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"AE{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 6 - 377"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 6 - 377"], self.get_from_fip(db_path, year, 12283, entcodigo)):
                 ws[f"AK{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"AK{row}"].value = value
-                ws[f"AL{row}"].number_format ="#,##0" 
+                ws[f"AK{row}"].offset(column=1).value= value
+                ws[f"AK{row}"].offset(column=2).value= value_fip
+                ws[f"AK{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"AK{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"AK{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 7 - 377"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 7 - 377"], self.get_from_fip(db_path, year, 12284, entcodigo)):
                 ws[f"AQ{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"AQ{row}"].value = value
-                ws[f"AR{row}"].number_format ="#,##0" 
+                ws[f"AQ{row}"].offset(column=1).value= value
+                ws[f"AQ{row}"].offset(column=2).value= value_fip
+                ws[f"AQ{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"AQ{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"AQ{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 8 - 377"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 8 - 377"], self.get_from_fip(db_path, year, 12301, entcodigo)):
                 ws[f"AW{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"AX{row}"].value = value
-                ws[f"AX{row}"].number_format ="#,##0" 
+                ws[f"AW{row}"].offset(column=1).value= value
+                ws[f"AW{row}"].offset(column=2).value= value_fip
+                ws[f"AW{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"AW{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"AW{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 9 - 377"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 9 - 377"], self.get_from_fip(db_path, year, 12326, entcodigo)):
                 ws[f"BC{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"BD{row}"].value = value
-                ws[f"BD{row}"].number_format ="#,##0" 
+                ws[f"BC{row}"].offset(column=1).value= value
+                ws[f"BC{row}"].offset(column=2).value= value_fip
+                ws[f"BC{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"BC{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"BC{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 10 - 377"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 10 - 377"], self.get_from_fip(db_path, year, 12332, entcodigo)):
                 ws[f"BI{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"BI{row}"].value = value
-                ws[f"BJ{row}"].number_format ="#,##0" 
+                ws[f"BI{row}"].offset(column=1).value= value
+                ws[f"BI{row}"].offset(column=2).value= value_fip
+                ws[f"BI{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"BI{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"BI{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
         elif qe == 378:
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 1 - 378"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 1 - 378"], self.get_from_fip(db_path, year, 12012, entcodigo)):
                 ws[f"G{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"H{row}"].value = value
-                ws[f"H{row}"].number_format ="#,##0" 
+                ws[f"G{row}"].offset(column=1).value= value
+                ws[f"G{row}"].offset(column=2).value= value_fip
+                ws[f"G{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"G{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"G{row}"].offset(column=3).number_format ="#,##0"
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 2 - 378"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 2 - 378"], self.get_from_fip(db_path, year, 12016, entcodigo)):
                 ws[f"M{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"N{row}"].value = value
-                ws[f"N{row}"].number_format ="#,##0" 
+                ws[f"M{row}"].offset(column=1).value= value
+                ws[f"M{row}"].offset(column=2).value= value_fip
+                ws[f"M{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"M{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"M{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 3 - 378"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 3 - 378"], self.get_from_fip(db_path, year, 12020, entcodigo)):
                 ws[f"S{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"T{row}"].value = value
-                ws[f"T{row}"].number_format ="#,##0" 
+                ws[f"S{row}"].offset(column=1).value= value
+                ws[f"S{row}"].offset(column=2).value= value_fip
+                ws[f"S{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"S{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"S{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 4 - 378"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 4 - 378"], self.get_from_fip(db_path, year, 12034, entcodigo)):
                 ws[f"Y{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"Z{row}"].value = value
-                ws[f"Z{row}"].number_format ="#,##0" 
+                ws[f"Y{row}"].offset(column=1).value= value
+                ws[f"Y{row}"].offset(column=2).value= value_fip
+                ws[f"Y{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"Y{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"Y{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 5 - 378"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 5 - 378"], self.get_from_fip(db_path, year, 12014, entcodigo)):
                 ws[f"AE{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"AF{row}"].value = value
-                ws[f"AF{row}"].number_format ="#,##0" 
+                ws[f"AE{row}"].offset(column=1).value= value
+                ws[f"AE{row}"].offset(column=2).value= value_fip
+                ws[f"AE{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"AE{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"AE{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 6 - 378"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 6 - 378"], self.get_from_fip(db_path, year, 12018, entcodigo)):
                 ws[f"AK{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"AK{row}"].value = value
-                ws[f"AL{row}"].number_format ="#,##0" 
+                ws[f"AK{row}"].offset(column=1).value= value
+                ws[f"AK{row}"].offset(column=2).value= value_fip
+                ws[f"AK{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"AK{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"AK{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 7 - 378"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 7 - 378"], self.get_from_fip(db_path, year, 12022, entcodigo)):
                 ws[f"AQ{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"AQ{row}"].value = value
-                ws[f"AR{row}"].number_format ="#,##0" 
+                ws[f"AQ{row}"].offset(column=1).value= value
+                ws[f"AQ{row}"].offset(column=2).value= value_fip
+                ws[f"AQ{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"AQ{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"AQ{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 8 - 378"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 8 - 378"], self.get_from_fip(db_path, year, 12036, entcodigo)):
                 ws[f"AW{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"AX{row}"].value = value
-                ws[f"AX{row}"].number_format ="#,##0" 
+                ws[f"AW{row}"].offset(column=1).value= value
+                ws[f"AW{row}"].offset(column=2).value= value_fip
+                ws[f"AW{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"AW{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"AW{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 9 - 378"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 9 - 378"], self.get_from_fip(db_path, year, 12013, entcodigo)):
                 ws[f"BC{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"BD{row}"].value = value
-                ws[f"BD{row}"].number_format ="#,##0" 
+                ws[f"BC{row}"].offset(column=1).value= value
+                ws[f"BC{row}"].offset(column=2).value= value_fip
+                ws[f"BC{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"BC{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"BC{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 10 - 378"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 10 - 378"], self.get_from_fip(db_path, year, 12017, entcodigo)):
                 ws[f"BI{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"BI{row}"].value = value
-                ws[f"BJ{row}"].number_format ="#,##0" 
+                ws[f"BI{row}"].offset(column=1).value= value
+                ws[f"BI{row}"].offset(column=2).value= value_fip
+                ws[f"BI{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"BI{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"BI{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 11 - 378"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 11 - 378"], self.get_from_fip(db_path, year, 12021, entcodigo)):
                 ws[f"BO{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"BP{row}"].value = value
-                ws[f"BP{row}"].number_format ="#,##0" 
+                ws[f"BO{row}"].offset(column=1).value= value
+                ws[f"BO{row}"].offset(column=2).value= value_fip
+                ws[f"BO{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"BO{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"BO{row}"].offset(column=3).number_format ="#,##0" 
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 12 - 378"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 12 - 378"], self.get_from_fip(db_path, year, 12035, entcodigo)):
                 ws[f"BU{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"BV{row}"].value = value
-                ws[f"BV{row}"].number_format ="#,##0" 
+                ws[f"BU{row}"].offset(column=1).value= value
+                ws[f"BU{row}"].offset(column=2).value= value_fip
+                ws[f"BU{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"BU{row}"].offset(column=2).number_format ="#,##0" 
+                ws[f"BU{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 13 - 378"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 13 - 378"], self.get_from_fip(db_path, year, 12026, entcodigo)):
                 ws[f"CA{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"CB{row}"].value = value
-                ws[f"CB{row}"].number_format ="#,##0" 
+                ws[f"CA{row}"].offset(column=1).value= value
+                ws[f"CA{row}"].offset(column=2).value= value_fip
+                ws[f"CA{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"CA{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"CA{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 14 - 378"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 14 - 378"], self.get_from_fip(db_path, year, 12481, entcodigo)):
                 ws[f"CG{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"CH{row}"].value = value
-                ws[f"CH{row}"].number_format ="#,##0" 
+                ws[f"CG{row}"].offset(column=1).value= value
+                ws[f"CG{row}"].offset(column=2).value= value_fip
+                ws[f"CG{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"CG{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"CG{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 15 - 378"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 15 - 378"], self.get_from_fip(db_path, year, 12482, entcodigo)):
                 ws[f"CM{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"CN{row}"].value = value
-                ws[f"CN{row}"].number_format ="#,##0" 
+                ws[f"CM{row}"].offset(column=1).value= value
+                ws[f"CM{row}"].offset(column=2).value= value_fip
+                ws[f"CM{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"CM{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"CM{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 16 - 378"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 16 - 378"], self.get_from_fip(db_path, year, 12483, entcodigo)):
                 ws[f"CS{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"CT{row}"].value = value
-                ws[f"CT{row}"].number_format ="#,##0" 
+                ws[f"CS{row}"].offset(column=1).value= value
+                ws[f"CS{row}"].offset(column=2).value= value_fip
+                ws[f"CS{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"CS{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"CS{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
         elif qe == 404:
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 1 - 404"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 1 - 404"], self.get_from_fip(db_path, year, 12244, entcodigo)):
                 ws[f"G{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"H{row}"].value = value
-                ws[f"H{row}"].number_format ="#,##0" 
+                ws[f"G{row}"].offset(column=1).value= value
+                ws[f"G{row}"].offset(column=2).value= value_fip
+                ws[f"G{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"G{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"G{row}"].offset(column=3).number_format ="#,##0"
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 2 - 404"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 2 - 404"], self.get_from_fip(db_path, year, 12245, entcodigo)):
                 ws[f"M{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"N{row}"].value = value
-                ws[f"N{row}"].number_format ="#,##0" 
+                ws[f"M{row}"].offset(column=1).value= value
+                ws[f"M{row}"].offset(column=2).value= value_fip
+                ws[f"M{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"M{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"M{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 3 - 404"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 3 - 404"], self.get_from_fip(db_path, year, 12246, entcodigo)):
                 ws[f"S{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"T{row}"].value = value
-                ws[f"T{row}"].number_format ="#,##0" 
+                ws[f"S{row}"].offset(column=1).value= value
+                ws[f"S{row}"].offset(column=2).value= value_fip
+                ws[f"S{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"S{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"S{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 4 - 404"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 4 - 404"], self.get_from_fip(db_path, year, 12249, entcodigo)):
                 ws[f"Y{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"Z{row}"].value = value
-                ws[f"Z{row}"].number_format ="#,##0" 
+                ws[f"Y{row}"].offset(column=1).value= value
+                ws[f"Y{row}"].offset(column=2).value= value_fip
+                ws[f"Y{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"Y{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"Y{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 5 - 404"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 5 - 404"], self.get_from_fip(db_path, year, 12250, entcodigo)):
                 ws[f"AE{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"AF{row}"].value = value
-                ws[f"AF{row}"].number_format ="#,##0" 
+                ws[f"AE{row}"].offset(column=1).value= value
+                ws[f"AE{row}"].offset(column=2).value= value_fip
+                ws[f"AE{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"AE{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"AE{row}"].offset(column=3).number_format ="#,##0" 
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 6 - 404"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 6 - 404"], self.get_from_fip(db_path, year, 12251, entcodigo)):
                 ws[f"AK{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"AK{row}"].value = value
-                ws[f"AL{row}"].number_format ="#,##0" 
+                ws[f"AK{row}"].offset(column=1).value= value
+                ws[f"AK{row}"].offset(column=2).value= value_fip
+                ws[f"AK{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"AK{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"AK{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 7 - 404"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 7 - 404"], self.get_from_fip(db_path, year, 12272, entcodigo)):
                 ws[f"AQ{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"AQ{row}"].value = value
-                ws[f"AR{row}"].number_format ="#,##0" 
+                ws[f"AQ{row}"].offset(column=1).value= value
+                ws[f"AQ{row}"].offset(column=2).value= value_fip
+                ws[f"AQ{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"AQ{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"AQ{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
         elif qe == 405:
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 1 - 405"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 1 - 405"], self.get_from_fip(db_path, year, 12258, entcodigo)):
                 ws[f"G{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"H{row}"].value = value
-                ws[f"H{row}"].number_format ="#,##0" 
+                ws[f"G{row}"].offset(column=1).value= value
+                ws[f"G{row}"].offset(column=2).value= value_fip
+                ws[f"G{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"G{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"G{row}"].offset(column=3).number_format ="#,##0"
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 2 - 405"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 2 - 405"], self.get_from_fip(db_path, year, 12259, entcodigo)):
                 ws[f"M{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"N{row}"].value = value
-                ws[f"N{row}"].number_format ="#,##0" 
+                ws[f"M{row}"].offset(column=1).value= value
+                ws[f"M{row}"].offset(column=2).value= value_fip
+                ws[f"M{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"M{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"M{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 3 - 405"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 3 - 405"], self.get_from_fip(db_path, year, 12262, entcodigo)):
                 ws[f"S{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"T{row}"].value = value
-                ws[f"T{row}"].number_format ="#,##0" 
+                ws[f"S{row}"].offset(column=1).value= value
+                ws[f"S{row}"].offset(column=2).value= value_fip
+                ws[f"S{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"S{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"S{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 4 - 405"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 4 - 405"], self.get_from_fip(db_path, year, 12263, entcodigo)):
                 ws[f"Y{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"Z{row}"].value = value
-                ws[f"Z{row}"].number_format ="#,##0" 
+                ws[f"Y{row}"].offset(column=1).value= value
+                ws[f"Y{row}"].offset(column=2).value= value_fip
+                ws[f"Y{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"Y{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"Y{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 5 - 405"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 5 - 405"], self.get_from_fip(db_path, year, 12273, entcodigo)):
                 ws[f"AE{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"AF{row}"].value = value
-                ws[f"AF{row}"].number_format ="#,##0" 
+                ws[f"AE{row}"].offset(column=1).value= value
+                ws[f"AE{row}"].offset(column=2).value= value_fip
+                ws[f"AE{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"AE{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"AE{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
         elif qe == 406:
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 1 - 406"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 1 - 406"], self.get_from_fip(db_path, year, 12338, entcodigo)):
                 ws[f"G{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"H{row}"].value = value
-                ws[f"H{row}"].number_format ="#,##0" 
+                ws[f"G{row}"].offset(column=1).value= value
+                ws[f"G{row}"].offset(column=2).value= value_fip
+                ws[f"G{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"G{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"G{row}"].offset(column=3).number_format ="#,##0"
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 2 - 406"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 2 - 406"], self.get_from_fip(db_path, year, 12339, entcodigo)):
                 ws[f"M{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"N{row}"].value = value
-                ws[f"N{row}"].number_format ="#,##0" 
+                ws[f"M{row}"].offset(column=1).value= value
+                ws[f"M{row}"].offset(column=2).value= value_fip
+                ws[f"M{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"M{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"M{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 3 - 406"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 3 - 406"], self.get_from_fip(db_path, year, 12341, entcodigo)):
                 ws[f"S{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"T{row}"].value = value
-                ws[f"T{row}"].number_format ="#,##0" 
+                ws[f"S{row}"].offset(column=1).value= value
+                ws[f"S{row}"].offset(column=2).value= value_fip
+                ws[f"S{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"S{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"S{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 4 - 406"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 4 - 406"], self.get_from_fip(db_path, year, 12342, entcodigo)):
                 ws[f"Y{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"Z{row}"].value = value
-                ws[f"Z{row}"].number_format ="#,##0" 
+                ws[f"Y{row}"].offset(column=1).value= value
+                ws[f"Y{row}"].offset(column=2).value= value_fip
+                ws[f"Y{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"Y{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"Y{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
         elif qe == 407:
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 1 - 407"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 1 - 407"], self.get_from_fip(db_path, year, 12352, entcodigo)):
                 ws[f"G{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"H{row}"].value = value
-                ws[f"H{row}"].number_format ="#,##0" 
+                ws[f"G{row}"].offset(column=1).value= value
+                ws[f"G{row}"].offset(column=2).value= value_fip
+                ws[f"G{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"G{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"G{row}"].offset(column=3).number_format ="#,##0"
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 2 - 407"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 2 - 407"], self.get_from_fip(db_path, year, 12353, entcodigo)):
                 ws[f"M{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"N{row}"].value = value
-                ws[f"N{row}"].number_format ="#,##0" 
+                ws[f"M{row}"].offset(column=1).value= value
+                ws[f"M{row}"].offset(column=2).value= value_fip
+                ws[f"M{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"M{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"M{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 3 - 407"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 3 - 407"], self.get_from_fip(db_path, year, 12379, entcodigo)):
                 ws[f"S{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"T{row}"].value = value
-                ws[f"T{row}"].number_format ="#,##0" 
+                ws[f"S{row}"].offset(column=1).value= value
+                ws[f"S{row}"].offset(column=2).value= value_fip
+                ws[f"S{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"S{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"S{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
         elif qe == 408:
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 1 - 408"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 1 - 408"], self.get_from_fip(db_path, year, 12064, entcodigo)):
                 ws[f"G{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"H{row}"].value = value
-                ws[f"H{row}"].number_format ="#,##0" 
+                ws[f"G{row}"].offset(column=1).value= value
+                ws[f"G{row}"].offset(column=2).value= value_fip
+                ws[f"G{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"G{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"G{row}"].offset(column=3).number_format ="#,##0"
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 2 - 408"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 2 - 408"], self.get_from_fip(db_path, year, 12066, entcodigo)):
                 ws[f"M{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"N{row}"].value = value
-                ws[f"N{row}"].number_format ="#,##0" 
+                ws[f"M{row}"].offset(column=1).value= value
+                ws[f"M{row}"].offset(column=2).value= value_fip
+                ws[f"M{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"M{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"M{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 3 - 408"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 3 - 408"], self.get_from_fip(db_path, year, 12067, entcodigo)):
                 ws[f"S{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"T{row}"].value = value
-                ws[f"T{row}"].number_format ="#,##0" 
+                ws[f"S{row}"].offset(column=1).value= value
+                ws[f"S{row}"].offset(column=2).value= value_fip
+                ws[f"S{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"S{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"S{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 4 - 408"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 4 - 408"], self.get_from_fip(db_path, year, 12069, entcodigo)):
                 ws[f"Y{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"Z{row}"].value = value
-                ws[f"Z{row}"].number_format ="#,##0" 
+                ws[f"Y{row}"].offset(column=1).value= value
+                ws[f"Y{row}"].offset(column=2).value= value_fip
+                ws[f"Y{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"Y{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"Y{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 5 - 408"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 5 - 408"], self.get_from_fip(db_path, year, 12074, entcodigo)):
                 ws[f"AE{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"AF{row}"].value = value
-                ws[f"AF{row}"].number_format ="#,##0" 
+                ws[f"AE{row}"].offset(column=1).value= value
+                ws[f"AE{row}"].offset(column=2).value= value_fip
+                ws[f"AE{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"AE{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"AE{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 6 - 408"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 6 - 408"], self.get_from_fip(db_path, year, 12075, entcodigo)):
                 ws[f"AK{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"AK{row}"].value = value
-                ws[f"AL{row}"].number_format ="#,##0" 
+                ws[f"AK{row}"].offset(column=1).value= value
+                ws[f"AK{row}"].offset(column=2).value= value_fip
+                ws[f"AK{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"AK{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"AK{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 7 - 408"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 7 - 408"], self.get_from_fip(db_path, year, 12076, entcodigo)):
                 ws[f"AQ{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"AQ{row}"].value = value
-                ws[f"AR{row}"].number_format ="#,##0" 
+                ws[f"AQ{row}"].offset(column=1).value= value
+                ws[f"AQ{row}"].offset(column=2).value= value_fip
+                ws[f"AQ{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"AQ{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"AQ{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 8 - 408"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 8 - 408"], (self.get_from_fip(db_path, year, 12059)-self.get_from_fip(db_path, year, 12062), entcodigo)):
                 ws[f"AW{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"AX{row}"].value = value
-                ws[f"AX{row}"].number_format ="#,##0" 
+                ws[f"AW{row}"].offset(column=1).value= value
+                ws[f"AW{row}"].offset(column=2).value= value_fip
+                ws[f"AW{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"AW{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"AW{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 9 - 408"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 9 - 408"], self.get_from_fip(db_path, year, 12061, entcodigo)):
                 ws[f"BC{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"BD{row}"].value = value
-                ws[f"BD{row}"].number_format ="#,##0" 
+                ws[f"BC{row}"].offset(column=1).value= value
+                ws[f"BC{row}"].offset(column=2).value= value_fip
+                ws[f"BC{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"BC{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"BC{row}"].offset(column=3).number_format ="#,##0" 
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 10 - 408"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 10 - 408"], self.get_from_fip(db_path, year, 12078, entcodigo)):
                 ws[f"BI{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"BI{row}"].value = value
-                ws[f"BJ{row}"].number_format ="#,##0" 
+                ws[f"BI{row}"].offset(column=1).value= value
+                ws[f"BI{row}"].offset(column=2).value= value_fip
+                ws[f"BI{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"BI{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"BI{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 11 - 408"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 11 - 408"], self.get_from_fip(db_path, year, 12500, entcodigo)):
                 ws[f"BO{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"BP{row}"].value = value
-                ws[f"BP{row}"].number_format ="#,##0" 
+                ws[f"BO{row}"].offset(column=1).value= value
+                ws[f"BO{row}"].offset(column=2).value= value_fip
+                ws[f"BO{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"BO{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"BO{row}"].offset(column=3).number_format ="#,##0" 
                 row +=1
         elif qe == 409:
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 1 - 409"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 1 - 409"], self.get_from_fip(db_path, year, 12087, entcodigo)):
                 ws[f"G{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"H{row}"].value = value
-                ws[f"H{row}"].number_format ="#,##0" 
+                ws[f"G{row}"].offset(column=1).value= value
+                ws[f"G{row}"].offset(column=2).value= value_fip
+                ws[f"G{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"G{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"G{row}"].offset(column=3).number_format ="#,##0"
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 2 - 409"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 2 - 409"], self.get_from_fip(db_path, year, 12089, entcodigo)):
                 ws[f"M{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"N{row}"].value = value
-                ws[f"N{row}"].number_format ="#,##0" 
+                ws[f"M{row}"].offset(column=1).value= value
+                ws[f"M{row}"].offset(column=2).value= value_fip
+                ws[f"M{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"M{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"M{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 3 - 409"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 3 - 409"], self.get_from_fip(db_path, year, 12090, entcodigo)):
                 ws[f"S{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"T{row}"].value = value
-                ws[f"T{row}"].number_format ="#,##0" 
+                ws[f"S{row}"].offset(column=1).value= value
+                ws[f"S{row}"].offset(column=2).value= value_fip
+                ws[f"S{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"S{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"S{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 4 - 409"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 4 - 409"], self.get_from_fip(db_path, year, 12092, entcodigo)):
                 ws[f"Y{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"Z{row}"].value = value
-                ws[f"Z{row}"].number_format ="#,##0" 
+                ws[f"Y{row}"].offset(column=1).value= value
+                ws[f"Y{row}"].offset(column=2).value= value_fip
+                ws[f"Y{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"Y{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"Y{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 5 - 409"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 5 - 409"], self.get_from_fip(db_path, year, 12097, entcodigo)):
                 ws[f"AE{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"AF{row}"].value = value
-                ws[f"AF{row}"].number_format ="#,##0" 
+                ws[f"AE{row}"].offset(column=1).value= value
+                ws[f"AE{row}"].offset(column=2).value= value_fip
+                ws[f"AE{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"AE{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"AE{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 6 - 409"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 6 - 409"], self.get_from_fip(db_path, year, 12098, entcodigo)):
                 ws[f"AK{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"AK{row}"].value = value
-                ws[f"AL{row}"].number_format ="#,##0" 
+                ws[f"AK{row}"].offset(column=1).value= value
+                ws[f"AK{row}"].offset(column=2).value= value_fip
+                ws[f"AK{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"AK{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"AK{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 7 - 409"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 7 - 409"], self.get_from_fip(db_path, year, 12099, entcodigo)):
                 ws[f"AQ{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"AQ{row}"].value = value
-                ws[f"AR{row}"].number_format ="#,##0" 
+                ws[f"AQ{row}"].offset(column=1).value= value
+                ws[f"AQ{row}"].offset(column=2).value= value_fip
+                ws[f"AQ{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"AQ{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"AQ{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 8 - 409"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 8 - 409"], (self.get_from_fip(db_path, year, 12082)-self.get_from_fip(db_path, year, 12085), entcodigo)):
                 ws[f"AW{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"AX{row}"].value = value
-                ws[f"AX{row}"].number_format ="#,##0" 
+                ws[f"AW{row}"].offset(column=1).value= value
+                ws[f"AW{row}"].offset(column=2).value= value_fip
+                ws[f"AW{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"AW{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"AW{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
             row = 14
-            for index, value in zip(df.index, df["Cruzamento 9 - 409"]):
+            for index, value, value_fip in zip(df_cruz.index, df_cruz["Cruzamento 9 - 409"], self.get_from_fip(db_path, year, 12084, entcodigo)):
                 ws[f"BC{row}"].value = to_excel(datetime.strptime(index,"%Y%m%d"))
-                ws[f"BD{row}"].value = value
-                ws[f"BD{row}"].number_format ="#,##0" 
+                ws[f"BC{row}"].offset(column=1).value= value
+                ws[f"BC{row}"].offset(column=2).value= value_fip
+                ws[f"BC{row}"].offset(column=1).number_format ="#,##0" 
+                ws[f"BC{row}"].offset(column=2).number_format ="#,##0"  
+                ws[f"BC{row}"].offset(column=3).number_format ="#,##0"  
                 row +=1
 
     def save_xl(self,save_path): 
