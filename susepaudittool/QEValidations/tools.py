@@ -10,7 +10,7 @@ def make_command(column, nome_arquivo, n, QE):
     
 def get_moedas():
     moedas = []
-    with open(os.path.abspath(os.path.join("TXTs", "moedas.txt"))) as txt:
+    with open(os.path.abspath(os.path.join("susepaudittool","QEValidations", "moedas.txt"))) as txt:
         for linha in txt.readlines():
             moedas.append(linha.strip())
     return moedas
