@@ -1,5 +1,44 @@
 # SEGUROS
 
+## 376
+
+| Campo           | Posição Inicial | Tamanho | Índice    | Formato               | Descrição                                                                                                                                                          |
+| --------------- | --------------- | ------- | --------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| ESRSEQ          | 1               | 7       | [0:7]     | nnnnnnn               | Número da linha do arquivo.                                                                                                                                        |
+| ENTCODIGO       | 8               | 5       | [7:12]    | nnnnn                 | Código da sociedade seguradora na SUSEP.                                                                                                                           |
+| MRFMESANO       | 13              | 8       | [12:20]   | aaaammdd              | Ano, mês e último dia do mês de referência do FIP/SUSEP.                                                                                                           |
+| QUAID           | 21              | 3       | [20:23]   | nnn                   | Código do quadro (Quaid: 376). [Tabela "Quadros" do FIPSUSEP]                                                                                                      |
+| TPMOID          | 24              | 4       | [23:27]   | nnnn                  | Código do tipo de movimento. [Tabela "TiposMovimentos" do FIPSUSEP]                                                                                                |
+| CMPID           | 28              | 4       | [27:31]   | nnnn                  | Código do tipo de operação. [Tabela "Bib_DefCamposEstatisticos" do FIPSUSEP]                                                                                       |
+| RAMCODIGO       | 32              | 4       | [31:35]   | nnnn                  | Código do ramo a que se refere o movimento. [Campos "Gracodigo" e "Ramcodigo" da tabela "Ramosseguros" do FIPSUSEP]                                                |
+| ESRDATAINICIO   | 36              | 8       | [35:43]   | aaaammdd              | Data de início de vigência do risco sinistrado.                                                                                                                    |
+| ESRDATAFIM      | 44              | 8       | [43:51]   | aaaammdd              | Data de fim de vigência do risco sinistrado.                                                                                                                       |
+| ESRDATAOCORR    | 52              | 8       | [51:59]   | aaaammdd              | Data de ocorrência do sinistro.                                                                                                                                    |
+| ESRDATAREG      | 60              | 8       | [59:67]   | aaaammdd              | Data em que a seguradora registrou a ocorrência do sinistro.                                                                                                       |
+| ESRVALORMOV     | 68              | 13      | [67:80]   | nnnnnnnnnn,nn         | Valor monetário do movimento do sinistro.                                                                                                                          |
+| ESRDATACOMUNICA | 81              | 8       | [80:88]   | aaaammdd              | Data em que a seguradora recebeu o aviso do sinistro.                                                                                                              |
+| ESRCODCESS      | 89              | 5       | [88:93]   | nnnnn                 | Código SUSEP da sociedade seguradora que efetuou a cessão (cosseguro aceito) ou da seguradora ou ressegurador que aceitou o risco (cosseguro cedido ou resseguro). |
+| ESRNUMSIN       | 94              | 20      | [93:113]  | nnnnnnnnnn nnnnnnnnnn | Código que identifique o sinistro que está sendo movimentado.                                                                                                      |
+| ESRVALORMON     | 114             | 13      | [113:126] | nnnnnnnnnn,nn         | Valor da atualização monetária, oscilação cambial, juros, multas contratuais e demais despesas financeiras do sinistro no mês de referência.                       |
+
+## 377
+
+| Campo         | Posição Inicial | Tamanho | Índice   | Formato               | Descrição                                                                                                                                                          |
+| ------------- | --------------- | ------- | -------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| ESLSEQ        | 1               | 7       | [0:7]    | nnnnnnn               | Número da linha do arquivo.                                                                                                                                        |
+| ENTCODIGO     | 8               | 5       | [7:12]   | nnnnn                 | Código da sociedade seguradora na SUSEP.                                                                                                                           |
+| MRFMESANO     | 13              | 8       | [12:20]  | aaaammdd              | Ano, mês e último dia do mês de referência do FIP/SUSEP.                                                                                                           |
+| QUAID         | 21              | 3       | [20:23]  | nnn                   | Código do quadro (Quaid: 377). [Tabela "Quadros" do FIPSUSEP]                                                                                                      |
+| CMPID         | 24              | 4       | [23:27]  | nnnn                  | Código do tipo de operação. [Tabela "Bib_DefCamposEstatisticos" do FIPSUSEP]                                                                                       |
+| RAMCODIGO     | 28              | 4       | [27:31]  | nnnn                  | Código do ramo a que se refere o movimento. [Campos "Gracodigo" e "Ramcodigo" da tabela "Ramosseguros" do FIPSUSEP]                                                |
+| ESLDATAINICIO | 32              | 8       | [31:39]  | aaaammdd              | Data de início de vigência do risco sinistrado.                                                                                                                    |
+| ESLDATAFIM    | 40              | 8       | [39:47]  | aaaammdd              | Data de fim de vigência do risco sinistrado.                                                                                                                       |
+| ESLDATAOCORR  | 48              | 8       | [47:55]  | aaaammdd              | Data de ocorrência do sinistro.                                                                                                                                    |
+| ESLDATAREG    | 56              | 8       | [55:63]  | aaaammdd              | Data em que a seguradora registrou a ocorrência do sinistro.                                                                                                       |
+| ESLVALORMOV   | 64              | 13      | [63:76]  | nnnnnnnnnn,nn         | Valor monetário do sinistro ou da recuperação do sinistro, conforme registro na PSL, ou do depósito judicial redutor da necessidade de cobertura.                  |
+| ESLCODCESS    | 77              | 5       | [76:81]  | nnnnn                 | Código SUSEP da sociedade seguradora que efetuou a cessão (cosseguro aceito) ou da seguradora ou ressegurador que aceitou o risco (cosseguro cedido ou resseguro). |
+| ESLNUMSIN     | 82              | 20      | [81:101] | nnnnnnnnnn nnnnnnnnnn | Código que identifique o sinistro registrado na PSL.                                                                                                               |
+
 ## 378
 
 | Campo           | Posição Inicial | Tamanho | Índice    | Formato       | Descrição                                                                                                                                                          |
