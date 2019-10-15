@@ -21,6 +21,24 @@
 | ESRNUMSIN       | 94              | 20      | [93:113]  | nnnnnnnnnn nnnnnnnnnn | Código que identifique o sinistro que está sendo movimentado.                                                                                                      |
 | ESRVALORMON     | 114             | 13      | [113:126] | nnnnnnnnnn,nn         | Valor da atualização monetária, oscilação cambial, juros, multas contratuais e demais despesas financeiras do sinistro no mês de referência.                       |
 
+
+| Crítica                                 | Descrição                                                                                                                                     | Impeditiva |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| 7392.1 Início: 1/01/2014 Fim: 1/1/2100  | Verifica se não há linhas em branco                                                                                                           | Sim        |
+| 7392.2 Início: 1/01/2014 Fim: 1/1/2100  | Verifica o tamanho padrão da linha (deve conter 126 caracteres)                                                                               | Sim        |
+| 7392.3 Início: 1/01/2014 Fim: 1/1/2100  | Verifica se o campo sequencial ESRSEQ é uma sequência válida, que se inicia em 0000001                                                        | Sim        |
+| 7392.4 Início: 1/01/2014 Fim: 1/1/2100  | Verifica se o campo ENTCODIGO corresponde à sociedade que está enviando o FIP/SUSEP                                                           | Sim        |
+| 7392.5 Início: 1/01/2014 Fim: 1/1/2100  | Verifica se o campo MRFMESANO corresponde, respectivamente, ao ano, mês e último dia do mês de referência do FIP/SUSEP                        | Sim        |
+| 7392.6 Início: 1/01/2014 Fim: 1/1/2100  | Verifica se o campo QUAID corresponde ao quadro 376                                                                                           | Sim        |
+| 7392.7 Início: 1/01/2014 Fim: 1/1/2100  | Verifica se o campo TPMOID corresponde a um tipo de movimento válido                                                                          | Sim        |
+| 7392.8 Início: 1/01/2014 Fim: 1/1/2100  | Valida a correspondência entre os campos TPMOID e CMPID                                                                                       | Sim        |
+| 7392.9 Início: 1/01/2014 Fim: 1/1/2100  | Verifica se o campo CMPID corresponde a um tipo de operação válida                                                                            | Sim        |
+| 7392.10 Início: 1/01/2014 Fim: 1/1/2100 | Verifica se o campo RAMCODIGO corresponde, respectivamente, a um grupo de ramos e ramo válidos e operados pela companhia no mês de referência | Sim        |
+| 7392.11 Início: 1/01/2014 Fim: 1/1/2100 | Verifica se o campo RAMCODIGO não foi preenchido com os ramos 0588, 0589, 0983, 0986, 0991, 0992, 0994, 1066, 1383, 1386, 1391, 1392 e 1603   | Sim        |
+| 7392.12 Início: 1/01/2014 Fim: 1/1/2100 | Verifica se o valor dos campos ESRVALORMOV e ESRVALORMON é float                                                                              | Sim        |
+| 7392.13 Início: 1/01/2014 Fim: 1/1/2100 | Verifica se os campos ESRDATAINICIO, ESRDATAFIM, ESRDATAOCORR, ESRDATAREG e ESRDATACOMUNICA correspondem a uma data válida                    | Sim        |
+
+
 ## 377
 
 | Campo         | Posição Inicial | Tamanho | Índice   | Formato               | Descrição                                                                                                                                                          |
@@ -38,6 +56,22 @@
 | ESLVALORMOV   | 64              | 13      | [63:76]  | nnnnnnnnnn,nn         | Valor monetário do sinistro ou da recuperação do sinistro, conforme registro na PSL, ou do depósito judicial redutor da necessidade de cobertura.                  |
 | ESLCODCESS    | 77              | 5       | [76:81]  | nnnnn                 | Código SUSEP da sociedade seguradora que efetuou a cessão (cosseguro aceito) ou da seguradora ou ressegurador que aceitou o risco (cosseguro cedido ou resseguro). |
 | ESLNUMSIN     | 82              | 20      | [81:101] | nnnnnnnnnn nnnnnnnnnn | Código que identifique o sinistro registrado na PSL.                                                                                                               |
+
+
+| Crítica                                 | Descrição                                                                                                                                     | Impeditiva |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| 7393.1 Início: 1/01/2014 Fim: 1/1/2100  | Verifica se não há linhas em branco                                                                                                           | Sim        |
+| 7393.2 Início: 1/01/2014 Fim: 1/1/2100  | Verifica o tamanho padrão da linha (deve conter 101 caracteres)                                                                               | Sim        |
+| 7393.3 Início: 1/01/2014 Fim: 1/1/2100  | Verifica se o campo sequencial ESLSEQ é uma sequência válida, que se inicia em 0000001                                                        | Sim        |
+| 7393.4 Início: 1/01/2014 Fim: 1/1/2100  | Verifica se o campo ENTCODIGO corresponde à sociedade que está enviando o FIP/SUSEP                                                           | Sim        |
+| 7393.5 Início: 1/01/2014 Fim: 1/1/2100  | Verifica se o campo MRFMESANO corresponde, respectivamente, ao ano, mês e último dia do mês de referência do FIP/SUSEP                        | Sim        |
+| 7393.6 Início: 1/01/2014 Fim: 1/1/2100  | Verifica se o campo QUAID corresponde ao quadro 377                                                                                           | Sim        |
+| 7393.7 Início: 1/01/2014 Fim: 1/1/2100  | Verifica se o campo CMPID corresponde a um tipo de operação válida (conforme tabela Bib_DefCamposEstatísticos)                                | Sim        |
+| 7393.10 Início: 1/01/2014 Fim: 1/1/2100 | Verifica se o campo RAMCODIGO corresponde, respectivamente, a um grupo de ramos e ramo válidos e operados pela companhia no mês de referência | Sim        |
+| 7393.11 Início: 1/01/2014 Fim: 1/1/2100 | Verifica se o campo RAMCODIGO não foi preenchido para os ramos 0588, 0589, 0983, 0986, 0991, 0992, 0994, 1066, 1383, 1386, 1391, 1392 e 1603  | Sim        |
+| 7393.12 Início: 1/01/2014 Fim: 1/1/2100 | Verifica se o valor dos campos ESLVALORMOV é float                                                                                            | Sim        |
+| 7393.13 Início: 1/01/2014 Fim: 1/1/2100 | Verifica se os campos ESLDATAINICIO, ESLDATAFIM, ESLDATAOCORR e ESLDATAREG correspondem a uma data válida                                     | Sim        |
+
 
 ## 378
 
@@ -65,6 +99,23 @@
 | ESPVALORCIRO    | 145             | 13      | [144:157] | nnnnnnnnnn,nn | Valor monetário dos custos iniciais de contratação relativos ao prêmio do risco original.                                                                          |
 | ESPVALORCIRD    | 158             | 13      | [157:170] | nnnnnnnnnn,nn | Valor monetário dos custos iniciais de contratação relativos ao prêmio do risco derivado.                                                                          |
 | ESPMOEDA        | 171             | 3       | [170:173] | nnn           | Moeda original do contrato. [Tabela 'TiposMoedas' do FIPSUSEP]                                                                                                     |
+
+
+| Crítica                                              | Descrição                                                                                                                                    | Impeditiva |
+| ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| 7394.1 Início: 1/01/2014 Fim: 1/1/2100               | Verifica se não há linhas em branco                                                                                                          | Sim        |
+| 7394.2 Início: 1/01/2014 Fim: 1/1/2100               | Verifica o tamanho padrão da linha (deve conter 173 caracteres)                                                                              | Sim        |
+| 7394.3 Início: 1/01/2014 Fim: 1/1/2100               | Verifica se o campo sequencial ESPSEQ é uma sequência válida, que se inicia em 0000001                                                       | Sim        |
+| 7394.4 Início: 1/01/2014 Fim: 1/1/2100               | Verifica se o campo ENTCODIGO corresponde à sociedade que está enviando o FIP/SUSEP                                                          | Sim        |
+| 7394.5 Início: 1/01/2014 Fim: 1/1/2100               | Verifica se o campo MRFMESANO corresponde, respectivamente, ao ano, mês e último dia do mês de referência do FIP/SUSEP                       | Sim        |
+| 7394.6 Início: 1/01/2014                             | Verifica se o campo QUAID corresponde ao quadro 378                                                                                          | Sim        |
+| Fim: 1/1/2100 7394.7 Início: 1/01/2014 Fim: 1/1/2100 | Verifica se o campo TPMOID corresponde a um tipo de movimento válido (conforme tabela 'TiposMovimentos' do FIPSUSEP)                         | Sim        |
+| 7394.8 Início: 1/01/2014 Fim: 1/1/2100               | Valida a correspondência entre os campos TPMOID e CMPID                                                                                      | Sim        |
+| 7394.9 Início: 1/01/2014 Fim: 1/1/2100               | Verifica se o campo CMPID corresponde a um tipo de operação válida (conforme tabela 'Bib_DefCamposEstatísticos do FIPSUSEP)                  | Sim        |
+| 7394.10 Início: 1/01/2014 Fim: 1/1/2100              | Verifica se o campo RAMCODIGO corresponde, respectivamente, a um grupo de ramos e ramo válidos                                               | Sim        |
+| 7394.11 Início: 1/01/2014 Fim: 1/1/2100              | Verifica se o campo RAMCODIGO não foi preenchido para os ramos 0588, 0589, 0983, 0986, 0991, 0992, 0994, 1066, 1383, 1386, 1391, 1392 e 1603 | Sim        |
+| 7394.12 Início: 1/01/2014 Fim: 1/1/2100              | Verifica se o valor dos campos ESPVALORMOVRO, ESPVALORMOVRD, ESPVALORCARO, ESPVALORCARD, ESPVALORCIRO e ESPVALORCIRD é float                 | Sim        |
+| 7394.13 Início: 1/01/2014 Fim: 1/1/2100              | Verifica se os campos ESPDATAINICIORO, ESPDATAFIMRO, ESPEMISSRO, ESPDATAINICIORD, ESPDATAFIMRD e ESPEMISSRD correspondem a uma data válida   | Sim        |
 
 # RESEGUROS
 
