@@ -8,9 +8,9 @@ import pyodbc
 class Handler:
     def __init__(self, qe):
         self.qe = qe
-        insurance = os.path.join("..","Excel Models", "Insurance")
-        reinsurance = os.path.join("..","Excel Models", "Reinsurance")
-        capitalization = os.path.join("..","Excel Models", "Capitalization")
+        insurance = os.path.join("Excel Models", "Insurance")
+        reinsurance = os.path.join("Excel Models", "Reinsurance")
+        capitalization = os.path.join("Excel Models", "Capitalization")
         # Insurance
         if self.qe == 376:
             path = insurance + "\\376.xlsx"
@@ -542,11 +542,7 @@ class Handler:
                 ws[f"AE{row}"].offset(column=3).number_format = "#,##0"
                 row += 1
             row = 14
-            for index, value, value_fip in zip(
-                df_cruz.index,
-                df_cruz["Cruzamento 6 - 378"],
-                self.get_from_fip(db_path, year, 12018, entcodigo),
-            ):
+            for index, value, value_fip in zip(df_cruz.index,df_cruz["Cruzamento 6 - 378"],self.get_from_fip(db_path, year, 12018, entcodigo)):
                 ws[f"AK{row}"].value = to_excel(
                     datetime.strptime(index, "%Y%m%d"))
                 ws[f"AK{row}"].offset(column=1).value = value

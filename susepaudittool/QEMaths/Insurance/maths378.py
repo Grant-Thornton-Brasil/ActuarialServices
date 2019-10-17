@@ -18,7 +18,7 @@ class maths_378():
                 += (float(linha[59:72]) - float(linha[144:157]))
         if int(linha[23:27]) == 8 and int(linha[27:31]) == 1026:
             self.df["Cruzamento 1 - 378"][linha[12:20]] \
-                += (float(linha[72:80]) - float(linha[157:170]))
+                += (float(linha[96:109]) - float(linha[157:170]))
         # Cruzamento 2
         if int(linha[23:27]) == 7 and int(linha[27:31]) == 1027:
             self.df["Cruzamento 2 - 378"][linha[12:20]] += float(linha[59:72])
