@@ -8,9 +8,9 @@ import pyodbc
 class Handler:
     def __init__(self, qe):
         self.qe = qe
-        insurance = os.path.join("Excel Models", "Insurance")
-        reinsurance = os.path.join("Excel Models", "Reinsurance")
-        capitalization = os.path.join("Excel Models", "Capitalization")
+        insurance = os.path.join("..","Excel Models", "Insurance")
+        reinsurance = os.path.join("..","Excel Models", "Reinsurance")
+        capitalization = os.path.join("..","Excel Models", "Capitalization")
         # Insurance
         if self.qe == 376:
             path = insurance + "\\376.xlsx"
@@ -1299,20 +1299,20 @@ class Handler:
                                 structure = [
                                     linha[0:7],
                                     linha[7:12],
-                                    linha[12:20],
+                                    "/".join([linha[18:20],linha[16:18],linha[12:16]]),
                                     linha[20:23],
                                     linha[23:27],
                                     linha[27:31],
                                     linha[31:35],
-                                    linha[35:43],
-                                    linha[43:51],
-                                    linha[51:59],
-                                    linha[59:67],
-                                    linha[67:80],
-                                    linha[80:88],
+                                    "/".join([linha[41:43],linha[39:41],linha[35:39]]),
+                                    "/".join([linha[49:51],linha[47:49],linha[43:47]]),
+                                    "/".join([linha[57:59],linha[55:57],linha[51:55]]),
+                                    "/".join([linha[65:67],linha[63:65],linha[59:63]]),
+                                    linha[67:80].replace(",","."),
+                                    "/".join([linha[86:88],linha[84:86],linha[80:84]]),
                                     linha[88:93],
                                     linha[93:113],
-                                    linha[113:126],
+                                    linha[113:126].replace(",","."),
                                 ]
                                 csv.write(";".join(structure) + "\n")
                     except FileNotFoundError:
@@ -1343,15 +1343,15 @@ class Handler:
                                 structure = [
                                     linha[0:7],
                                     linha[7:12],
-                                    linha[12:20],
+                                    "/".join([linha[18:20],linha[16:18],linha[12:16]]),
                                     linha[20:23],
                                     linha[23:27],
                                     linha[27:31],
-                                    linha[31:39],
-                                    linha[39:47],
-                                    linha[47:55],
-                                    linha[55:63],
-                                    linha[63:76],
+                                    "/".join([linha[37:39],linha[35:37],linha[31:35]]),
+                                    "/".join([linha[45:47],linha[43:45],linha[39:43]]),
+                                    "/".join([linha[53:55],linha[51:53],linha[47:51]]),
+                                    "/".join([linha[61:63],linha[59:61],linha[55:59]]),
+                                    linha[63:76].replace(",","."),
                                     linha[76:81],
                                     linha[81:101],
                                 ]
@@ -1393,25 +1393,25 @@ class Handler:
                                 structure = [
                                     linha[0:7],
                                     linha[7:12],
-                                    linha[12:20],
+                                    "/".join([linha[18:20],linha[16:18],linha[12:16]]),
                                     linha[20:23],
                                     linha[23:27],
                                     linha[27:31],
                                     linha[31:35],
-                                    linha[35:43],
-                                    linha[43:51],
-                                    linha[51:59],
-                                    linha[59:72],
-                                    linha[72:80],
-                                    linha[80:88],
-                                    linha[88:96],
-                                    linha[96:109],
+                                    "/".join([linha[41:43],linha[39:41],linha[35:39]]),
+                                    "/".join([linha[49:51],linha[47:49],linha[43:47]]),
+                                    "/".join([linha[57:59],linha[55:57],linha[51:55]]),
+                                    linha[59:72].replace(",","."),
+                                    "/".join([linha[78:80],linha[76:78],linha[72:76]]),
+                                    "/".join([linha[86:88],linha[84:86],linha[80:84]]),
+                                    "/".join([linha[94:96],linha[92:94],linha[88:92]]),
+                                    linha[96:109].replace(",","."),
                                     linha[109:114],
                                     linha[114:118],
-                                    linha[118:131],
-                                    linha[131:144],
-                                    linha[144:157],
-                                    linha[157:170],
+                                    linha[118:131].replace(",","."),
+                                    linha[131:144].replace(",","."),
+                                    linha[144:157].replace(",","."),
+                                    linha[157:170].replace(",","."),
                                     linha[170:173],
                                 ]
                                 csv.write(";".join(structure) + "\n")
