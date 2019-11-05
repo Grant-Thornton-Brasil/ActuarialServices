@@ -8,9 +8,9 @@ import pyodbc
 class Handler:
     def __init__(self, qe):
         self.qe = qe
-        insurance = os.path.join("..","Excel Models", "Insurance")
-        reinsurance = os.path.join("..","Excel Models", "Reinsurance")
-        capitalization = os.path.join("..","Excel Models", "Capitalization")
+        insurance = os.path.join("Excel Models", "Insurance")
+        reinsurance = os.path.join("Excel Models", "Reinsurance")
+        capitalization = os.path.join("Excel Models", "Capitalization")
         # Insurance
         if self.qe == 376:
             path = insurance + "\\376.xlsx"
