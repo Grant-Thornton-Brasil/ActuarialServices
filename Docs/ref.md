@@ -385,29 +385,29 @@
 
 ## 419
 
-| Campo                 | Posição Inicial | Tamanho | Índice    | Formato          | Descrição                                                                                                                         |
-| --------------------- | --------------- | ------- | --------- | ---------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| EMFSEQ                | 1               | 6       | [0:7]     | nnnnnn           | Número da linha do arquivo                                                                                                        |
-| ENTCODIGO             | 7               | 5       | [6:12]    | nnnnn            | Código do ente supervisionado pela SUSEP                                                                                          |
-| MRFMESANO             | 12              | 8       | [11:20]   | aaaammdd         | Mês de referência no formato AAAAMMDD, onde o dia será o último dia do mês                                                        |
-| QUAID                 | 20              | 3       | [19:23]   | nnn              | Código do quadro (Quaid: 419)                                                                                                     |
-| ATVCODIGO             | 23              | 5       | [22:28]   | ccccc            | Código do tipo de ativo (Vide tabela ATIVOCODIGO)                                                                                 |
-| TPFOPERADOR           | 28              | 1       | [27:29]   | c                | Definição do tipo da posição (Vide tabela TIPOFLUXO)                                                                              |
-| FTRCODIGO             | 29              | 3       | [28:32]   | ccc              | Código do fator de risco (Vide tabela FATORCODIGO)                                                                                |
-| LCRCODIGO             | 32              | 3       | [31:35]   | ccc              | Local de registro (Vide tabela LOCALREGISTRO)                                                                                     |
-| TCTCODIGO             | 35              | 2       | [34:37]   | cc               | Código referente ao tipo de carteira (Vide tabela TIPOCARTEIRACODIGO).                                                            |
-| TPECODIGO             | 37              | 4       | [36:41]   | cccc             | Código referente ao tipo de emissor (Vide tabela TIPOEMISSOR)                                                                     |
-| EMFPRAZOFLUXO         | 41              | 5       | [40:46]   | nnnnn            | Prazo, em dias úteis, entre a data-base e o vencimento                                                                            |
-| EMFVLREXPRISCO        | 46              | 15      | [45:61]   | nnnnnnnnnnnn,nn  | Valor exposto ao risco                                                                                                            |
-| EMFCNPJFUNDO          | 61              | 14      | [60:75]   | cccccccccccccccc | CNPJ do fundo                                                                                                                     |
-| EMFCODISIN            | 75              | 12      | [74:87]   | cccccccccccc     | Código ISIN                                                                                                                       |
-| EMFCODCUSTODIA        | 87              | 12      | [86:99]   | cccccccccccc     | Código da câmara de custódia onde o ativo está registrado                                                                         |
-| EMFMULTIPLOFATOR      | 99              | 1       | [98:100]  | n                | Código utilizado quando o registro for referente a ativos que estão sujeitos a mais de um fator de risco                          |
-| EMFTXCONTRATADO       | 100             | 6       | [99:106]  | nnn,nn           | Taxa de remuneração contratada no caso de ativos de renda fixa indexados a um percentual do CDI ou SELIC                          |
-| EMFTXMERCADO          | 106             | 6       | [105:112] | nnn,nn           | Taxa de remuneração média praticada pelo mercado para um determinado ativo de renda fixa indexado a um percentual do CDI ou SELIC |
-| TPFOPERADORDERIVATIVO | 112             | 1       | [111:113] | c                | Definição do tipo da posição para o caso de instrumento derivativo (Vide tabela TIPOFLUXO)                                        |
-| EMFVLRDERIVATIVO      | 113             | 15      | [112:128] | nnnnnnnnnnnn,nn  | Valor auxiliar para o caso de fluxos oriundos de instrumentos derivativos                                                         |
-| EMFCODGRUPO           | 128             | 6       | [127:134] | nnnnnn           | Código utilizado para a identificação de grupos de produtos ou ramos a que o fluxo se refere                                      |
+| Campo                 | Posição Inicial | Tamanho | Índice        | Formato          | Descrição                                                                                                                         |
+| :-------------------- | :-------------- | :------ | :------------ | :--------------- | :-------------------------------------------------------------------------------------------------------------------------------- |
+| EMFSEQ                | 1               | 6       | line[0:6]     | nnnnnn           | Número da linha do arquivo                                                                                                        |
+| ENTCODIGO             | 7               | 5       | line[6:11]    | nnnnn            | Código do ente supervisionado pela SUSEP                                                                                          |
+| MRFMESANO             | 12              | 8       | line[11:19]   | aaaammdd         | Mês de referência no formato AAAAMMDD, onde o dia será o último dia do mês.                                                       |
+| QUAID                 | 20              | 3       | line[19:22]   | nnn              | Código do quadro (Quaid: 419)                                                                                                     |
+| ATVCODIGO             | 23              | 5       | line[22:27]   | ccccc            | Código do tipo de ativo (Vide tabela ATIVOCODIGO)                                                                                 |
+| TPFOPERADOR           | 28              | 1       | line[27:28]   | c                | Definição do tipo da posição (Vide tabela TIPOFLUXO)                                                                              |
+| FTRCODIGO             | 29              | 3       | line[28:31]   | ccc              | Código do fator de risco (Vide tabela FATORCODIGO)                                                                                |
+| LCRCODIGO             | 32              | 3       | line[31:34]   | ccc              | Local de registro (Vide tabela LOCALREGISTRO)                                                                                     |
+| TCTCODIGO             | 35              | 2       | line[34:36]   | cc               | Código referente ao tipo de carteira (Vide tabela TIPOCARTEIRACODIGO).                                                            |
+| TPECODIGO             | 37              | 4       | line[36:40]   | cccc             | Código referente ao tipo de emissor (Vide tabela TIPOEMISSOR)                                                                     |
+| EMFPRAZOFLUXO         | 41              | 5       | line[40:45]   | nnnnn            | Prazo, em dias úteis, entre a data-base e o vencimento                                                                            |
+| EMFVLREXPRISCO        | 46              | 15      | line[45:60]   | nnnnnnnnnnnn,nn  | Valor exposto ao risco                                                                                                            |
+| EMFCNPJFUNDO          | 61              | 14      | line[60:74]   | cccccccccccccccc | CNPJ do fundo                                                                                                                     |
+| EMFCODISIN            | 75              | 12      | line[74:86]   | cccccccccccc     | Código ISIN                                                                                                                       |
+| EMFCODCUSTODIA        | 87              | 12      | line[86:98]   | cccccccccccc     | Código da câmara de custódia onde o ativo está registrado                                                                         |
+| EMFMULTIPLOFATOR      | 99              | 1       | line[98:99]   | n                | Código utilizado quando o registro for referente a ativos que estão sujeitos a mais de um fator de risco                          |
+| EMFTXCONTRATADO       | 100             | 6       | line[99:105]  | nnn,nn           | Taxa de remuneração contratada no caso de ativos de renda fixa indexados a um percentual do CDI ou SELIC                          |
+| EMFTXMERCADO          | 106             | 6       | line[105:111] | nnn,nn           | Taxa de remuneração média praticada pelo mercado para um determinado ativo de renda fixa indexado a um percentual do CDI ou SELIC |
+| TPFOPERADORDERIVATIVO | 112             | 1       | line[111:112] | c                | Definição do tipo da posição para o caso de instrumento derivativo (Vide tabela TIPOFLUXO)                                        |
+| EMFVLRDERIVATIVO      | 113             | 15      | line[112:127] | nnnnnnnnnnnn,nn  | Valor auxiliar para o caso de fluxos oriundos de instrumentos derivativos                                                         |
+| EMFCODGRUPO           | 128             | 6       | line[127:133] | nnnnnn           | Código utilizado para a identificação de grupos de produtos ou ramos a que o fluxo se refere.                                     |
 
 | Regra | Descrição                                                                                                                                     | Impeditivo |
 | ----- | --------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
