@@ -542,7 +542,9 @@ class Handler:
                 ws[f"AE{row}"].offset(column=3).number_format = "#,##0"
                 row += 1
             row = 14
-            for index, value, value_fip in zip(df_cruz.index,df_cruz["Cruzamento 6 - 378"],self.get_from_fip(db_path, year, 12018, entcodigo)):
+            for index, value, value_fip in zip(
+                df_cruz.index, df_cruz["Cruzamento 6 - 378"], self.get_from_fip(
+                    db_path, year, 12018, entcodigo)):
                 ws[f"AK{row}"].value = to_excel(
                     datetime.strptime(index, "%Y%m%d"))
                 ws[f"AK{row}"].offset(column=1).value = value
@@ -1295,26 +1297,29 @@ class Handler:
                     try:
                         with open(file_name) as txt:
                             for linha in txt.readlines():
-                                linha = linha.strip()
-                                structure = [
-                                    linha[0:7],
-                                    linha[7:12],
-                                    "/".join([linha[18:20],linha[16:18],linha[12:16]]),
-                                    linha[20:23],
-                                    linha[23:27],
-                                    linha[27:31],
-                                    linha[31:35],
-                                    "/".join([linha[41:43],linha[39:41],linha[35:39]]),
-                                    "/".join([linha[49:51],linha[47:49],linha[43:47]]),
-                                    "/".join([linha[57:59],linha[55:57],linha[51:55]]),
-                                    "/".join([linha[65:67],linha[63:65],linha[59:63]]),
-                                    linha[67:80].replace(",","."),
-                                    "/".join([linha[86:88],linha[84:86],linha[80:84]]),
-                                    linha[88:93],
-                                    linha[93:113],
-                                    linha[113:126].replace(",","."),
-                                ]
-                                csv.write(";".join(structure) + "\n")
+                                if not (len(linha) == 0 \
+                                    or linha == "" \
+                                        or linha is None):
+                                    linha = linha.strip()
+                                    structure = [
+                                        linha[0:7],
+                                        linha[7:12],
+                                        "/".join([linha[18:20], linha[16:18], linha[12:16]]),
+                                        linha[20:23],
+                                        linha[23:27],
+                                        linha[27:31],
+                                        linha[31:35],
+                                        "/".join([linha[41:43], linha[39:41], linha[35:39]]),
+                                        "/".join([linha[49:51], linha[47:49], linha[43:47]]),
+                                        "/".join([linha[57:59], linha[55:57], linha[51:55]]),
+                                        "/".join([linha[65:67], linha[63:65], linha[59:63]]),
+                                        linha[67:80].replace(",", "."),
+                                        "/".join([linha[86:88], linha[84:86], linha[80:84]]),
+                                        linha[88:93],
+                                        linha[93:113],
+                                        linha[113:126].replace(",", "."),
+                                    ]
+                                    csv.write(";".join(structure) + "\n")
                     except FileNotFoundError:
                         pass
         if qe_type == "377" or qe_type == 377:
@@ -1340,22 +1345,25 @@ class Handler:
                         with open(file_name) as txt:
                             for linha in txt.readlines():
                                 linha = linha.strip()
-                                structure = [
-                                    linha[0:7],
-                                    linha[7:12],
-                                    "/".join([linha[18:20],linha[16:18],linha[12:16]]),
-                                    linha[20:23],
-                                    linha[23:27],
-                                    linha[27:31],
-                                    "/".join([linha[37:39],linha[35:37],linha[31:35]]),
-                                    "/".join([linha[45:47],linha[43:45],linha[39:43]]),
-                                    "/".join([linha[53:55],linha[51:53],linha[47:51]]),
-                                    "/".join([linha[61:63],linha[59:61],linha[55:59]]),
-                                    linha[63:76].replace(",","."),
-                                    linha[76:81],
-                                    linha[81:101],
-                                ]
-                                csv.write(";".join(structure) + "\n")
+                                if not (len(linha) == 0 \
+                                    or linha == "" \
+                                        or linha is None):
+                                    structure = [
+                                        linha[0:7],
+                                        linha[7:12],
+                                        "/".join([linha[18:20], linha[16:18], linha[12:16]]),
+                                        linha[20:23],
+                                        linha[23:27],
+                                        linha[27:31],
+                                        "/".join([linha[37:39], linha[35:37], linha[31:35]]),
+                                        "/".join([linha[45:47], linha[43:45], linha[39:43]]),
+                                        "/".join([linha[53:55], linha[51:53], linha[47:51]]),
+                                        "/".join([linha[61:63], linha[59:61], linha[55:59]]),
+                                        linha[63:76].replace(",", "."),
+                                        linha[76:81],
+                                        linha[81:101],
+                                    ]
+                                    csv.write(";".join(structure) + "\n")
                     except FileNotFoundError:
                         pass
         if qe_type == "378" or qe_type == 378:
@@ -1390,31 +1398,34 @@ class Handler:
                         with open(file_name) as txt:
                             for linha in txt.readlines():
                                 linha = linha.strip()
-                                structure = [
-                                    linha[0:7],
-                                    linha[7:12],
-                                    "/".join([linha[18:20],linha[16:18],linha[12:16]]),
-                                    linha[20:23],
-                                    linha[23:27],
-                                    linha[27:31],
-                                    linha[31:35],
-                                    "/".join([linha[41:43],linha[39:41],linha[35:39]]),
-                                    "/".join([linha[49:51],linha[47:49],linha[43:47]]),
-                                    "/".join([linha[57:59],linha[55:57],linha[51:55]]),
-                                    linha[59:72].replace(",","."),
-                                    "/".join([linha[78:80],linha[76:78],linha[72:76]]),
-                                    "/".join([linha[86:88],linha[84:86],linha[80:84]]),
-                                    "/".join([linha[94:96],linha[92:94],linha[88:92]]),
-                                    linha[96:109].replace(",","."),
-                                    linha[109:114],
-                                    linha[114:118],
-                                    linha[118:131].replace(",","."),
-                                    linha[131:144].replace(",","."),
-                                    linha[144:157].replace(",","."),
-                                    linha[157:170].replace(",","."),
-                                    linha[170:173],
-                                ]
-                                csv.write(";".join(structure) + "\n")
+                                if not (len(linha) == 0 \
+                                    or linha == "" \
+                                        or linha is None):
+                                    structure = [
+                                        linha[0:7],
+                                        linha[7:12],
+                                        "/".join([linha[18:20], linha[16:18], linha[12:16]]),
+                                        linha[20:23],
+                                        linha[23:27],
+                                        linha[27:31],
+                                        linha[31:35],
+                                        "/".join([linha[41:43], linha[39:41], linha[35:39]]),
+                                        "/".join([linha[49:51], linha[47:49], linha[43:47]]),
+                                        "/".join([linha[57:59], linha[55:57], linha[51:55]]),
+                                        linha[59:72].replace(",", "."),
+                                        "/".join([linha[78:80], linha[76:78], linha[72:76]]),
+                                        "/".join([linha[86:88], linha[84:86], linha[80:84]]),
+                                        "/".join([linha[94:96], linha[92:94], linha[88:92]]),
+                                        linha[96:109].replace(",", "."),
+                                        linha[109:114],
+                                        linha[114:118],
+                                        linha[118:131].replace(",", "."),
+                                        linha[131:144].replace(",", "."),
+                                        linha[144:157].replace(",", "."),
+                                        linha[157:170].replace(",", "."),
+                                        linha[170:173],
+                                    ]
+                                    csv.write(";".join(structure) + "\n")
                     except FileNotFoundError:
                         pass
         if qe_type == "404" or qe_type == 404:
@@ -1446,28 +1457,31 @@ class Handler:
                         with open(file_name) as txt:
                             for linha in txt.readlines():
                                 linha = linha.strip()
-                                structure = [
-                                    linha[0:7],
-                                    linha[7:12],
-                                    linha[12:18],
-                                    linha[18:21],
-                                    linha[21:23],
-                                    linha[23:24],
-                                    linha[24:44],
-                                    linha[44:70],
-                                    linha[70:71],
-                                    linha[71:76],
-                                    linha[76:84],
-                                    linha[84:92],
-                                    linha[92:100],
-                                    linha[100:113],
-                                    linha[113:114],
-                                    linha[114:116],
-                                    linha[116:119],
-                                    linha[119:120],
-                                    linha[120:133],
-                                ]
-                                csv.write(";".join(structure) + "\n")
+                                if not (len(linha) == 0 \
+                                    or linha == "" \
+                                        or linha is None):
+                                    structure = [
+                                        linha[0:7],
+                                        linha[7:12],
+                                        linha[12:18],
+                                        linha[18:21],
+                                        linha[21:23],
+                                        linha[23:24],
+                                        linha[24:44],
+                                        linha[44:70],
+                                        linha[70:71],
+                                        linha[71:76],
+                                        linha[76:84],
+                                        linha[84:92],
+                                        linha[92:100],
+                                        linha[100:113],
+                                        linha[113:114],
+                                        linha[114:116],
+                                        linha[116:119],
+                                        linha[119:120],
+                                        linha[120:133],
+                                    ]
+                                    csv.write(";".join(structure) + "\n")
                     except FileNotFoundError:
                         pass
         if qe_type == "405" or qe_type == 405:
@@ -1498,27 +1512,30 @@ class Handler:
                         with open(file_name) as txt:
                             for linha in txt.readlines():
                                 linha = linha.strip()
-                                structure = [
-                                    linha[0:7],
-                                    linha[7:12],
-                                    linha[12:18],
-                                    linha[18:21],
-                                    linha[21:23],
-                                    linha[23:43],
-                                    linha[43:69],
-                                    linha[69:70],
-                                    linha[70:75],
-                                    linha[75:83],
-                                    linha[83:91],
-                                    linha[91:99],
-                                    linha[99:112],
-                                    linha[112:113],
-                                    linha[113:115],
-                                    linha[115:118],
-                                    linha[118:119],
-                                    linha[119:132],
-                                ]
-                                csv.write(";".join(structure) + "\n")
+                                if not (len(linha) == 0 \
+                                    or linha == "" \
+                                        or linha is None):
+                                    structure = [
+                                        linha[0:7],
+                                        linha[7:12],
+                                        linha[12:18],
+                                        linha[18:21],
+                                        linha[21:23],
+                                        linha[23:43],
+                                        linha[43:69],
+                                        linha[69:70],
+                                        linha[70:75],
+                                        linha[75:83],
+                                        linha[83:91],
+                                        linha[91:99],
+                                        linha[99:112],
+                                        linha[112:113],
+                                        linha[113:115],
+                                        linha[115:118],
+                                        linha[118:119],
+                                        linha[119:132],
+                                    ]
+                                    csv.write(";".join(structure) + "\n")
                     except FileNotFoundError:
                         pass
         if qe_type == "406" or qe_type == 406:
@@ -1548,28 +1565,30 @@ class Handler:
                     try:
                         with open(file_name) as txt:
                             for linha in txt.readlines():
-                                linha = linha.strip()
-                                structure = [
-                                    linha[0:7],
-                                    linha[7:12],
-                                    linha[12:18],
-                                    linha[18:20],
-                                    linha[20:21],
-                                    linha[21:41],
-                                    linha[41:67],
-                                    linha[67:68],
-                                    linha[68:73],
-                                    linha[73:81],
-                                    linha[81:89],
-                                    linha[89:97],
-                                    linha[97:110],
-                                    linha[110:123],
-                                    linha[123:124],
-                                    linha[124:126],
-                                    linha[126:129],
-                                    linha[129:130],
-                                ]
-                                csv.write(";".join(structure) + "\n")
+                                if not (len(linha) == 0 \
+                                    or linha == "" \
+                                        or linha is None):
+                                    structure = [
+                                        linha[0:7],
+                                        linha[7:12],
+                                        linha[12:18],
+                                        linha[18:20],
+                                        linha[20:21],
+                                        linha[21:41],
+                                        linha[41:67],
+                                        linha[67:68],
+                                        linha[68:73],
+                                        linha[73:81],
+                                        linha[81:89],
+                                        linha[89:97],
+                                        linha[97:110],
+                                        linha[110:123],
+                                        linha[123:124],
+                                        linha[124:126],
+                                        linha[126:129],
+                                        linha[129:130],
+                                    ]
+                                    csv.write(";".join(structure) + "\n")
                     except FileNotFoundError:
                         pass
         if qe_type == "407" or qe_type == 407:
@@ -1599,26 +1618,29 @@ class Handler:
                         with open(file_name) as txt:
                             for linha in txt.readlines():
                                 linha = linha.strip()
-                                structure = [
-                                    linha[0:7],
-                                    linha[7:12],
-                                    linha[12:18],
-                                    linha[18:20],
-                                    linha[20:40],
-                                    linha[40:66],
-                                    linha[66:67],
-                                    linha[67:72],
-                                    linha[72:80],
-                                    linha[80:88],
-                                    linha[88:96],
-                                    linha[96:109],
-                                    linha[109:122],
-                                    linha[122:123],
-                                    linha[123:125],
-                                    linha[125:128],
-                                    linha[128:129],
-                                ]
-                                csv.write(";".join(structure) + "\n")
+                                if not (len(linha) == 0 \
+                                    or linha == "" \
+                                        or linha is None):
+                                    structure = [
+                                        linha[0:7],
+                                        linha[7:12],
+                                        linha[12:18],
+                                        linha[18:20],
+                                        linha[20:40],
+                                        linha[40:66],
+                                        linha[66:67],
+                                        linha[67:72],
+                                        linha[72:80],
+                                        linha[80:88],
+                                        linha[88:96],
+                                        linha[96:109],
+                                        linha[109:122],
+                                        linha[122:123],
+                                        linha[123:125],
+                                        linha[125:128],
+                                        linha[128:129],
+                                    ]
+                                    csv.write(";".join(structure) + "\n")
                     except FileNotFoundError:
                         pass
         if qe_type == "408" or qe_type == 408:
@@ -1654,38 +1676,41 @@ class Handler:
                         with open(file_name) as txt:
                             for linha in txt.readlines():
                                 linha = linha.strip()
-                                structure = [
-                                    linha[0:7],
-                                    linha[7:12],
-                                    linha[12:18],
-                                    linha[18:21],
-                                    linha[21:23],
-                                    linha[23:24],
-                                    linha[24:50],
-                                    linha[50:56],
-                                    linha[56:61],
-                                    linha[61:62],
-                                    linha[62:64],
-                                    linha[64:72],
-                                    linha[72:80],
-                                    linha[80:88],
-                                    linha[88:96],
-                                    linha[96:109],
-                                    linha[109:115],
-                                    linha[115:128],
-                                    linha[128:141],
-                                    linha[141:146],
-                                    linha[146:148],
-                                    linha[148:149],
-                                    linha[149:152],
-                                    linha[152:165],
-                                    linha[165:173],
-                                ]
-                                csv.write(";".join(structure) + "\n")
+                                if not (len(linha) == 0 \
+                                    or linha == "" \
+                                        or linha is None):
+                                    structure = [
+                                        linha[0:7],
+                                        linha[7:12],
+                                        linha[12:18],
+                                        linha[18:21],
+                                        linha[21:23],
+                                        linha[23:24],
+                                        linha[24:50],
+                                        linha[50:56],
+                                        linha[56:61],
+                                        linha[61:62],
+                                        linha[62:64],
+                                        linha[64:72],
+                                        linha[72:80],
+                                        linha[80:88],
+                                        linha[88:96],
+                                        linha[96:109],
+                                        linha[109:115],
+                                        linha[115:128],
+                                        linha[128:141],
+                                        linha[141:146],
+                                        linha[146:148],
+                                        linha[148:149],
+                                        linha[149:152],
+                                        linha[152:165],
+                                        linha[165:173],
+                                    ]
+                                    csv.write(";".join(structure) + "\n")
                     except FileNotFoundError:
                         pass
         if qe_type == "409" or qe_type == 409:
-            with open(path + "\\408_Export.csv", "a+") as csv:
+            with open(path + "\\409_Export.csv", "a+") as csv:
                 headers = [
                     "EMFSEQ",
                     "ENTCODIGO",
@@ -1715,32 +1740,243 @@ class Handler:
                         with open(file_name) as txt:
                             for linha in txt.readlines():
                                 linha = linha.strip()
-                                structure = [
-                                    linha[0:7],
-                                    linha[7:12],
-                                    linha[12:18],
-                                    linha[18:21],
-                                    linha[21:23],
-                                    linha[23:49],
-                                    linha[49:55],
-                                    linha[55:60],
-                                    linha[60:61],
-                                    linha[61:63],
-                                    linha[63:71],
-                                    linha[71:79],
-                                    linha[79:87],
-                                    linha[87:95],
-                                    linha[95:101],
-                                    linha[101:114],
-                                    linha[114:127],
-                                    linha[127:132],
-                                    linha[132:145],
-                                    linha[145:147],
-                                    linha[147:148],
-                                    linha[148:151],
-                                    linha[151:164],
-                                    linha[164:172],
-                                ]
-                                csv.write(";".join(structure) + "\n")
+                                if not (len(linha) == 0 \
+                                    or linha == "" \
+                                        or linha is None):
+                                    structure = [
+                                        linha[0:7],
+                                        linha[7:12],
+                                        linha[12:18],
+                                        linha[18:21],
+                                        linha[21:23],
+                                        linha[23:49],
+                                        linha[49:55],
+                                        linha[55:60],
+                                        linha[60:61],
+                                        linha[61:63],
+                                        linha[63:71],
+                                        linha[71:79],
+                                        linha[79:87],
+                                        linha[87:95],
+                                        linha[95:101],
+                                        linha[101:114],
+                                        linha[114:127],
+                                        linha[127:132],
+                                        linha[132:145],
+                                        linha[145:147],
+                                        linha[147:148],
+                                        linha[148:151],
+                                        linha[151:164],
+                                        linha[164:172],
+                                    ]
+                                    csv.write(";".join(structure) + "\n")
+                    except FileNotFoundError:
+                        pass
+        if qe_type == "419" or qe_type == 419:
+            with open(path + "\\419_Export.csv", "a+") as csv:
+                headers = [
+                    "EMFSEQ",
+                    "ENTCODIGO",
+                    "MRFMESANO",
+                    "QUAID",
+                    "ATVCODIGO",
+                    "TPFOPERADOR",
+                    "FTRCODIGO",
+                    "LCRCODIGO",
+                    "TCTCODIGO",
+                    "TPECODIGO",
+                    "EMFPRAZOFLUXO",
+                    "EMFVLREXPRISCO",
+                    "EMFCNPJFUNDO",
+                    "EMFCODISIN",
+                    "EMFCODCUSTODIA",
+                    "EMFMULTIPLOFATOR",
+                    "EMFTXCONTRATADO",
+                    "EMFTXMERCADO",
+                    "TPFOPERADORDERIVATIVO",
+                    "EMFVLRDERIVATIVO",
+                    "EMFCODGRUPO",
+                ]
+                csv.write(";".join(headers) + "\n")
+                for file_name in file_names:
+                    try:
+                        with open(file_name) as txt:
+                            for linha in txt.readlines():
+                                linha = linha.strip()
+                                if not (len(linha) == 0 \
+                                    or linha == "" \
+                                        or linha is None):
+                                    structure = [
+                                        linha[0:7],
+                                        linha[6:12],
+                                        linha[11:20],
+                                        linha[19:23],
+                                        linha[22:28],
+                                        linha[27:29],
+                                        linha[28:32],
+                                        linha[31:35],
+                                        linha[34:37],
+                                        linha[36:41],
+                                        linha[40:46],
+                                        linha[45:61],
+                                        linha[60:75],
+                                        linha[74:87],
+                                        linha[86:99],
+                                        linha[98:100],
+                                        linha[99:106],
+                                        linha[105:112],
+                                        linha[111:113],
+                                        linha[112:128],
+                                        linha[127:134],
+                                    ]
+                                    csv.write(";".join(structure) + "\n")
+                    except FileNotFoundError:
+                        pass
+        if qe_type == "420" or qe_type == 420:
+            with open(path + "\\420_Export.csv", "a+") as csv:
+                headers = [
+                    "EMCSEQ",
+                    "ENTCODIGO",
+                    "MRFMESANO",
+                    "QUAID",
+                    "DOCCODIGO",
+                    "TPFOPERADOR",
+                    "FTRCODIGO",
+                    "EMCPRAZOFLUXO",
+                    "EMCVLREXPRISCO",
+                    "EMCMULTIPLOFATOR",
+                    "EMCCODGRUPO",
+                    "EMCSEMREGISTRO",
+                ]
+                csv.write(";".join(headers) + "\n")
+                for file_name in file_names:
+                    try:
+                        with open(file_name) as txt:
+                            for linha in txt.readlines():
+                                linha = linha.strip()
+                                if not (len(linha) == 0 \
+                                    or linha == "" \
+                                        or linha is None):
+                                    structure = [
+                                        linha[0:6],
+                                        linha[6:11],
+                                        linha[11:19],
+                                        linha[19:22],
+                                        linha[22:27],
+                                        linha[27:28],
+                                        linha[28:31],
+                                        linha[31:36],
+                                        linha[36:51],
+                                        linha[51:52],
+                                        linha[52:58],
+                                        linha[58:59],
+                                    ]
+                                    csv.write(";".join(structure) + "\n")
+                    except FileNotFoundError:
+                        pass
+        if qe_type == "421" or qe_type == 421:
+            with open(path + "\\421_Export.csv", "a+") as csv:
+                headers = [
+                    "EMDSEQ",
+                    "ENTCODIGO",
+                    "MRFMESANO",
+                    "QUAID",
+                    "DODCODIGO",
+                    "TPFOPERADOR",
+                    "FTRCODIGO",
+                    "EMDPRAZOFLUXO",
+                    "EMDVLREXPRISCO",
+                    "EMDMULTIPLOFATOR",
+                ]
+                csv.write(";".join(headers) + "\n")
+                for file_name in file_names:
+                    try:
+                        with open(file_name) as txt:
+                            for linha in txt.readlines():
+                                linha = linha.strip()
+                                if not (len(linha) == 0 \
+                                    or linha == "" \
+                                        or linha is None):
+                                    structure = [
+                                        linha[0:6],
+                                        linha[6:11],
+                                        linha[11:19],
+                                        linha[19:22],
+                                        linha[22:27],
+                                        linha[27:28],
+                                        linha[28:31],
+                                        linha[31:36],
+                                        linha[36:51],
+                                        linha[51:52],
+                                    ]
+                                    csv.write(";".join(structure) + "\n")
+                    except FileNotFoundError:
+                        pass
+        if qe_type == "422" or qe_type == 422:
+            with open(path + "\\422_Export.csv", "a+") as csv:
+                headers = [
+                    "EMESEQ",
+                    "ENTCODIGO",
+                    "MRFMESANO",
+                    "QUAID",
+                    "EMECODGRUPO",
+                    "EMEPEF",
+                    "EMEVLRCONTATIVOS",
+                    "EMEPERCREVERSAO",
+                    "EMEPERCDEDUCAO",
+                ]
+                csv.write(";".join(headers) + "\n")
+                for file_name in file_names:
+                    try:
+                        with open(file_name) as txt:
+                            for linha in txt.readlines():
+                                linha = linha.strip()
+                                if not (len(linha) == 0 \
+                                    or linha == "" \
+                                        or linha is None):
+                                    structure = [
+                                        linha[0:6],
+                                        linha[6:11],
+                                        linha[11:19],
+                                        linha[19:22],
+                                        linha[22:28],
+                                        linha[28:43],
+                                        linha[43:58],
+                                        linha[58:64],
+                                        linha[64:70],
+                                    ]
+                                    csv.write(";".join(structure) + "\n")
+                    except FileNotFoundError:
+                        pass
+        if qe_type == "423" or qe_type == 423:
+            with open(path + "\\423_Export.csv", "a+") as csv:
+                headers = [
+                    "EMGSEQ",
+                    "ENTCODIGO",
+                    "MRFMESANO",
+                    "QUAID",
+                    "EMGCODGRUPO",
+                    "RAMCODIGO",
+                    "PLNCODIGO",
+                ]
+                csv.write(";".join(headers) + "\n")
+                for file_name in file_names:
+                    try:
+                        with open(file_name) as txt:
+                            for linha in txt.readlines():
+                                linha = linha.strip()
+                                if not (len(linha) == 0 \
+                                    or linha == "" \
+                                        or linha is None):
+                                    structure = [
+                                        linha[0:6],
+                                        linha[6:11],
+                                        linha[11:19],
+                                        linha[19:22],
+                                        linha[22:28],
+                                        linha[28:32],
+                                        linha[32:38],
+                                    ]
+                                    csv.write(";".join(structure) + "\n")
                     except FileNotFoundError:
                         pass
