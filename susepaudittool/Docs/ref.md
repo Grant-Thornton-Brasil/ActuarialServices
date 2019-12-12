@@ -179,6 +179,39 @@
 | EMFVLRDERIVATIVO      | 113             | 15      | [112:128] | nnnnnnnnnnnn,nn  | Valor auxiliar para o caso de fluxos oriundos de instrumentos derivativos                                                         |
 | EMFCODGRUPO           | 128             | 6       | [127:134] | nnnnnn           | Código utilizado para a identificação de grupos de produtos ou ramos a que o fluxo se refere                                      |
 
+Regra| Descrição |Impeditivo
+:-----|:---------|:----------
+8125.1|Verifica se não há linhas em branco.|Sim
+8125.2|Verifica o tamanho padrão da linha (133 caracteres).|Sim
+8125.3|Verifica se o campo sequencial EMFSEQ é uma sequência válida, que se inicia em 000001.|Sim
+8125.4|Verifica se o campo ENTCODIGO corresponde à sociedade que está enviando o FIP/SUSEP.|Sim
+8125.5|Verifica se o campo MRFMESANO corresponde, respectivamente, ao ano, mês e último dia do mês de referência do FIP/SUSEP.|Sim
+8125.6|Verifica se o campo QUAID corresponde ao quadro 419.|Sim
+8125.7|Verifica se o campo ATVCODIGO corresponde a um tipo de ativo valido (conforme tabela “ATIVOCODIGO”).|Sim
+8125.8|Verifica se o campo TPFOPERADOR corresponde a um tipo de fluxo válido (conforme tabela “TIPOFLUXO”).|Sim
+8125.9|Verifica se o campo FTRCODIGO corresponde a um tipo de fator válido (conforme tabela FATORCODIGO).|Sim
+8125.10|Verifica se o campo LCRCODIGO corresponde a um local de registro válido (conforme tabela "LOCALREGISTRO").|Sim
+8125.11|Verifica se o campo TCTCODIGO corresponde a um código de carteira válido (conforme tabela "TIPOCARTEIRACODIGO").|Sim
+8125.12|Verifica se o campo TPECODIGO corresponde a um tipo de emissor válido (conforme tabela "TIPOEMISSOR").|Sim
+8125.13|Verifica se o campo TPFOPERADORDERIVATIVO corresponde a um tipo de fluxo válido (conforme tabela “TIPOFLUXO”).|Sim
+8125.14|Verifica se o campo EMFPRAZOFLUXO é um número inteiro positivo.|Sim
+8125.15|Verifica se o campo EMFVLREXPRISCO é um número float positivo.|Sim
+8125.16|Verifica se o CNPJ do fundo (EMFCNPJFUNDO) é inteiro e válido, exceto para preenchimento com zeros.|Sim
+8125.17|Verifica se o campo EMFMULTIPLOFATOR é igual a 0 ou 1.|Sim
+8125.18|Verifica se o campo EMFTXCONTRATADO é um número float positivo ou zero.|Sim
+8125.19|Verifica se o campo EMFTXMERCADO é um número float positivo ou zero.|Sim
+8125.20|Verifica se o campo EMFVLRDERIVATIVO é um número float positivo ou zero.|Sim
+8125.22|Valida a correspondência entre os campos ATVCODIGO e TPFOPERADOR (vide detalhamento abaixo).|Sim
+8125.23|Valida a correspondência entre os campos ATVCODIGO e FTRCODIGO (vide detalhamento abaixo).|Sim
+8125.24|Valida a correspondência dos campos TCTCODIGO e ATVCODIGO com o campo EMFCNPJFUNDO (vide detalhamento abaixo).|Sim
+8125.25|Valida a correspondência entre os campos EMFCNPJFUNDO e BMVCGCFUNDO da tabela BENSVINCULADOS do FIPSUSEP, exceto para preenchimento com zeros (vide detalhamento abaixo).|Sim
+8125.26|Valida a correspondência entre os campos ATVCODIGO e EMFVLRDERIVATIVO (vide detalhamento abaixo).|Sim
+8125.27|Valida a correspondência entre os campos ATVCODIGO e TPFOPERADORDERIVATIVO (vide detalhamento abaixo).|Sim
+8125.28|Verifica se quando EMFTXMERCADO e EMFTXCONTRATADO é maior que zero o valor de FTRCODIGO é TD1 ou TS1.|Sim
+8125.29|Verifica se quando EMFTXMERCADO é maior que zero o valor de EMFTXCONTRATADO também é maior que zero e vice-versa.|Sim
+8125.30|Valida a correspondência entre os campos ATVCODIGO e EMFCODISIN (vide detalhamento abaixo).|Sim
+
+
 ## 420
 
 | Campo            | Posição Inicial | Tamanho | Índice  | Formato         | Descrição                                                                                                                                                                      |

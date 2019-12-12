@@ -23,7 +23,7 @@ class maths:
         self.dates_seguros = [datetime(year, month, calendar.monthrange(
             year, month)[1]).strftime("%Y%m%d")for month in range(1, 13)]
         self.dates_reseguros = [
-            f"2018" + f"{month}".zfill(2) for month in range(1, 13)]
+            f"{year}" + f"{month}".zfill(2) for month in range(1, 13)]
         if self.qe == 376:
             self.math = maths_376(self.dates_seguros)
         elif self.qe == 377:
