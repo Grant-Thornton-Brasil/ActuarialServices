@@ -368,8 +368,8 @@ class main_window:
         esrcodcess.append(entcodigo)
         path = os.path.abspath(self.output_entry.get())
         # Crate new folder
-        os.mkdir(path+"\\Output")
-        path = os.path.abspath(os.path.join(path,"Output"))
+        os.mkdir(path+f"\\Output_{entcodigo}_{qe}_{year}")
+        path = os.path.abspath(os.path.join(path,f"Output_{entcodigo}_{qe}_{year}"))
         total = 0
         # Connection
         db_path = path+"\\"+str(len(glob(path+"\\*.db"))+1)+".db"
@@ -382,7 +382,7 @@ class main_window:
         if self.processo1_var.get() ==1:
             # CRITICAS
             for arquivo in self.files_list:                   
-                with open(arquivo) as txt:
+                with open(arquivo, encoding="utf-8-sig") as txt:
                     linhas = txt.readlines()
                     total += len(linhas)
                     for n, linha in enumerate(linhas,1):
@@ -404,9 +404,12 @@ class main_window:
             # CRUZAMENTOS
             calculator = maths(year,qe)
             for file in self.files_list:
-                with open(file) as txt:
+                with open(file, encoding="utf-8-sig") as txt:
                     for line in txt.readlines():
-                        calculator.score_line(line.replace(",",".").strip())
+                        try:
+                            calculator.score_line(line.replace(",",".").strip())
+                        except:
+                            pass
             df = calculator.get_dataframe()
             excel.df_to_excel(df,qe,os.path.abspath(self.fip_entry.get()),year,entcodigo)
             excel.conn.close()
@@ -426,7 +429,7 @@ class main_window:
             self.processo2_var.get() == 1:
             excel.save_xl(path)
         # Clear form & Delete DB
-        self.clear_form()
+        # self.clear_form()
         self.conn.close()
         os.remove(db_path)
 
