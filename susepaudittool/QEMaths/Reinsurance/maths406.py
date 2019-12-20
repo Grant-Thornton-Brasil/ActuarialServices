@@ -12,23 +12,23 @@ class maths_406():
         self.df.fillna(0.0, inplace=True)
 
     def run(self, linha):
+        MRFMESANO = linha[12:18]
+        SLATIPOPERA = linha[20:21]
+        SLAVALORMOVPEN = linha[97:110]
+        SLATIPOSIN = linha[123:124]
         # Cruzamento 1
         # SLATIPOPERA 1 ; SLATIPOSIN 1 ; SLAVALORMOVPEN ; CMPID 12338
-        if linha[18] == "1" and linha[124] == "1":
-            self.df["Cruzamento 1 - 406"][linha[12:18]] \
-                += float(linha[110:123])
+        if SLATIPOPERA == "1" and SLATIPOSIN == "1":
+            self.df["Cruzamento 1 - 406"][MRFMESANO] += float(SLAVALORMOVPEN)
         # Cruzamento 2
         # SLATIPOPERA 1 ; SLATIPOSIN 2 ; SLAVALORMOVPEN ; CMPID 12339
-        if linha[18] == "1" and linha[124] == "2":
-            self.df["Cruzamento 2 - 406"][linha[12:18]] \
-                += float(linha[110:123])
+        elif SLATIPOPERA == "1" and SLATIPOSIN == "2":
+            self.df["Cruzamento 2 - 406"][MRFMESANO] += float(SLAVALORMOVPEN)
         # Cruzamento 3
         # SLATIPOPERA 2 ; SLATIPOSIN 1 ; SLAVALORMOVPEN ; CMPID 12341
-        if linha[18] == "2" and linha[124] == "1":
-            self.df["Cruzamento 3 - 406"][linha[12:18]] \
-                += float(linha[110:123])
+        elif SLATIPOPERA == "2" and SLATIPOSIN == "1":
+            self.df["Cruzamento 3 - 406"][MRFMESANO] += float(SLAVALORMOVPEN)
         # Cruzamento 4
         # SLATIPOPERA 2 ; SLATIPOSIN 2 ; SLAVALORMOVPEN ; CMPID 12342
-        if linha[18] == "2" and linha[124] == "2":
-            self.df["Cruzamento 4 - 406"][linha[12:18]] \
-                += float(linha[110:123])
+        elif SLATIPOPERA == "2" and SLATIPOSIN == "2":
+            self.df["Cruzamento 4 - 406"][MRFMESANO] += float(SLAVALORMOVPEN)

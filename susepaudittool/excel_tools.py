@@ -49,17 +49,30 @@ class Handler:
         self.conn = pyodbc.connect(
             r"Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=" + db_path
         )
-        query = self.conn.execute(
-            f"""SELECT sum(vdrValor)
-                FROM ValoresMovRamos
-                WHERE ((mrfMesAno >= #01/01/{year}#)
-                AND (mrfMesAno <= #31/12/{year}#)
-                AND (CMPID = {cmpid})
-                AND (entCodigo = '{entcodigo}'))
-                GROUP BY mrfMesAno
-                ORDER BY mrfMesAno
-                """
-        ).fetchall()
+        try:
+            query = self.conn.execute(
+                f"""SELECT sum(vdrValor)
+                    FROM ValoresMovRamos
+                    WHERE ((mrfMesAno >= #01/01/{year}#)
+                    AND (mrfMesAno <= #31/12/{year}#)
+                    AND (CMPID = {cmpid})
+                    AND (entCodigo = '{entcodigo}'))
+                    GROUP BY mrfMesAno
+                    ORDER BY mrfMesAno
+                    """
+            ).fetchall()
+        except:
+            query = self.conn.execute(
+                f"""SELECT sum(vdrvalor)
+                    FROM ValoresResMovGrupos
+                    WHERE ((mrfmesano >= #01/01/{year}#)
+                    AND (mrfmesano <= #31/12/{year}#)
+                    AND (cmpid = {cmpid})
+                    AND (entcodigo = '{entcodigo}'))
+                    GROUP BY mrfmesano
+                    ORDER BY mrfmesano
+                    """
+            ).fetchall()
         for i in query:
             values.append(i[0])
         return values
@@ -107,7 +120,7 @@ class Handler:
             for i in range(1, 30):
                 command += f"SUM(T{i}), "
             command = command.strip()[:-1] + ' FROM "419";'
-        elif self.qe == 410:
+        elif self.qe == 420:
             for i in range(1, 8):
                 command += f"SUM(T{i}), "
             command = command.strip()[:-1] + ' FROM "420";'
@@ -701,7 +714,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12244, entcodigo),
             ):
                 ws[f"G{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"G{row}"].offset(column=1).value = value
                 ws[f"G{row}"].offset(column=2).value = value_fip
                 ws[f"G{row}"].offset(column=1).number_format = "#,##0"
@@ -715,7 +728,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12245, entcodigo),
             ):
                 ws[f"M{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"M{row}"].offset(column=1).value = value
                 ws[f"M{row}"].offset(column=2).value = value_fip
                 ws[f"M{row}"].offset(column=1).number_format = "#,##0"
@@ -729,7 +742,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12246, entcodigo),
             ):
                 ws[f"S{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"S{row}"].offset(column=1).value = value
                 ws[f"S{row}"].offset(column=2).value = value_fip
                 ws[f"S{row}"].offset(column=1).number_format = "#,##0"
@@ -743,7 +756,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12249, entcodigo),
             ):
                 ws[f"Y{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"Y{row}"].offset(column=1).value = value
                 ws[f"Y{row}"].offset(column=2).value = value_fip
                 ws[f"Y{row}"].offset(column=1).number_format = "#,##0"
@@ -757,7 +770,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12250, entcodigo),
             ):
                 ws[f"AE{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"AE{row}"].offset(column=1).value = value
                 ws[f"AE{row}"].offset(column=2).value = value_fip
                 ws[f"AE{row}"].offset(column=1).number_format = "#,##0"
@@ -771,7 +784,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12251, entcodigo),
             ):
                 ws[f"AK{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"AK{row}"].offset(column=1).value = value
                 ws[f"AK{row}"].offset(column=2).value = value_fip
                 ws[f"AK{row}"].offset(column=1).number_format = "#,##0"
@@ -785,7 +798,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12272, entcodigo),
             ):
                 ws[f"AQ{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"AQ{row}"].offset(column=1).value = value
                 ws[f"AQ{row}"].offset(column=2).value = value_fip
                 ws[f"AQ{row}"].offset(column=1).number_format = "#,##0"
@@ -800,7 +813,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12258, entcodigo),
             ):
                 ws[f"G{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"G{row}"].offset(column=1).value = value
                 ws[f"G{row}"].offset(column=2).value = value_fip
                 ws[f"G{row}"].offset(column=1).number_format = "#,##0"
@@ -814,7 +827,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12259, entcodigo),
             ):
                 ws[f"M{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"M{row}"].offset(column=1).value = value
                 ws[f"M{row}"].offset(column=2).value = value_fip
                 ws[f"M{row}"].offset(column=1).number_format = "#,##0"
@@ -828,7 +841,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12262, entcodigo),
             ):
                 ws[f"S{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"S{row}"].offset(column=1).value = value
                 ws[f"S{row}"].offset(column=2).value = value_fip
                 ws[f"S{row}"].offset(column=1).number_format = "#,##0"
@@ -842,7 +855,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12263, entcodigo),
             ):
                 ws[f"Y{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"Y{row}"].offset(column=1).value = value
                 ws[f"Y{row}"].offset(column=2).value = value_fip
                 ws[f"Y{row}"].offset(column=1).number_format = "#,##0"
@@ -856,7 +869,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12273, entcodigo),
             ):
                 ws[f"AE{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"AE{row}"].offset(column=1).value = value
                 ws[f"AE{row}"].offset(column=2).value = value_fip
                 ws[f"AE{row}"].offset(column=1).number_format = "#,##0"
@@ -871,7 +884,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12338, entcodigo),
             ):
                 ws[f"G{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"G{row}"].offset(column=1).value = value
                 ws[f"G{row}"].offset(column=2).value = value_fip
                 ws[f"G{row}"].offset(column=1).number_format = "#,##0"
@@ -885,7 +898,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12339, entcodigo),
             ):
                 ws[f"M{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"M{row}"].offset(column=1).value = value
                 ws[f"M{row}"].offset(column=2).value = value_fip
                 ws[f"M{row}"].offset(column=1).number_format = "#,##0"
@@ -899,7 +912,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12341, entcodigo),
             ):
                 ws[f"S{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"S{row}"].offset(column=1).value = value
                 ws[f"S{row}"].offset(column=2).value = value_fip
                 ws[f"S{row}"].offset(column=1).number_format = "#,##0"
@@ -913,7 +926,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12342, entcodigo),
             ):
                 ws[f"Y{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"Y{row}"].offset(column=1).value = value
                 ws[f"Y{row}"].offset(column=2).value = value_fip
                 ws[f"Y{row}"].offset(column=1).number_format = "#,##0"
@@ -928,7 +941,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12352, entcodigo),
             ):
                 ws[f"G{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"G{row}"].offset(column=1).value = value
                 ws[f"G{row}"].offset(column=2).value = value_fip
                 ws[f"G{row}"].offset(column=1).number_format = "#,##0"
@@ -942,7 +955,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12353, entcodigo),
             ):
                 ws[f"M{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"M{row}"].offset(column=1).value = value
                 ws[f"M{row}"].offset(column=2).value = value_fip
                 ws[f"M{row}"].offset(column=1).number_format = "#,##0"
@@ -956,7 +969,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12379, entcodigo),
             ):
                 ws[f"S{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"S{row}"].offset(column=1).value = value
                 ws[f"S{row}"].offset(column=2).value = value_fip
                 ws[f"S{row}"].offset(column=1).number_format = "#,##0"
@@ -971,7 +984,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12064, entcodigo),
             ):
                 ws[f"G{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"G{row}"].offset(column=1).value = value
                 ws[f"G{row}"].offset(column=2).value = value_fip
                 ws[f"G{row}"].offset(column=1).number_format = "#,##0"
@@ -985,7 +998,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12066, entcodigo),
             ):
                 ws[f"M{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"M{row}"].offset(column=1).value = value
                 ws[f"M{row}"].offset(column=2).value = value_fip
                 ws[f"M{row}"].offset(column=1).number_format = "#,##0"
@@ -999,7 +1012,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12067, entcodigo),
             ):
                 ws[f"S{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"S{row}"].offset(column=1).value = value
                 ws[f"S{row}"].offset(column=2).value = value_fip
                 ws[f"S{row}"].offset(column=1).number_format = "#,##0"
@@ -1013,7 +1026,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12069, entcodigo),
             ):
                 ws[f"Y{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"Y{row}"].offset(column=1).value = value
                 ws[f"Y{row}"].offset(column=2).value = value_fip
                 ws[f"Y{row}"].offset(column=1).number_format = "#,##0"
@@ -1027,7 +1040,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12074, entcodigo),
             ):
                 ws[f"AE{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"AE{row}"].offset(column=1).value = value
                 ws[f"AE{row}"].offset(column=2).value = value_fip
                 ws[f"AE{row}"].offset(column=1).number_format = "#,##0"
@@ -1041,7 +1054,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12075, entcodigo),
             ):
                 ws[f"AK{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"AK{row}"].offset(column=1).value = value
                 ws[f"AK{row}"].offset(column=2).value = value_fip
                 ws[f"AK{row}"].offset(column=1).number_format = "#,##0"
@@ -1055,7 +1068,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12076, entcodigo),
             ):
                 ws[f"AQ{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"AQ{row}"].offset(column=1).value = value
                 ws[f"AQ{row}"].offset(column=2).value = value_fip
                 ws[f"AQ{row}"].offset(column=1).number_format = "#,##0"
@@ -1067,13 +1080,13 @@ class Handler:
                 df_cruz.index,
                 df_cruz["Cruzamento 8 - 408"],
                 (
-                    self.get_from_fip(db_path, year, 12059)
-                    - self.get_from_fip(db_path, year, 12062),
-                    entcodigo,
+                    self.get_from_fip(db_path, year, 12059,entcodigo)
+                    #- self.get_from_fip(db_path, year, 12062,entcodigo),
+                    
                 ),
             ):
                 ws[f"AW{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"AW{row}"].offset(column=1).value = value
                 ws[f"AW{row}"].offset(column=2).value = value_fip
                 ws[f"AW{row}"].offset(column=1).number_format = "#,##0"
@@ -1087,7 +1100,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12061, entcodigo),
             ):
                 ws[f"BC{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"BC{row}"].offset(column=1).value = value
                 ws[f"BC{row}"].offset(column=2).value = value_fip
                 ws[f"BC{row}"].offset(column=1).number_format = "#,##0"
@@ -1101,7 +1114,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12078, entcodigo),
             ):
                 ws[f"BI{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"BI{row}"].offset(column=1).value = value
                 ws[f"BI{row}"].offset(column=2).value = value_fip
                 ws[f"BI{row}"].offset(column=1).number_format = "#,##0"
@@ -1115,7 +1128,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12500, entcodigo),
             ):
                 ws[f"BO{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"BO{row}"].offset(column=1).value = value
                 ws[f"BO{row}"].offset(column=2).value = value_fip
                 ws[f"BO{row}"].offset(column=1).number_format = "#,##0"
@@ -1130,7 +1143,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12087, entcodigo),
             ):
                 ws[f"G{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"G{row}"].offset(column=1).value = value
                 ws[f"G{row}"].offset(column=2).value = value_fip
                 ws[f"G{row}"].offset(column=1).number_format = "#,##0"
@@ -1144,7 +1157,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12089, entcodigo),
             ):
                 ws[f"M{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"M{row}"].offset(column=1).value = value
                 ws[f"M{row}"].offset(column=2).value = value_fip
                 ws[f"M{row}"].offset(column=1).number_format = "#,##0"
@@ -1158,7 +1171,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12090, entcodigo),
             ):
                 ws[f"S{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"S{row}"].offset(column=1).value = value
                 ws[f"S{row}"].offset(column=2).value = value_fip
                 ws[f"S{row}"].offset(column=1).number_format = "#,##0"
@@ -1172,7 +1185,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12092, entcodigo),
             ):
                 ws[f"Y{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"Y{row}"].offset(column=1).value = value
                 ws[f"Y{row}"].offset(column=2).value = value_fip
                 ws[f"Y{row}"].offset(column=1).number_format = "#,##0"
@@ -1186,7 +1199,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12097, entcodigo),
             ):
                 ws[f"AE{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"AE{row}"].offset(column=1).value = value
                 ws[f"AE{row}"].offset(column=2).value = value_fip
                 ws[f"AE{row}"].offset(column=1).number_format = "#,##0"
@@ -1200,7 +1213,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12098, entcodigo),
             ):
                 ws[f"AK{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"AK{row}"].offset(column=1).value = value
                 ws[f"AK{row}"].offset(column=2).value = value_fip
                 ws[f"AK{row}"].offset(column=1).number_format = "#,##0"
@@ -1214,7 +1227,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12099, entcodigo),
             ):
                 ws[f"AQ{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"AQ{row}"].offset(column=1).value = value
                 ws[f"AQ{row}"].offset(column=2).value = value_fip
                 ws[f"AQ{row}"].offset(column=1).number_format = "#,##0"
@@ -1226,13 +1239,13 @@ class Handler:
                 df_cruz.index,
                 df_cruz["Cruzamento 8 - 409"],
                 (
-                    self.get_from_fip(db_path, year, 12082)
-                    - self.get_from_fip(db_path, year, 12085),
-                    entcodigo,
+                    self.get_from_fip(db_path, year, 12082,entcodigo)
+                    #- self.get_from_fip(db_path, year, 12085),
+                    #entcodigo,
                 ),
             ):
                 ws[f"AW{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"AW{row}"].offset(column=1).value = value
                 ws[f"AW{row}"].offset(column=2).value = value_fip
                 ws[f"AW{row}"].offset(column=1).number_format = "#,##0"
@@ -1246,7 +1259,7 @@ class Handler:
                 self.get_from_fip(db_path, year, 12084, entcodigo),
             ):
                 ws[f"BC{row}"].value = to_excel(
-                    datetime.strptime(index, "%Y%m%d"))
+                    datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"BC{row}"].offset(column=1).value = value
                 ws[f"BC{row}"].offset(column=2).value = value_fip
                 ws[f"BC{row}"].offset(column=1).number_format = "#,##0"
@@ -1295,7 +1308,7 @@ class Handler:
                 csv.write(";".join(headers) + "\n")
                 for file_name in file_names:
                     try:
-                        with open(file_name) as txt:
+                        with open(file_name, encoding="utf-8-sig")  as txt:
                             for linha in txt.readlines():
                                 if not (len(linha) == 0 \
                                     or linha == "" \
@@ -1342,7 +1355,7 @@ class Handler:
                 csv.write(";".join(headers) + "\n")
                 for file_name in file_names:
                     try:
-                        with open(file_name) as txt:
+                        with open(file_name, encoding="utf-8-sig")  as txt:
                             for linha in txt.readlines():
                                 linha = linha.strip()
                                 if not (len(linha) == 0 \
@@ -1395,7 +1408,7 @@ class Handler:
                 csv.write(";".join(headers) + "\n")
                 for file_name in file_names:
                     try:
-                        with open(file_name) as txt:
+                        with open(file_name, encoding="utf-8-sig")  as txt:
                             for linha in txt.readlines():
                                 linha = linha.strip()
                                 if not (len(linha) == 0 \
@@ -1454,7 +1467,7 @@ class Handler:
                 csv.write(";".join(headers) + "\n")
                 for file_name in file_names:
                     try:
-                        with open(file_name) as txt:
+                        with open(file_name, encoding="utf-8-sig")  as txt:
                             for linha in txt.readlines():
                                 linha = linha.strip()
                                 if not (len(linha) == 0 \
@@ -1509,7 +1522,7 @@ class Handler:
                 csv.write(";".join(headers) + "\n")
                 for file_name in file_names:
                     try:
-                        with open(file_name) as txt:
+                        with open(file_name, encoding="utf-8-sig")  as txt:
                             for linha in txt.readlines():
                                 linha = linha.strip()
                                 if not (len(linha) == 0 \
@@ -1563,7 +1576,7 @@ class Handler:
                 csv.write(";".join(headers) + "\n")
                 for file_name in file_names:
                     try:
-                        with open(file_name) as txt:
+                        with open(file_name, encoding="utf-8-sig")  as txt:
                             for linha in txt.readlines():
                                 if not (len(linha) == 0 \
                                     or linha == "" \
@@ -1615,7 +1628,7 @@ class Handler:
                 csv.write(";".join(headers) + "\n")
                 for file_name in file_names:
                     try:
-                        with open(file_name) as txt:
+                        with open(file_name, encoding="utf-8-sig")  as txt:
                             for linha in txt.readlines():
                                 linha = linha.strip()
                                 if not (len(linha) == 0 \
@@ -1673,7 +1686,7 @@ class Handler:
                 csv.write(";".join(headers) + "\n")
                 for file_name in file_names:
                     try:
-                        with open(file_name) as txt:
+                        with open(file_name, encoding="utf-8-sig")  as txt:
                             for linha in txt.readlines():
                                 linha = linha.strip()
                                 if not (len(linha) == 0 \
@@ -1737,7 +1750,7 @@ class Handler:
                 csv.write(";".join(headers) + "\n")
                 for file_name in file_names:
                     try:
-                        with open(file_name) as txt:
+                        with open(file_name, encoding="utf-8-sig")  as txt:
                             for linha in txt.readlines():
                                 linha = linha.strip()
                                 if not (len(linha) == 0 \
@@ -1800,7 +1813,7 @@ class Handler:
                 csv.write(";".join(headers) + "\n")
                 for file_name in file_names:
                     try:
-                        with open(file_name) as txt:
+                        with open(file_name, encoding="utf-8-sig")  as txt:
                             for linha in txt.readlines():
                                 linha = linha.strip()
                                 if not (len(linha) == 0 \
@@ -1851,7 +1864,7 @@ class Handler:
                 csv.write(";".join(headers) + "\n")
                 for file_name in file_names:
                     try:
-                        with open(file_name) as txt:
+                        with open(file_name, encoding="utf-8-sig")  as txt:
                             for linha in txt.readlines():
                                 linha = linha.strip()
                                 if not (len(linha) == 0 \
@@ -1891,7 +1904,7 @@ class Handler:
                 csv.write(";".join(headers) + "\n")
                 for file_name in file_names:
                     try:
-                        with open(file_name) as txt:
+                        with open(file_name, encoding="utf-8-sig")  as txt:
                             for linha in txt.readlines():
                                 linha = linha.strip()
                                 if not (len(linha) == 0 \
@@ -1962,7 +1975,7 @@ class Handler:
                 csv.write(";".join(headers) + "\n")
                 for file_name in file_names:
                     try:
-                        with open(file_name) as txt:
+                        with open(file_name, encoding="utf-8-sig")  as txt:
                             for linha in txt.readlines():
                                 linha = linha.strip()
                                 if not (len(linha) == 0 \

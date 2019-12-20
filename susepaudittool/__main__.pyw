@@ -406,10 +406,11 @@ class main_window:
             for file in self.files_list:
                 with open(file, encoding="utf-8-sig") as txt:
                     for line in txt.readlines():
-                        try:
-                            calculator.score_line(line.replace(",",".").strip())
-                        except:
-                            pass
+                        calculator.score_line(line.replace(",",".").strip())
+                        # try:
+                        #     calculator.score_line(line.replace(",",".").strip())
+                        # except:
+                        #     pass
             df = calculator.get_dataframe()
             excel.df_to_excel(df,qe,os.path.abspath(self.fip_entry.get()),year,entcodigo)
             excel.conn.close()
