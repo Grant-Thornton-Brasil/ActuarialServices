@@ -7,4 +7,7 @@ from datetime import datetime
 class maths_422():
 
     def __init__(self, dates):
-       pass
+        pass
+
+    def run(self, linha):
+        pass

@@ -6,6 +6,19 @@ from ..tools import make_command
 # CAPITALIZAÇÃO
 def validate_420(nome_arquivo, linha, n, conn, dates,
                  entcodigo):
+    EMCSEQ = linha[0:6]
+    ENTCODIGO = linha[6:11]
+    MRFMESANO = linha[11:19]
+    QUAID = linha[19:22]
+    DOCCODIGO = linha[22:27]
+    TPFOPERADOR = linha[27:28]
+    FTRCODIGO = linha[28:31]
+    EMCPRAZOFLUXO = linha[31:36]
+    EMCVLREXPRISCO = linha[36:51]
+    EMCMULTIPLOFATOR = linha[51:52]
+    EMCCODGRUPO = linha[52:58]
+    EMCSEMREGISTRO = linha[58:59]
+
     # Verifica se não há linhas em branco
     if linha == "" or linha is None:
         conn.execute(make_command("T1", nome_arquivo, n, "420"))

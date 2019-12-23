@@ -8,6 +8,33 @@ moedas = get_moedas()
 # RESEGUROS
 def validate_408(nome_arquivo, linha, n, conn, dates,
                  entcodigo, gracodigos):
+
+    MPASEQ = linha[0:7]
+    ENTCODIGO = linha[7:12]
+    MRFMESANO = linha[12:18]
+    TPMORESSID = linha[18:21]
+    GRACODIGO = linha[21:23]
+    MPATIPOPERA = linha[23:24]
+    MPANUMCONT = linha[24:50]
+    MPANUMENDOSSO = linha[50:56]
+    MPACODCESS = linha[56:61]
+    MPATIPOCONT = linha[61:62]
+    MPAMODCONT = linha[62:64]
+    MPADATAORDEMFIRME = linha[64:72]
+    MPADATACONTR = linha[72:80]
+    MPADATAINICIO = linha[80:88]
+    MPADATAFIM = linha[88:96]
+    MPAVALORMOV = linha[96:109]
+    MPAPERCENTRISCO = linha[109:115]
+    MPAVALORMOVCOMIS = linha[115:128]
+    MPAVALORMOVCORRET = linha[128:141]
+    MPACODCORRET = linha[141:146]
+    MPAVIGMED = linha[146:148]
+    MPABASEIND = linha[148:149]
+    MPAMOEDA = linha[149:152]
+    MPATAXACONV = linha[152:165]
+    MPADATAEMISS = linha[165:173]
+
     # Verifica se não há linhas em branco
     try:
         if linha == "" or linha is None:
@@ -43,7 +70,7 @@ def validate_408(nome_arquivo, linha, n, conn, dates,
     # (conforme tabela 'TiposMovimentosResseguros' do FIPSUSEP)
     try:
         if linha[18:21] not in ["024", "025", "026", "027", "028", "029",
-                                "030", "031", "032", "033"]:
+                                "030", "031", "032", "033", "034"]:
             conn.execute(make_command("T6", nome_arquivo, n, "408"))
     except:
         conn.execute(make_command("T6", nome_arquivo, n, "408"))
@@ -92,7 +119,7 @@ def validate_408(nome_arquivo, linha, n, conn, dates,
     # 'Restituição de Prêmio Efetivo' ou 'Cancelamento de Prêmio Efetivo' ou
     # 'Informação sem Movimentação de Prêmio'
     try:
-        if linha[61] == "1" and linha[18:21] not in ["24","25","27","26","27"]:
+        if linha[61] == "2" and linha[18:21] not in ["24","25","27","26","27"]:
             conn.execute(make_command("T12", nome_arquivo, n, "408"))
     except:
         conn.execute(make_command("T12", nome_arquivo, n, "408"))
@@ -153,8 +180,8 @@ def validate_408(nome_arquivo, linha, n, conn, dates,
     # Verifica se o campo MPACODCORRET corresponde a um código de corretora de
     # resseguro válido ou '99999'
     try:
-        if not (70000 <= int(linha[141:146]) <=
-                79999) or linha[141:146] == "99999":
+        if (not (70000 <= int(linha[141:146]) <=
+                79999)) or linha[141:146] != "99999":
             conn.execute(make_command("T19", nome_arquivo, n, "408"))
     except:
         conn.execute(make_command("T19", nome_arquivo, n, "408"))

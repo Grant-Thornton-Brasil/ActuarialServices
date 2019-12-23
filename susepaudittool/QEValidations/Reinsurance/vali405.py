@@ -8,6 +8,24 @@ moedas = get_moedas()
 # RESEGUROS
 def validate_405(nome_arquivo, linha, n, conn, dates,
                  entcodigo, gracodigos):
+    MSRSEQ = linha[0:7]
+    ENTCODIGO = linha[7:12]
+    MRFMESANO = linha[12:18]
+    TPMORESSID = linha[18:21]
+    GRACODIGO = linha[21:23]
+    MSRNUMSIN = linha[23:43]
+    MSRNUMCONT = linha[43:69]
+    MSRTIPOCONT = linha[69:70]
+    MSRCODCESS = linha[70:75]
+    MSRDATACOMUNICA = linha[75:83]
+    MSRDATAREG = linha[83:91]
+    MSRDATAOCORR = linha[91:99]
+    MSRVALORMOV = linha[99:112]
+    MSRTIPOSIN = linha[112:113]
+    MSRMODCONT = linha[113:115]
+    MSRMOEDA = linha[115:118]
+    MSRBASEIND = linha[118:119]
+    MSRVALORMON = linha[119:132]
 
     # 1	Verifica se não há linhas em branco
     try:

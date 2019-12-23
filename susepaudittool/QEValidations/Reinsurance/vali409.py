@@ -8,6 +8,31 @@ moedas = get_moedas()
 # RESEGUROS
 def validate_409(nome_arquivo, linha, n, conn, dates,
                  entcodigo, gracodigos):
+    MPRSEQ = linha[0:7]
+    ENTCODIGO = linha[7:12]
+    MRFMESANO = linha[12:18]
+    TPMORESSID = linha[18:21]
+    GRACODIGO = linha[21:23]
+    MPRNUMCONT = linha[23:49]
+    MPRNUMENDOSSO = linha[49:55]
+    MPRCODESS = linha[55:60]
+    MPRTIPOCONT = linha[60:61]
+    MPRMODCONT = linha[61:63]
+    MPRDATACEITE = linha[63:71]
+    MPRDATACONTR = linha[71:79]
+    MPRDATAINICIO = linha[79:87]
+    MPRDATAFIM = linha[87:95]
+    MPRPERCRISCO = linha[95:101]
+    MPRVALORMOV = linha[101:114]
+    MPRVALORMOVCOMIS = linha[114:127]
+    MPRCODCORRET = linha[127:132]
+    MPRVALORMOVCORRET = linha[132:145]
+    MPRVIGMED = linha[145:147]
+    MPRBASEIND = linha[147:148]
+    MPRMOEDA = linha[148:151]
+    MPRTAXACONV = linha[151:164]
+    MPRDATAEMISS = linha[164:172]
+    
     # Verifica se não há linhas em branco
     try:
         if linha == "" or linha is None:

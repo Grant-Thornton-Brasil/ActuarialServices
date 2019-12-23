@@ -8,3 +8,6 @@ class maths_423():
 
     def __init__(self, dates):
         pass
+
+    def run(self, linha):
+        pass
