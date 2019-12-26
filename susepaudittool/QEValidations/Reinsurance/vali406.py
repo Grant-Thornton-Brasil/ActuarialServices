@@ -8,24 +8,18 @@ moedas = get_moedas()
 # RESEGUROS
 def validate_406(nome_arquivo, linha, n, conn, dates,
                  entcodigo, gracodigos):
-    SLASEQ = linha[0:7]
     ENTCODIGO = linha[7:12]
     MRFMESANO = linha[12:18]
     GRACODIGO = linha[18:20]
     SLATIPOPERA = linha[20:21]
-    SLANUMSIN = linha[21:41]
-    SLANUMCONT = linha[41:67]
-    SLATIPOCONT = linha[67:68]
     SLACODCESS = linha[68:73]
     SLADATACOMUNICA = linha[73:81]
     SLADATAREG = linha[81:89]
     SLADATAOCORR = linha[89:97]
     SLAVALORMOVPEN = linha[97:110]
     SLAVALORMOVTOT = linha[110:123]
-    SLATIPOSIN = linha[123:124]
     SLAMODCONT = linha[124:126]
     SLAMOEDA = linha[126:129]
-    SLABASEIND = linha[129:130]
 
     # Verifica se não há linhas em branco
     try:
@@ -42,26 +36,26 @@ def validate_406(nome_arquivo, linha, n, conn, dates,
     # Verifica se o campo sequencial SLASEQ é uma sequência válida, que se
     # inicia em 0000001
     try:
-        if int(linha[0:7]) != n:
+        if int(MSLASEQ) != n:
             conn.execute(make_command("T3", nome_arquivo, n, "406"))
     except:
         conn.execute(make_command("T3", nome_arquivo, n, "406"))
     # Verifica se o campo ENTCODIGO corresponde à sociedade que está enviando
     # o FIP/SUSEP
     try:
-        if linha[7:12] != entcodigo:
+        if ENTCODIGO != entcodigo:
             conn.execute(make_command("T4", nome_arquivo, n, "406"))
     except:
         conn.execute(make_command("T4", nome_arquivo, n, "406"))
     # Verifica se o campo MRFMESANO corresponde a um ano e mês válidos
     try:
-        ciso8601.parse_datetime(linha[12:18] + "01")
+        ciso8601.parse_datetime(MRFMESANO + "01")
     except ValueError:
         conn.execute(make_command("T5", nome_arquivo, n, "406"))
     # Verifica se o campo GRACODIGO corresponde a um grupo de ramos válido
     # operado pelo ressegurador
     try:
-        if linha[18:20] not in gracodigos:
+        if GRACODIGO not in gracodigos:
             conn.execute(make_command("T6", nome_arquivo, n, "406"))
     except:
         conn.execute(make_command("T6", nome_arquivo, n, "406"))    
@@ -83,8 +77,8 @@ def validate_406(nome_arquivo, linha, n, conn, dates,
     # válido ou ‘99999’ e valida a correspondência entre os campos SLATIPOPERA
     # e SLACODCESS
     try:
-        if (linha[20:21] == "1" and int(linha[68:73]) not in [i for i in range(1, 20000)]) or (
-                linha[20:21] == "2" and int(linha[68:73]) not in [i for i in range(30000, 60000)]):
+        if (SLATIPOPERA == "1" and int(SLACODCESS) not in [i for i in range(1, 20000)]) or (
+                SLATIPOPERA == "2" and int(SLACODCESS) not in [i for i in range(30000, 60000)]):
             conn.execute(make_command("T9", nome_arquivo, n, "406"))
     except:
         conn.execute(make_command("T9", nome_arquivo, n, "406"))
@@ -93,17 +87,17 @@ def validate_406(nome_arquivo, linha, n, conn, dates,
     # contrato seja 'Proporcional: Cota Parte' ou 'Proporcional: ER', os
     # campos podem ser preenchidos com '99999999'
     try:
-        ciso8601.parse_datetime(linha[73:81])
-        ciso8601.parse_datetime(linha[81:89])
-        ciso8601.parse_datetime(linha[89:97])
+        ciso8601.parse_datetime(SLADATACOMUNICA)
+        ciso8601.parse_datetime(SLADATAREG)
+        ciso8601.parse_datetime(SLADATAOCORR)
     except ValueError:
-        if (linha[124:126] in ["1", "2"]) and (linha[73:81] ==
-                                               "99999999" and linha[81:89] == "99999999" and linha[89:97] == "99999999"):
+        if (SLAMODCONT in ["1", "2"]) and (SLADATACOMUNICA ==
+                                               "99999999" and SLADATAREG == "99999999" and SLADATAOCORR == "99999999"):
             conn.execute(make_command("T10", nome_arquivo, n, "406"))
     # Verifica se o valor dos campos SLAVALORMOVPEN e SLAVALORMOVTOT é float
     try:
-        float(linha[97:110].replace(",", "."))
-        float(linha[110:123].replace(",", "."))
+        float(SLAVALORMOVPEN.replace(",", "."))
+        float(SLAVALORMOVTOT.replace(",", "."))
     except ValueError:
         conn.execute(make_command("T11", nome_arquivo, n, "406"))
     # Verifica se o campo SLATIPOSIN foi preenchido com um tipo de sinistro
@@ -117,14 +111,14 @@ def validate_406(nome_arquivo, linha, n, conn, dates,
     # contrato válida, exceto nos casos em que o tipo de contrato seja
     # ‘Facultativo’, quando o campo deve ser preenchido com ‘99
     try:
-        if linha[124:126] not in ["01", "02", "03", "04", "05", "06"] and (
-                linha[67] == "2" and linha[124:126] != "99"):
+        if SLAMODCONT not in ["01", "02", "03", "04", "05", "06"] and (
+                linha[67] == "2" and SLAMODCONT != "99"):
             conn.execute(make_command("T13", nome_arquivo, n, "406"))
     except:
         conn.execute(make_command("T13", nome_arquivo, n, "406"))
     # Verifica se o campo SLAMOEDA foi preenchido com uma moeda válida
     try:
-        if linha[126:129] not in moedas:
+        if SLAMOEDA not in moedas:
             conn.execute(make_command("T14", nome_arquivo, n, "406"))
     except:
         conn.execute(make_command("T14", nome_arquivo, n, "406"))

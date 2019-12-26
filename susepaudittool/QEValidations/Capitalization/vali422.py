@@ -24,22 +24,22 @@ def validate_422(nome_arquivo, linha, n, conn, dates,
         conn.execute(make_command("T2", nome_arquivo, n, "422"))
     # Verifica se o campo sequencial EMESEQ é uma sequência válida, que se
     # inicia em 000001
-    if int(linha[0:6]) == n:
+    if int(EMESEQ) == n:
         conn.execute(make_command("T3", nome_arquivo, n, "422"))
     # Verifica se o campo ENTCODIGO corresponde à sociedade que está enviando
     # o FIP/SUSEP
-    if linha[6:11] != entcodigo:
+    if ENTCODIGO != entcodigo:
         conn.execute(make_command("T4", nome_arquivo, n, "422"))
     # Verifica se o campo MRFMESANO corresponde, respectivamente, ao ano, mês
     # e último dia do mês de referência do FIP/SUSEP
-    if linha not in dates:
+    if MRFMESANO not in dates:
         conn.execute(make_command("T5", nome_arquivo, n, "422"))
     # Verifica se o campo QUAID corresponde ao quadro 422
-    if linha[19:22] != "422":
+    if QUAID != "422":
         conn.execute(make_command("T6", nome_arquivo, n, "422"))
     # Verifica se o campo EMECODGRUPO é um número inteiro positivo
     try:
-        if int(linha[22:28]) < 0:
+        if int(EMECODGRUPO) < 0:
             conn.execute(make_command("T7", nome_arquivo, n, "422"))
     except BaseException:
         conn.execute(make_command("T7", nome_arquivo, n, "422"))
@@ -48,25 +48,25 @@ def validate_422(nome_arquivo, linha, n, conn, dates,
     pass
     # Verifica se o campo EMEPEF é um número float positivo
     try:
-        if float(linha[28:43]) <= 0:
+        if float(EMEPEF) <= 0:
             conn.execute(make_command("T9", nome_arquivo, n, "422"))
     except BaseException:
         conn.execute(make_command("T9", nome_arquivo, n, "422"))
     # Verifica se o campo EMEVLRCONTATIVOS é um número float positivo
     try:
-        if float(linha[43:58]) <= 0:
+        if float(EMEVLRCONTATIVOS) <= 0:
             conn.execute(make_command("T10", nome_arquivo, n, "422"))
     except BaseException:
         conn.execute(make_command("T10", nome_arquivo, n, "422"))
     # Verifica se o campo EMEPERCREVERSAO é um número float positivo
     try:
-        if float(linha[58:64]) <= 0:
+        if float(EMEPERCREVERSAO) <= 0:
             conn.execute(make_command("T11", nome_arquivo, n, "422"))
     except BaseException:
         conn.execute(make_command("T11", nome_arquivo, n, "422"))
     # Verifica se o campo EMEPERCDEDUCAO é um número float positivo Sim
     try:
-        if float(linha[64:70]) <= 0:
+        if float(EMEPERCDEDUCAO) <= 0:
             conn.execute(make_command("T12", nome_arquivo, n, "422"))
     except BaseException:
         conn.execute(make_command("T12", nome_arquivo, n, "422"))

@@ -1,4 +1,5 @@
 import os
+from numpy import array
 from openpyxl import load_workbook
 from openpyxl.utils.datetime import to_excel
 from datetime import datetime
@@ -49,19 +50,18 @@ class Handler:
         self.conn = pyodbc.connect(
             r"Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=" + db_path
         )
-        try:
-            query = self.conn.execute(
-                f"""SELECT sum(vdrValor)
-                    FROM ValoresMovRamos
-                    WHERE ((mrfMesAno >= #01/01/{year}#)
-                    AND (mrfMesAno <= #31/12/{year}#)
-                    AND (CMPID = {cmpid})
-                    AND (entCodigo = '{entcodigo}'))
-                    GROUP BY mrfMesAno
-                    ORDER BY mrfMesAno
-                    """
-            ).fetchall()
-        except:
+        query = self.conn.execute(
+            f"""SELECT sum(vdrValor)
+                FROM ValoresMovRamos
+                WHERE ((mrfMesAno >= #01/01/{year}#)
+                AND (mrfMesAno <= #31/12/{year}#)
+                AND (CMPID = {cmpid})
+                AND (entCodigo = '{entcodigo}'))
+                GROUP BY mrfMesAno
+                ORDER BY mrfMesAno
+                """
+        ).fetchall()
+        if len(query) == 0:
             query = self.conn.execute(
                 f"""SELECT sum(vdrvalor)
                     FROM ValoresResMovGrupos
@@ -75,7 +75,7 @@ class Handler:
             ).fetchall()
         for i in query:
             values.append(i[0])
-        return values
+        return array(values)
 
     def critics_to_excel(self, conn, total):
         self.report = []
@@ -556,8 +556,9 @@ class Handler:
                 row += 1
             row = 14
             for index, value, value_fip in zip(
-                df_cruz.index, df_cruz["Cruzamento 6 - 378"], self.get_from_fip(
-                    db_path, year, 12018, entcodigo)):
+                df_cruz.index, 
+                df_cruz["Cruzamento 6 - 378"], 
+                self.get_from_fip(db_path, year, 12018, entcodigo)):
                 ws[f"AK{row}"].value = to_excel(
                     datetime.strptime(index, "%Y%m%d"))
                 ws[f"AK{row}"].offset(column=1).value = value
@@ -570,8 +571,7 @@ class Handler:
             for index, value, value_fip in zip(
                 df_cruz.index,
                 df_cruz["Cruzamento 7 - 378"],
-                self.get_from_fip(db_path, year, 12022, entcodigo),
-            ):
+                self.get_from_fip(db_path, year, 12022, entcodigo)):
                 ws[f"AQ{row}"].value = to_excel(
                     datetime.strptime(index, "%Y%m%d"))
                 ws[f"AQ{row}"].offset(column=1).value = value
@@ -1079,12 +1079,8 @@ class Handler:
             for index, value, value_fip in zip(
                 df_cruz.index,
                 df_cruz["Cruzamento 8 - 408"],
-                (
-                    self.get_from_fip(db_path, year, 12059,entcodigo)
-                    #- self.get_from_fip(db_path, year, 12062,entcodigo),
-                    
-                ),
-            ):
+                self.get_from_fip(db_path, year, 12059,entcodigo)
+                - self.get_from_fip(db_path, year, 12062,entcodigo)):
                 ws[f"AW{row}"].value = to_excel(
                     datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"AW{row}"].offset(column=1).value = value
@@ -1238,12 +1234,8 @@ class Handler:
             for index, value, value_fip in zip(
                 df_cruz.index,
                 df_cruz["Cruzamento 8 - 409"],
-                (
-                    self.get_from_fip(db_path, year, 12082,entcodigo)
-                    #- self.get_from_fip(db_path, year, 12085),
-                    #entcodigo,
-                ),
-            ):
+                self.get_from_fip(db_path, year, 12082,entcodigo)
+                - self.get_from_fip(db_path, year, 12085,entcodigo)):
                 ws[f"AW{row}"].value = to_excel(
                     datetime.strptime(index+"01", "%Y%m%d"))
                 ws[f"AW{row}"].offset(column=1).value = value

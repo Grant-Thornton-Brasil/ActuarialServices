@@ -22,22 +22,22 @@ def validate_423(nome_arquivo, linha, n, conn, dates,
         conn.execute(make_command("T2", nome_arquivo, n, "423"))
     # Verifica se o campo sequencial EMGSEQ é uma sequência válida, que se
     # inicia em 000001
-    if int(linha[0:6]) != n:
+    if int(EMGSEQ) != n:
         conn.execute(make_command("T3", nome_arquivo, n, "423"))
     # Verifica se o campo ENTCODIGO corresponde à sociedade que está enviando
     # o FIP/SUSEP
-    if linha[6:11] != entcodigo:
+    if ENTCODIGO != entcodigo:
         conn.execute(make_command("T4", nome_arquivo, n, "423"))
     # Verifica se o campo MRFMESANO corresponde, respectivamente, ao ano, mês
     # e último dia do mês de referência do FIP/SUSEP
-    if linha[11:19] not in dates:
+    if MRFMESANO not in dates:
         conn.execute(make_command("T5", nome_arquivo, n, "423"))
     # Verifica se o campo QUAID corresponde ao quadro 423
-    if linha[19:22] != "423":
+    if QUAID != "423":
         conn.execute(make_command("T6", nome_arquivo, n, "423"))
     # Verifica se o campo EMGCODGRUPO é um número inteiro positivo
     try:
-        if float(linha[22:28]) <= 0:
+        if float(EMGCODGRUPO) <= 0:
             conn.execute(make_command("T7", nome_arquivo, n, "423"))
     except BaseException:
         conn.execute(make_command("T7", nome_arquivo, n, "423"))
@@ -49,7 +49,7 @@ def validate_423(nome_arquivo, linha, n, conn, dates,
     pass
     # Verifica se o campo PLNCODIGO ou o RAMCODIGO está preenchido diferente
     # de zeros, porém não ambos ao mesmo tempo
-    if int(linha[32:38]) == 0 or \
-       int(linha[28:32]) == 0 or \
-       (int(linha[32:38]) == 0 and int(linha[28:32]) == 0):
+    if int(PLNCODIGO) == 0 or \
+       int(RAMCODIGO) == 0 or \
+       (int(PLNCODIGO) == 0 and int(RAMCODIGO) == 0):
         conn.execute(make_command("T10", nome_arquivo, n, "423"))

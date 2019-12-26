@@ -19,13 +19,11 @@ def validate_419(nome_arquivo, linha, n, conn, dates, entcodigo):
     EMFVLREXPRISCO = linha[45:60]
     EMFCNPJFUNDO = linha[60:74]
     EMFCODISIN = linha[74:86]
-    EMFCODCUSTODIA = linha[86:98]
     EMFMULTIPLOFATOR = linha[98:99]
     EMFTXCONTRATADO = linha[99:105]
     EMFTXMERCADO = linha[105:111]
     TPFOPERADORDERIVATIVO = linha[111:112]
     EMFVLRDERIVATIVO = linha[112:127]
-    EMFCODGRUPO = linha[127:133]
 
     # Verifica se não há linhas em branco
     if linha == "" or linha is None:
