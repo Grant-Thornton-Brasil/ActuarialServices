@@ -25,7 +25,7 @@ def validate_421(nome_arquivo, linha, n, conn, dates,
         conn.execute(make_command("T2", nome_arquivo, n, "421"))
     # Verifica se o campo sequencial EMDSEQ é uma sequência válida, que se
     # inicia em 000001
-    if EMDSEQ != n:
+    if int(EMDSEQ) != n:
         conn.execute(make_command("T3", nome_arquivo, n, "421"))
     # Verifica se o campo ENTCODIGO corresponde à sociedade que está enviando
     # o FIP/SUSEP
@@ -36,7 +36,7 @@ def validate_421(nome_arquivo, linha, n, conn, dates,
     if MRFMESANO not in dates:
         conn.execute(make_command("T5", nome_arquivo, n, "421"))
     #  Verifica se o campo QUAID corresponde ao quadro 421
-    if QUAID == "421":
+    if QUAID != "421":
         conn.execute(make_command("T6", nome_arquivo, n, "421"))
     # Verifica se o campo DODCODIGO corresponde a um tipo de obrigação ou
     # direito válido (conforme tabela "DEMAISCODIGO")

@@ -38,15 +38,17 @@ def validate_420(nome_arquivo, linha, n, conn, dates,
     except ValueError:
         conn.execute(make_command("T5", nome_arquivo, n, "376"))
     # Verifica se o campo QUAID corresponde ao quadro 420
-    if QUAID == "420":
+    if QUAID != "420":
         conn.execute(make_command("T6", nome_arquivo, n, "420"))
     # Verifica se o campo DOCCODIGO corresponde a um tipo de direito ou
     # obrigação valido (conforme tabela “CONTRATOSEGUROCODIGO”)
-    if DOCCODIGO not in ["D0001", "D0002", "D0003", "D0004", "D0005",
-                            "D0006", "D0007", "D9999", "CC001", "CC003",
-                            "C0001", "C0002", "C0004", "C0005", "C0006",
-                            "C9999", "CR001", "DR002", "CCP01", "CCP02",
-                            "DCP01", "DCP02", "DCP03", "DCP04", "DCP05"]:
+    if DOCCODIGO not in ["P0001","P0002","P0003","P0004","P0005","P0006",
+                         "P0007","P0008","P0009","P0010","P0011","CR011",
+                         "CR002","CR003","CR004","CR005","CR006","CR007",
+                         "CR008","CR009","CR010","C0001","C0002","C0003",
+                         "C0007","C0004","C0008","C9999","D0008",
+                         "D9999","PC001","PC002","PC003","PC004",
+                         "PC005","CCP03","CCP04","CCP99","DCP06","DCP99"]:
         conn.execute(make_command("T7", nome_arquivo, n, "420"))
     # Verifica se o campo TPFOPERADOR corresponde a um tipo de fluxo válido
     # (conforme tabela “TIPOFLUXO”)

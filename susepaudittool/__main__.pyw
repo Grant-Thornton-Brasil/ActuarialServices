@@ -79,8 +79,11 @@ class main_window:
         self.qe_rb_421 = Radiobutton(
             self.qe_frame, text="421", value=421, variable=self.qetype_var,
             command = lambda: self.hide_show_up(False))
-        self.qe_rb_42x = Radiobutton(
-            self.qe_frame, text="422 & 423", value=429, variable=self.qetype_var,
+        self.qe_rb_422 = Radiobutton(
+            self.qe_frame, text="422", value=422, variable=self.qetype_var,
+            command = lambda: self.hide_show_up(False))
+        self.qe_rb_423 = Radiobutton(
+            self.qe_frame, text="423", value=423, variable=self.qetype_var,
             command = lambda: self.hide_show_up(False))
         # ENTCODIGO % ANO BASE
         self.entcodyear_frame = LabelFrame(self.root, text="Validação SES")
@@ -180,7 +183,8 @@ class main_window:
         self.qe_rb_419.grid(row=5, column=1)
         self.qe_rb_420.grid(row=5, column=2)
         self.qe_rb_421.grid(row=5, column=3)
-        self.qe_rb_42x.grid(row=6, column=1,columnspan=2,sticky=W)
+        self.qe_rb_422.grid(row=6, column=1)
+        self.qe_rb_423.grid(row=6, column=2)
         # ENTCODIGO % ANO BASE
         self.entcodyear_frame.grid(row=0, column=1, sticky=(W, N, S, E))
         self.ent_label.grid(row=0, column=0, sticky=W)
@@ -406,11 +410,10 @@ class main_window:
             for file in self.files_list:
                 with open(file, encoding="utf-8-sig") as txt:
                     for line in txt.readlines():
-                        calculator.score_line(line.replace(",",".").strip())
-                        # try:
-                        #     calculator.score_line(line.replace(",",".").strip())
-                        # except:
-                        #     pass
+                        try:
+                            calculator.score_line(line.replace(",",".").strip())
+                        except:
+                            pass
             df = calculator.get_dataframe()
             excel.df_to_excel(df,qe,os.path.abspath(self.fip_entry.get()),year,entcodigo)
             excel.conn.close()

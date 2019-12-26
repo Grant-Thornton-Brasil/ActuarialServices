@@ -29,7 +29,7 @@ def validate_419(nome_arquivo, linha, n, conn, dates, entcodigo):
     if linha == "" or linha is None:
         conn.execute(make_command("T1", nome_arquivo, n, "419"))
     # Verifica o tamanho padrão da linha (133 caracteres)
-    if linha != n:
+    if len(linha) != 133:
         conn.execute(make_command("T2", nome_arquivo, n, "419"))
     # Verifica se o campo sequencial EMFSEQ é uma sequência válida, que se
     # inicia em 000001
@@ -82,7 +82,7 @@ def validate_419(nome_arquivo, linha, n, conn, dates, entcodigo):
         conn.execute(make_command("T12", nome_arquivo, n, "419"))
     # Verifica se o campo TPFOPERADORDERIVATIVO corresponde a um tipo de fluxo
     # válido (conforme tabela “TIPOFLUXO”)
-    if TPFOPERADORDERIVATIVO not in ["+", "-"]:
+    if TPFOPERADORDERIVATIVO != "0":
         conn.execute(make_command("T13", nome_arquivo, n, "419"))
     # Verifica se o campo EMFPRAZOFLUXO é um número inteiro positivo
     try:
@@ -97,26 +97,26 @@ def validate_419(nome_arquivo, linha, n, conn, dates, entcodigo):
         conn.execute(make_command("T14", nome_arquivo, n, "419"))
     # Verifica se o CNPJ do fundo (EMFCNPJFUNDO) é inteiro e válido, exceto
     # para preenchimento com zeros
-    if cpfcnpj.validate(EMFCNPJFUNDO) == False:
+    if cpfcnpj.validate(EMFCNPJFUNDO) == False and EMFCNPJFUNDO != '00000000000000':
         conn.execute(make_command("T15", nome_arquivo, n, "419"))
     # Verifica se o campo EMFMULTIPLOFATOR é igual a 0 ou 1
     if EMFMULTIPLOFATOR not in ["0", "1"]:
         conn.execute(make_command("T16", nome_arquivo, n, "419"))
     # Verifica se o campo EMFTXCONTRATADO é um número float positivo ou zero
     try:
-        if not float(EMFTXCONTRATADO) > 0:
+        if float(EMFTXCONTRATADO) > 0:
             conn.execute(make_command("T17", nome_arquivo, n, "419"))
     except BaseException:
         conn.execute(make_command("T17", nome_arquivo, n, "419"))
     # Verifica se o campo EMFTXMERCADO é um número float positivo ou zero
     try:
-        if not float(EMFTXMERCADO) > 0:
+        if float(EMFTXMERCADO) > 0:
             conn.execute(make_command("T18", nome_arquivo, n, "419"))
     except BaseException:
         conn.execute(make_command("T18", nome_arquivo, n, "419"))
     # Verifica se o campo EMFVLRDERIVATIVO é um número float positivo ou zero
     try:
-        if not float(EMFVLRDERIVATIVO) > 0:
+        if float(EMFVLRDERIVATIVO) > 0:
             conn.execute(make_command("T19", nome_arquivo, n, "419"))
     except BaseException:
         conn.execute(make_command("T19", nome_arquivo, n, "419"))
