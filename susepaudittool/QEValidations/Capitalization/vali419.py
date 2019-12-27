@@ -104,13 +104,13 @@ def validate_419(nome_arquivo, linha, n, conn, dates, entcodigo):
         conn.execute(make_command("T16", nome_arquivo, n, "419"))
     # Verifica se o campo EMFTXCONTRATADO é um número float positivo ou zero
     try:
-        if float(EMFTXCONTRATADO) > 0:
+        if float(EMFTXCONTRATADO) < 0:
             conn.execute(make_command("T17", nome_arquivo, n, "419"))
     except BaseException:
         conn.execute(make_command("T17", nome_arquivo, n, "419"))
     # Verifica se o campo EMFTXMERCADO é um número float positivo ou zero
     try:
-        if float(EMFTXMERCADO) > 0:
+        if float(EMFTXMERCADO) < 0:
             conn.execute(make_command("T18", nome_arquivo, n, "419"))
     except BaseException:
         conn.execute(make_command("T18", nome_arquivo, n, "419"))
@@ -161,10 +161,10 @@ def validate_419(nome_arquivo, linha, n, conn, dates, entcodigo):
         conn.execute(make_command("T24", nome_arquivo, n, "419"))
     # Valida a correspondência entre os campos ATVCODIGO e
     # TPFOPERADORDERIVATIVO
-    if (
-        ATVCODIGO in ["D0001", "D1001", "D1002", "D2001", "D2002", "D3001"]
-        and TPFOPERADORDERIVATIVO not in ["+", "-"]
-    ) or TPFOPERADORDERIVATIVO != "0":
+    if ((ATVCODIGO in ["D0001", "D1001", "D1002", "D2001", "D2002", "D3001"]
+        and TPFOPERADORDERIVATIVO not in ["+", "-"]) \
+            or (ATVCODIGO not in ["D0001", "D1001", "D1002", "D2001", "D2002", "D3001"] \
+                and TPFOPERADORDERIVATIVO != "0")):
         conn.execute(make_command("T25", nome_arquivo, n, "419"))
     # Verifica se quando EMFTXMERCADO e EMFTXCONTRATADO é maior que zero o
     # valor de FTRCODIGO é TD1 ou TS1
@@ -181,5 +181,5 @@ def validate_419(nome_arquivo, linha, n, conn, dates, entcodigo):
                       "D0001", "D0002", "D0003", "D1001", "D1002",
                       "D1003", "D1004", "D2001", "D2002", "D2003",
                       "D2004", "D3001", "D9999"] 
-        and EMFCODISIN == "000000000000"):
+        and EMFCODISIN == '000000000000'):
         conn.execute(make_command("T29", nome_arquivo, n, "419"))

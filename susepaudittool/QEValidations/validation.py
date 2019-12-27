@@ -162,20 +162,19 @@ def run_validations(**kwargs):
             conn,
             dates_seguros,
             entcodigo)
-    elif qe == 429:
-        if resolve42x(linha) == 422:
-            validate_422(
-                nome_arquivo,
-                linha,
-                n,
-                conn,
-                dates_seguros,
-                entcodigo)
-        elif resolve42x(linha) == 422:
-            validate_423(
-                nome_arquivo,
-                linha,
-                n,
-                conn,
-                dates_seguros,
-                entcodigo)
+    elif qe == 422:
+        validate_422(
+            nome_arquivo,
+            linha,
+            n,
+            conn,
+            dates_seguros,
+            entcodigo)
+    elif qe == 423:
+        validate_423(
+            nome_arquivo,
+            linha,
+            n,
+            conn,
+            dates_seguros,
+            entcodigo)

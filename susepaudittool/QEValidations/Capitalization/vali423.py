@@ -49,7 +49,7 @@ def validate_423(nome_arquivo, linha, n, conn, dates,
     pass
     # Verifica se o campo PLNCODIGO ou o RAMCODIGO está preenchido diferente
     # de zeros, porém não ambos ao mesmo tempo
-    if int(PLNCODIGO) == 0 or \
-       int(RAMCODIGO) == 0 or \
-       (int(PLNCODIGO) == 0 and int(RAMCODIGO) == 0):
+    if not ((int(PLNCODIGO) == 0 and int(RAMCODIGO) != 0) or \
+        (int(RAMCODIGO) == 0 and int(PLNCODIGO) != 0)) or \
+            (int(PLNCODIGO) == 0 and int(RAMCODIGO) == 0):
         conn.execute(make_command("T10", nome_arquivo, n, "423"))

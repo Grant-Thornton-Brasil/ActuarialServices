@@ -121,7 +121,7 @@ class Handler:
                 command += f"SUM(T{i}), "
             command = command.strip()[:-1] + ' FROM "419";'
         elif self.qe == 420:
-            for i in range(1, 8):
+            for i in range(1, 16):
                 command += f"SUM(T{i}), "
             command = command.strip()[:-1] + ' FROM "420";'
         elif self.qe == 421:
