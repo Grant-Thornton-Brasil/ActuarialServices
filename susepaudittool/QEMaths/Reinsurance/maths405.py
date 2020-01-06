@@ -16,6 +16,7 @@ class maths_405():
         TPMORESSID = linha[18:21]
         MSRVALORMOV = linha[99:112]
         MSRTIPOSIN = linha[112:113]
+        MSRVALORMON = linha[119:132]
         # Cruzamento 1
         # TPMORESSID 12+14-19+21 ; MSRTIPOSIN 1 ; MSRVALORMOV ; CMPID 12258
         if MSRTIPOSIN == "1":
@@ -45,9 +46,9 @@ class maths_405():
             elif TPMORESSID == "020":
                 self.df["Cruzamento 4 - 405"][MRFMESANO] -= float(MSRVALORMOV) 
         # Cruzamento 5
-        # TPMORESSID 14-19+21 ; MSRTIPOSIN 1+2 ; MSRVALORMOV ; CMPID 12273
+        # TPMORESSID 14-19+21 ; MSRTIPOSIN 1+2 ; MSRVALORMON ; CMPID 12273
         if MSRTIPOSIN in ["1", "2"]:
             if TPMORESSID in ["014", "021"]:
-                self.df["Cruzamento 5 - 405"][MRFMESANO] += float(MSRVALORMOV) 
+                self.df["Cruzamento 5 - 405"][MRFMESANO] += float(MSRVALORMON) 
             elif TPMORESSID == "019":
-                self.df["Cruzamento 5 - 405"][MRFMESANO] -= float(MSRVALORMOV) 
+                self.df["Cruzamento 5 - 405"][MRFMESANO] -= float(MSRVALORMON) 

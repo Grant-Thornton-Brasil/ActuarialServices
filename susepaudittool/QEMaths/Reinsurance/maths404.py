@@ -69,6 +69,6 @@ class maths_404():
         # CMPID 12272
         if MSATIPOPERA in ["1","2"] and MSATIPOSIN in ["1","2"]:
             if TPMORESSID in ["001", "003", "010"]:
-                self.df["Cruzamento 7 - 404"][MRFMESANO] += float(MSAVALORMOV)
+                self.df["Cruzamento 7 - 404"][MRFMESANO] += float(MSAVALORMON)
             elif TPMORESSID == "008":
-                self.df["Cruzamento 7 - 404"][MRFMESANO] -= float(MSAVALORMOV)
+                self.df["Cruzamento 7 - 404"][MRFMESANO] -= float(MSAVALORMON)
