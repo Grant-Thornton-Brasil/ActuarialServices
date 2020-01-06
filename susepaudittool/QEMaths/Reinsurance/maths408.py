@@ -90,13 +90,13 @@ class maths_408():
                 self.df["Cruzamento 9 - 408"][MRFMESANO] -= float(MPAVALORMOVCOMIS)
         # Cruzamento 10
         # MPATIPOCONT 1+2 ; MPAMODCONT 1+2+3+4+5+6+99 ; MPATIPOPERA 2 ;
-        # TPMORESSID 24+25-26-27+28+29+30-31+32+33 ; MPAVALORMOVCOMISS ; CMPID
+        # TPMORESSID 24+25-26-27+28+29+30-31+32+33 ; MPAVALORMOV ; CMPID
         # 12078
         if MPATIPOCONT in ["1","2"] and MPAMODCONT in ["01","02","03","04","05","06","99"] and MPATIPOPERA == "2":
             if TPMORESSID in ["024","025","028","029","030","032","033"]:
-                self.df["Cruzamento 10 - 408"][MRFMESANO] += float(MPAVALORMOVCOMIS)
-            elif TPMORESSID in ["026","027","030"]:
-                self.df["Cruzamento 10 - 408"][MRFMESANO] -= float(MPAVALORMOVCOMIS)
+                self.df["Cruzamento 10 - 408"][MRFMESANO] += float(MPAVALORMOV)
+            elif TPMORESSID in ["026","027","031"]:
+                self.df["Cruzamento 10 - 408"][MRFMESANO] -= float(MPAVALORMOV)
         # Cruzamento 11
         # TPMORESSID 24+25-26-27+28+29+30-31+32 MPAVALORMOVCORRET CMPID 12500
         if TPMORESSID in ["024", "025", "028", "029", "030", "032"]:
