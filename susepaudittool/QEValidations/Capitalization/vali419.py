@@ -82,7 +82,10 @@ def validate_419(nome_arquivo, linha, n, conn, dates, entcodigo):
         conn.execute(make_command("T12", nome_arquivo, n, "419"))
     # Verifica se o campo TPFOPERADORDERIVATIVO corresponde a um tipo de fluxo
     # válido (conforme tabela “TIPOFLUXO”)
-    if TPFOPERADORDERIVATIVO != "0":
+    if (ATVCODIGO in ["D0001","D1001","D1002","D2001","D2002","D3001"] \
+        and TPFOPERADORDERIVATIVO not in ["+","-"]) \
+            or (ATVCODIGO not in ["D0001","D1001","D1002","D2001","D2002","D3001"]  and \
+                TPFOPERADORDERIVATIVO != "0"):
         conn.execute(make_command("T13", nome_arquivo, n, "419"))
     # Verifica se o campo EMFPRAZOFLUXO é um número inteiro positivo
     try:
@@ -116,7 +119,7 @@ def validate_419(nome_arquivo, linha, n, conn, dates, entcodigo):
         conn.execute(make_command("T18", nome_arquivo, n, "419"))
     # Verifica se o campo EMFVLRDERIVATIVO é um número float positivo ou zero
     try:
-        if float(EMFVLRDERIVATIVO) > 0:
+        if not float(EMFVLRDERIVATIVO) >= 0:
             conn.execute(make_command("T19", nome_arquivo, n, "419"))
     except BaseException:
         conn.execute(make_command("T19", nome_arquivo, n, "419"))
@@ -151,7 +154,7 @@ def validate_419(nome_arquivo, linha, n, conn, dates, entcodigo):
     # Valida a correspondência dos campos TCTCODIGO e ATVCODIGO com o campo
     # EMFCNPJFUNDO
     if TCTCODIGO == "01" and ATVCODIGO == "A1003":
-        conn.execute(make_command("T23", nome_arquivo, n, "419"))
+        pass
     # Valida a correspondência entre os campos EMFCNPJFUNDO e BMVCGCFUNDO da
     # tabela BENSVINCULADOS do FIPSUSEP, exceto para preenchimento com zeros
     pass
