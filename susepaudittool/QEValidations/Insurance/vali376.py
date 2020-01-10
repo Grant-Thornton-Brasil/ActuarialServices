@@ -6,6 +6,7 @@ from ..tools import make_command
 def validate_376(
     nome_arquivo, linha, n, conn, 
     dates, entcodigo, ramcodigos, esrcodcess):
+    test14 = linha[88:93]
     
     tpmoids = [1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008, 1009, 1010, 1012, 1013]
     # Verifica se não há linhas em branco
@@ -154,7 +155,9 @@ def validate_376(
     # Verifica se o campo ESRCODCESS corresponde a um código de sociedade
     # válido
     try:
-        if linha[88:93] not in esrcodcess:
+        if test14 not in esrcodcess:
             conn.execute(make_command("T14", nome_arquivo, n, "376"))
+            # with open("test14.txt","a+") as txt:
+            #     txt.write(test14+"\n")   
     except BaseException:
         conn.execute(make_command("T14", nome_arquivo, n, "376"))
