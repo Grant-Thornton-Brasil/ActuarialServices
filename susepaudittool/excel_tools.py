@@ -502,7 +502,7 @@ class Handler:
             for index, value, value_fip in zip(
                 df_cruz.index,
                 df_cruz["Cruzamento 2 - 378"],
-                self.get_from_fip(db_path, year, 12016, entcodigo),
+                self.get_from_fip(db_path, year, 12013, entcodigo),
             ):
                 ws[f"M{row}"].value = to_excel(
                     datetime.strptime(index, "%Y%m%d"))
@@ -516,7 +516,7 @@ class Handler:
             for index, value, value_fip in zip(
                 df_cruz.index,
                 df_cruz["Cruzamento 3 - 378"],
-                self.get_from_fip(db_path, year, 12020, entcodigo),
+                self.get_from_fip(db_path, year, 12014, entcodigo),
             ):
                 ws[f"S{row}"].value = to_excel(
                     datetime.strptime(index, "%Y%m%d"))
@@ -530,7 +530,7 @@ class Handler:
             for index, value, value_fip in zip(
                 df_cruz.index,
                 df_cruz["Cruzamento 4 - 378"],
-                self.get_from_fip(db_path, year, 12034, entcodigo),
+                self.get_from_fip(db_path, year, 12016, entcodigo),
             ):
                 ws[f"Y{row}"].value = to_excel(
                     datetime.strptime(index, "%Y%m%d"))
@@ -544,7 +544,7 @@ class Handler:
             for index, value, value_fip in zip(
                 df_cruz.index,
                 df_cruz["Cruzamento 5 - 378"],
-                self.get_from_fip(db_path, year, 12014, entcodigo),
+                self.get_from_fip(db_path, year, 12017, entcodigo),
             ):
                 ws[f"AE{row}"].value = to_excel(
                     datetime.strptime(index, "%Y%m%d"))
@@ -571,7 +571,7 @@ class Handler:
             for index, value, value_fip in zip(
                 df_cruz.index,
                 df_cruz["Cruzamento 7 - 378"],
-                self.get_from_fip(db_path, year, 12022, entcodigo)):
+                self.get_from_fip(db_path, year, 12020, entcodigo)):
                 ws[f"AQ{row}"].value = to_excel(
                     datetime.strptime(index, "%Y%m%d"))
                 ws[f"AQ{row}"].offset(column=1).value = value
@@ -584,7 +584,7 @@ class Handler:
             for index, value, value_fip in zip(
                 df_cruz.index,
                 df_cruz["Cruzamento 8 - 378"],
-                self.get_from_fip(db_path, year, 12036, entcodigo),
+                self.get_from_fip(db_path, year, 12021, entcodigo),
             ):
                 ws[f"AW{row}"].value = to_excel(
                     datetime.strptime(index, "%Y%m%d"))
@@ -598,7 +598,7 @@ class Handler:
             for index, value, value_fip in zip(
                 df_cruz.index,
                 df_cruz["Cruzamento 9 - 378"],
-                self.get_from_fip(db_path, year, 12013, entcodigo),
+                self.get_from_fip(db_path, year, 12022, entcodigo),
             ):
                 ws[f"BC{row}"].value = to_excel(
                     datetime.strptime(index, "%Y%m%d"))
@@ -612,7 +612,7 @@ class Handler:
             for index, value, value_fip in zip(
                 df_cruz.index,
                 df_cruz["Cruzamento 10 - 378"],
-                self.get_from_fip(db_path, year, 12017, entcodigo),
+                self.get_from_fip(db_path, year, 12026, entcodigo),
             ):
                 ws[f"BI{row}"].value = to_excel(
                     datetime.strptime(index, "%Y%m%d"))
@@ -626,7 +626,7 @@ class Handler:
             for index, value, value_fip in zip(
                 df_cruz.index,
                 df_cruz["Cruzamento 11 - 378"],
-                self.get_from_fip(db_path, year, 12021, entcodigo),
+                self.get_from_fip(db_path, year, 12034, entcodigo),
             ):
                 ws[f"BO{row}"].value = to_excel(
                     datetime.strptime(index, "%Y%m%d"))
@@ -654,7 +654,7 @@ class Handler:
             for index, value, value_fip in zip(
                 df_cruz.index,
                 df_cruz["Cruzamento 13 - 378"],
-                self.get_from_fip(db_path, year, 12026, entcodigo),
+                self.get_from_fip(db_path, year, 12036, entcodigo),
             ):
                 ws[f"CA{row}"].value = to_excel(
                     datetime.strptime(index, "%Y%m%d"))
