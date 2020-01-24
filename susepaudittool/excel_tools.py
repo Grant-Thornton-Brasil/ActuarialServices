@@ -81,7 +81,7 @@ class Handler:
         self.report = []
         command = "SELECT "
         if self.qe == 376:
-            for i in range(1, 15):
+            for i in range(1, 14):
                 command += f"SUM(T{i}), "
             command = command.strip()[:-1] + ' FROM "376";'
         elif self.qe == 377:

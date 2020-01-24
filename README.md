@@ -21,5 +21,6 @@ pyodbc
 requests
 win10toast
 ```
-2. Clone the project
-3. Execute \_\_main__.pyw
+2. Install Microsoft Build Tools 2015
+3. Clone the project
+4. Execute \_\_main__.pyw

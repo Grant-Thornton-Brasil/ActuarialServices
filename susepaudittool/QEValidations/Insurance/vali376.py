@@ -152,12 +152,3 @@ def validate_376(
         ciso8601.parse_datetime(linha[80:88])
     except ValueError:
         conn.execute(make_command("T13", nome_arquivo, n, "376"))
-    # Verifica se o campo ESRCODCESS corresponde a um código de sociedade
-    # válido
-    try:
-        if test14 not in esrcodcess:
-            conn.execute(make_command("T14", nome_arquivo, n, "376"))
-            # with open("test14.txt","a+") as txt:
-            #     txt.write(test14+"\n")   
-    except BaseException:
-        conn.execute(make_command("T14", nome_arquivo, n, "376"))
