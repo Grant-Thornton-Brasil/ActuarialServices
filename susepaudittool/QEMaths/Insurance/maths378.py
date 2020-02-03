@@ -2,7 +2,7 @@ import pandas as pd
 import calendar
 from datetime import datetime
 
-        
+
 # SEGUROS
 class maths_378():
 
@@ -12,30 +12,33 @@ class maths_378():
         self.df.fillna(0.0, inplace=True)
 
     def run(self, linha):
-        MRFMESANO= linha[12:20]                                                                                          
-        TPMOID= int(linha[23:27])
-        CMPID= int(linha[27:31])                                                                                                   
-        ESPVALORMOVRO= float(linha[59:72])                                                                                                                                                                                   
-        ESPVALORMOVRD= float(linha[96:109])                                                                                                                                                
-        ESPVALORCARO= linha[118:131] 
-        ESPVALORCARD = linha[131:144]
-        ESPVALORCIRO= float(linha[144:157])                                                                  
-        ESPVALORCIRD= linha[157:170]                                                                                                        
+        MRFMESANO = linha[12:20]
+        TPMOID = int(linha[23:27])
+        CMPID = int(linha[27:31])
+        ESPVALORMOVRO = float(linha[59:72])
+        ESPVALORMOVRD = float(linha[96:109])
+        ESPVALORCARO = float(linha[118:131])
+        ESPVALORCARD = float(linha[131:144])
+        ESPVALORCIRO = float(linha[144:157])
+        ESPVALORCIRD = float(linha[157:170])
         # Cruzamento 1
-        if TPMOID in [7,8] and CMPID == 1026:
-            self.df["Cruzamento 1 - 378"][MRFMESANO] += (ESPVALORMOVRO - ESPVALORCIRO)
+        if TPMOID == 7 and CMPID == 1026:
+            self.df["Cruzamento 1 - 378"][MRFMESANO] += ESPVALORMOVRO - ESPVALORCIRO
+        if TPMOID == 8 and CMPID == 1026:
+            self.df["Cruzamento 1 - 378"][MRFMESANO] += ESPVALORMOVRD - ESPVALORCIRD
         # Cruzamento 2
-        if TPMOID in [7,8] and CMPID == 1027:
+        if TPMOID in [7, 8] and CMPID == 1027:
             self.df["Cruzamento 2 - 378"][MRFMESANO] += ESPVALORMOVRO
         # Cruzamento 3
-        if TPMOID in [7,8] and CMPID == 1028:
+        if TPMOID in [7, 8] and CMPID == 1028:
             self.df["Cruzamento 3 - 378"][MRFMESANO] += ESPVALORMOVRO
         # Cruzamento 4
-        if TPMOID in [7,8] and CMPID == 1029:
+        if TPMOID in [7, 8] and CMPID == 1029:
             self.df["Cruzamento 4 - 378"][MRFMESANO] += ESPVALORMOVRO
         # Cruzamento 5
         if TPMOID == 9 and CMPID == 1030:
-            self.df["Cruzamento 5 - 378"][MRFMESANO] += (ESPVALORMOVRD - ESPVALORCIRO)
+            self.df["Cruzamento 5 - 378"][MRFMESANO] += (
+                ESPVALORMOVRD - ESPVALORCIRO)
         # Cruzamento 6
         if TPMOID == 9 and CMPID == 1031:
             self.df["Cruzamento 6 - 378"][MRFMESANO] += ESPVALORMOVRD
