@@ -372,8 +372,8 @@ class main_window:
         # esrcodcess.append(entcodigo)
         path = os.path.abspath(self.output_entry.get())
         # Crate new folder
-        os.mkdir(path+f"\\Output_{qe}_{year}")
-        path = os.path.abspath(os.path.join(path,f"Output_{qe}_{year}"))
+        os.mkdir(path+f"\\Output_{entcodigo}_{qe}_{year}")
+        path = os.path.abspath(os.path.join(path,f"Output_{entcodigo}_{qe}_{year}"))
         total = 0
         # Connection
         db_path = path+"\\"+str(len(glob(path+"\\*.db"))+1)+".db"
