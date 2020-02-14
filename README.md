@@ -1,5 +1,5 @@
 # Actuarial Services By [Grant Thornton Brasil](https://www.grantthornton.com.br/en/service/advisory/actuarial-services/ "ActuarialServicesGrantThornton")
-![](https://github.com/Grant-Thornton-Brasil/ActuarialServices/blob/master/Docs/demo.gif)
+![](https://raw.githubusercontent.com/Grant-Thornton-Brasil/ActuarialServices/2aa7ee24fe7a81087c9854c0efb97e89ef188df3/Docs/demo.gif)
 ![](https://github.com/Grant-Thornton-Brasil/ActuarialServices/blob/master/Docs/notification.png)
 ## What is this?
 
