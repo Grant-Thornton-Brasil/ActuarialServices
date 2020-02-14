@@ -372,7 +372,15 @@ class main_window:
         # esrcodcess.append(entcodigo)
         path = os.path.abspath(self.output_entry.get())
         # Crate new folder
-        os.mkdir(path+f"\\Output_{entcodigo}_{qe}_{year}")
+        try:
+            os.mkdir(path+f"\\Output_{entcodigo}_{qe}_{year}")
+        except FileExistsError:
+            messagebox.showerror("Erro",
+                "Já existe uma pasta com o mesmo nome."
+            )
+            self.output_execute_bt.config(state=NORMAL)
+            self.root.wm_state("normal")
+            return
         path = os.path.abspath(os.path.join(path,f"Output_{entcodigo}_{qe}_{year}"))
         total = 0
         # Connection
@@ -413,10 +421,11 @@ class main_window:
                         try:
                             calculator.score_line(line.replace(",",".").strip())
                         except:
-                            pass
-            df = calculator.get_dataframe()
-            excel.df_to_excel(df,qe,os.path.abspath(self.fip_entry.get()),year,entcodigo)
-            excel.conn.close()
+                            raise Exception("PROBLEMA AO SOMAR AS LINHAS")
+            if qe not in [419, 420, 421, 422, 423]:
+                df = calculator.get_dataframe()
+                excel.df_to_excel(df,qe,os.path.abspath(self.fip_entry.get()),year,entcodigo)
+                excel.conn.close()
         if self.processo3_var.get()==1:
             make_report(qe,self.conn,path)
         if self.processo4_var.get()==1:
