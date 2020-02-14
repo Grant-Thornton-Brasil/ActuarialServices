@@ -1,10 +1,5 @@
 import calendar
 from datetime import datetime
-from .Capitalization.maths419 import maths_419
-from .Capitalization.maths420 import maths_420
-from .Capitalization.maths421 import maths_421
-from .Capitalization.maths422 import maths_422
-from .Capitalization.maths423 import maths_423
 from .Insurance.maths376 import maths_376
 from .Insurance.maths377 import maths_377
 from .Insurance.maths378 import maths_378
@@ -44,20 +39,12 @@ class maths:
         elif self.qe == 409:
             self.math = maths_409(self.dates_reseguros)
         # Capitalization
-        elif self.qe == 419:
-            self.math = maths_419(self.dates_seguros)
-        elif self.qe == 420:
-            self.math = maths_420(self.dates_seguros)
-        elif self.qe == 421:
-            self.math = maths_421(self.dates_seguros)
-        elif self.qe == 422:
-            self.math = maths_422(self.dates_seguros)
-        elif self.qe == 423:
-            self.math = maths_423(self.dates_seguros)
+        elif self.qe in [419, 420, 421, 422, 423]:
+            pass
         
     def score_line(self, line):
-        # Insurance
-        self.math.run(line)
+        if self.qe not in [419, 420, 421, 422, 423]:
+            self.math.run(line)
                 
     def get_dataframe(self):
         return self.math.df
