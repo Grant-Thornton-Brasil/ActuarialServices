@@ -1,5 +1,6 @@
 # Actuarial Services By [Grant Thornton Brasil](https://www.grantthornton.com.br/en/service/advisory/actuarial-services/ "ActuarialServicesGrantThornton")
 <img src="https://raw.githubusercontent.com/Grant-Thornton-Brasil/ActuarialServices/2aa7ee24fe7a81087c9854c0efb97e89ef188df3/Docs/demo.gif" width="660" height="345">
+
 ## What is this?
 
 This is a tool that audits TXTs files sent to [SUSEP](http://www.susep.gov.br "SUSEP"), following their [manual](https://www2.susep.gov.br/download/fip2_2/Fip22_ManualPreenchimentosetembro-2019.zip "manual").
