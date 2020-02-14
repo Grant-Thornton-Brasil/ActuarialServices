@@ -413,7 +413,7 @@ class main_window:
                         try:
                             calculator.score_line(line.replace(",",".").strip())
                         except:
-                            pass
+                            raise Exception("PROBLEMA AO SOMAR AS LINHAS")
             df = calculator.get_dataframe()
             excel.df_to_excel(df,qe,os.path.abspath(self.fip_entry.get()),year,entcodigo)
             excel.conn.close()

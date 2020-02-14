@@ -9,9 +9,9 @@ import pyodbc
 class Handler:
     def __init__(self, qe):
         self.qe = qe
-        insurance = os.path.join("Excel Models", "Insurance")
-        reinsurance = os.path.join("Excel Models", "Reinsurance")
-        capitalization = os.path.join("Excel Models", "Capitalization")
+        insurance = os.path.join(os.path.dirname(__file__),"..","Excel Models", "Insurance")
+        reinsurance = os.path.join(os.path.dirname(__file__),"..","Excel Models", "Reinsurance")
+        capitalization = os.path.join(os.path.dirname(__file__),"..","Excel Models", "Capitalization")
         # Insurance
         if self.qe == 376:
             path = insurance + "\\376.xlsx"
@@ -43,7 +43,12 @@ class Handler:
             path = capitalization + "\\422.xlsx"
         elif self.qe == 423:
             path = capitalization + "\\423.xlsx"
-        self.wb = load_workbook(os.path.abspath(path))
+        try:
+            self.wb = load_workbook(os.path.abspath(path))
+        except FileNotFoundError:
+            print("EXECEL NÃO ENCONTRADO!")
+            quit()
+
 
     def get_from_fip(self, db_path, year, cmpid, entcodigo):
         values = []

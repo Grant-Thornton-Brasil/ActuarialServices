@@ -9,7 +9,7 @@ moedas = get_moedas()
 def validate_408(nome_arquivo, linha, n, conn, dates,
                  entcodigo, gracodigos):
 
-    MPASEQ = linha[0:7]
+    MPASEQ = int(linha[0:7])
     ENTCODIGO = linha[7:12]
     MRFMESANO = linha[12:18]
     TPMORESSID = linha[18:21]
@@ -50,26 +50,26 @@ def validate_408(nome_arquivo, linha, n, conn, dates,
     # Verifica se o campo sequencial MPASEQ é uma sequência válida, que se
     # inicia em 0000001
     try:
-        if int(linha[0:7]) != n:
+        if MPASEQ != n:
             conn.execute(make_command("T3", nome_arquivo, n, "408"))
     except:
         conn.execute(make_command("T3", nome_arquivo, n, "408"))
     # Verifica se o campo ENTCODIGO corresponde à sociedade que está enviando
     # o FIP/SUSEP
     try:
-        if linha[7:12] != entcodigo:
+        if ENTCODIGO != entcodigo:
             conn.execute(make_command("T4", nome_arquivo, n, "408"))
     except:
         conn.execute(make_command("T4", nome_arquivo, n, "408"))
     # Verifica se o campo MRFMESANO corresponde a um ano e mês válidos
     try:
-        ciso8601.parse_datetime(linha[12:18] + "01")
+        ciso8601.parse_datetime(MRFMESANO + "01")
     except ValueError:
         conn.execute(make_command("T5", nome_arquivo, n, "408"))
     # Verifica se o campo TPMORESSID corresponde a um tipo de movimento válido
     # (conforme tabela 'TiposMovimentosResseguros' do FIPSUSEP)
     try:
-        if linha[18:21] not in ["024", "025", "026", "027", "028", "029",
+        if TPMORESSID not in ["024", "025", "026", "027", "028", "029",
                                 "030", "031", "032", "033", "034"]:
             conn.execute(make_command("T6", nome_arquivo, n, "408"))
     except:
@@ -77,14 +77,14 @@ def validate_408(nome_arquivo, linha, n, conn, dates,
     # Verifica se o campo GRACODIGO corresponde a um grupo de ramos válido
     # operado pelo ressegurador
     try:
-        if linha[21:23] not in gracodigos:
+        if GRACODIGO not in gracodigos:
             conn.execute(make_command("T7", nome_arquivo, n, "408"))
     except:
         conn.execute(make_command("T7", nome_arquivo, n, "408"))
     # Verifica se o campo MPATIPOPERA foi preenchido com um tipo de operação
     # válido
     try:
-        if linha[23:24] not in ["1", "2"]:
+        if MPATIPOPERA not in ["1", "2"]:
             conn.execute(make_command("T8", nome_arquivo, n, "408"))
     except:
         conn.execute(make_command("T8", nome_arquivo, n, "408"))
@@ -100,7 +100,7 @@ def validate_408(nome_arquivo, linha, n, conn, dates,
     # Verifica se o campo MPATIPOCONT foi preenchido com um tipo de contrato
     # válido
     try:
-        if linha[61] not in ["1", "2"]:
+        if MPATIPOCONT not in ["1", "2"]:
             conn.execute(make_command("T10", nome_arquivo, n, "408"))
     except:
         conn.execute(make_command("T10", nome_arquivo, n, "408"))
@@ -119,7 +119,7 @@ def validate_408(nome_arquivo, linha, n, conn, dates,
     # 'Restituição de Prêmio Efetivo' ou 'Cancelamento de Prêmio Efetivo' ou
     # 'Informação sem Movimentação de Prêmio'
     try:
-        if linha[61] == "2" and linha[18:21] not in ["24","25","27","26","27"]:
+        if MPATIPOCONT == "2" and TPMORESSID not in ["024", "025", "026", "027", "034"]:
             conn.execute(make_command("T12", nome_arquivo, n, "408"))
     except:
         conn.execute(make_command("T12", nome_arquivo, n, "408"))
@@ -146,9 +146,10 @@ def validate_408(nome_arquivo, linha, n, conn, dates,
     # Verifica se os campos MPADATAORDEMFIRME, MPADATAINICIO, MPADATAFIM e
     # MPADATAEMISS correspondem a uma data válida
     try:
-        ciso8601.parse_datetime(linha[64:72])
-        ciso8601.parse_datetime(linha[80:88])
-        ciso8601.parse_datetime(linha[88:96])
+        ciso8601.parse_datetime(MPADATAORDEMFIRME)
+        ciso8601.parse_datetime(MPADATAINICIO)
+        ciso8601.parse_datetime(MPADATAFIM)
+        ciso8601.parse_datetime(MPADATAEMISS)
     except ValueError:
         conn.execute(make_command("T15", nome_arquivo, n, "408"))
     # Verifica se o campo MPADATACONTR foi preenchido com uma data válida ou
@@ -164,43 +165,43 @@ def validate_408(nome_arquivo, linha, n, conn, dates,
     # Verifica se o valor dos campos MPAVALORMOV, MPAVALORMOVCOMIS,
     # MPAVALORMOVCORRET e MPATAXACONV é float
     try:
-        float(linha[96:109].replace(",", ""))
-        float(linha[115:128].replace(",", ""))
-        float(linha[128:141].replace(",", ""))
-        float(linha[152:165].replace(",", ""))
+        float(MPAVALORMOV.replace(",", ""))
+        float(MPAVALORMOVCOMIS.replace(",", ""))
+        float(MPAVALORMOVCORRET.replace(",", ""))
+        float(MPATAXACONV.replace(",", ""))
     except ValueError:
         conn.execute(make_command("T17", nome_arquivo, n, "408"))
     # Verifica se o campo MPAPERCENTRISCO corresponde a um valor entre
     # '000,01' e '100,00'
     try:
-        if (0.01 <= float(linha[109:115].replace(",", ".")) <= 100) == False:
+        if (0.01 <= float(MPAPERCENTRISCO.replace(",", ".")) <= 100) == False:
             conn.execute(make_command("T18", nome_arquivo, n, "408"))
     except:
         conn.execute(make_command("T18", nome_arquivo, n, "408"))
     # Verifica se o campo MPACODCORRET corresponde a um código de corretora de
     # resseguro válido ou '99999'
     try:
-        if (not (70000 <= int(linha[141:146]) <=
-                79999)) or linha[141:146] != "99999":
-            conn.execute(make_command("T19", nome_arquivo, n, "408"))
+        if (not (70000 <= int(MPACODCORRET) <= 79999)):
+            if MPACODCORRET != "99999":
+                conn.execute(make_command("T19", nome_arquivo, n, "408"))
     except:
         conn.execute(make_command("T19", nome_arquivo, n, "408"))
     # Verifica se o campo MPAVIGMED corresponde a um valor entre '01' e '99'
     try:
-        if (1 <= int(linha[146:148]) <= 99) == False:
+        if (1 <= int(MPAVIGMED) <= 99) == False:
             conn.execute(make_command("T20", nome_arquivo, n, "408"))
     except:
         conn.execute(make_command("T20", nome_arquivo, n, "408"))
     # Verifica se o campo MPABASEIND foi preenchido com uma base indenitária
     # válida
     try:
-        if linha[148] not in ["1", "2", "3"]:
+        if MPABASEIND not in ["1", "2", "3"]:
             conn.execute(make_command("T21", nome_arquivo, n, "408"))
     except:
         conn.execute(make_command("T21", nome_arquivo, n, "408"))
     # Verifica se o campo MPAMOEDA foi preenchido com uma moeda válida
     try:
-        if linha[149:152] not in moedas:
+        if MPAMOEDA not in moedas:
             conn.execute(make_command("22", nome_arquivo, n, "408"))
     except:
         conn.execute(make_command("T22", nome_arquivo, n, "408"))
