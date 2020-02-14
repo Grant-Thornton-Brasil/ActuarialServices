@@ -25,6 +25,5 @@ win10toast
 ```
 pip install -U setuptools pip bs4 ciso8601 openpyxl pandas pycpfcnpj pyodbc requests win10toast --user
 ```
-3. Install Microsoft Build Tools 2015
-4. Clone the project
-5. Execute \_\_main__.pyw
+3. Clone the project
+4. Execute \_\_main__.pyw
