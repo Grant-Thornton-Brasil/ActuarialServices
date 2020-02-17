@@ -17,6 +17,7 @@ class maths_404():
         MSATIPOPERA = linha[23:24]
         MSAVALORMOV = linha[100:113]
         MSATIPOSIN = linha[113:114]
+        MSAVALORMON = linha[120:133]
         # Cruzamento 1
         # TPMORESSID 1+3-8+10 ; MSATIPOPERA 1 ; MSATIPOSIN 1 ; MSAVALORMOV ;
         if MSATIPOPERA == "1" and MSATIPOSIN == "1":

@@ -8,6 +8,7 @@ moedas = get_moedas()
 # RESEGUROS
 def validate_406(nome_arquivo, linha, n, conn, dates,
                  entcodigo, gracodigos):
+    SLASEQ = linha[0:7]
     ENTCODIGO = linha[7:12]
     MRFMESANO = linha[12:18]
     GRACODIGO = linha[18:20]
@@ -36,7 +37,7 @@ def validate_406(nome_arquivo, linha, n, conn, dates,
     # Verifica se o campo sequencial SLASEQ é uma sequência válida, que se
     # inicia em 0000001
     try:
-        if int(MSLASEQ) != n:
+        if int(SLASEQ) != n:
             conn.execute(make_command("T3", nome_arquivo, n, "406"))
     except:
         conn.execute(make_command("T3", nome_arquivo, n, "406"))
