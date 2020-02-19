@@ -24,7 +24,7 @@ def validate_422(nome_arquivo, linha, n, conn, dates,
         conn.execute(make_command("T2", nome_arquivo, n, "422"))
     # Verifica se o campo sequencial EMESEQ é uma sequência válida, que se
     # inicia em 000001
-    if int(EMESEQ) == n:
+    if int(EMESEQ) != n:
         conn.execute(make_command("T3", nome_arquivo, n, "422"))
     # Verifica se o campo ENTCODIGO corresponde à sociedade que está enviando
     # o FIP/SUSEP
